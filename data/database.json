@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-10-05T23:07:57.641Z",
+  "lastUpdated": "2026-10-05T23:11:02.345Z",
   "obras": [
     {
       "id": "obra_1791241676439",
       "clienteNome": "Gonzalo",
-      "tituloObra": "Obra Geral",
+      "tituloObra": "Construção| Casa",
       "clienteTelefone": "",
       "clienteEndereco": "",
-      "valorTotalContratado": "R$ 0,00",
+      "valorTotalContratado": "R$ 180.000,00",
       "status": "Em Andamento",
       "dataCriacao": "2026-10-05T23:07:56.439Z",
       "pagamentos": []
