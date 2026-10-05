@@ -1,6 +1,18 @@
 {
-  "lastUpdated": "2026-10-05T23:00:00.000Z",
-  "obras": [],
+  "lastUpdated": "2026-10-05T23:07:57.641Z",
+  "obras": [
+    {
+      "id": "obra_1791241676439",
+      "clienteNome": "Gonzalo",
+      "tituloObra": "Obra Geral",
+      "clienteTelefone": "",
+      "clienteEndereco": "",
+      "valorTotalContratado": "R$ 0,00",
+      "status": "Em Andamento",
+      "dataCriacao": "2026-10-05T23:07:56.439Z",
+      "pagamentos": []
+    }
+  ],
   "quotes": [],
   "receipts": []
 }
