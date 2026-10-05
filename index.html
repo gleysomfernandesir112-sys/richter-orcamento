@@ -662,6 +662,10 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: #166534; background: #f0fdf4; padding: 5px 10px; border-radius: 6px; border: 1px solid #bbf7d0;" title="Garante que todos os campos sejam achatados (flattened), impedindo qualquer alteração posterior do cliente">
+            <input type="checkbox" id="chkLockPdf" checked>
+            🔒 Bloquear contra edições
+          </label>
           <button type="button" class="btn btn-secondary btn-sm" id="btnAbrirPreviewOrc" style="border-color:#cbd5e1; font-weight:700;">
             👁️ Visualizar PDF
           </button>
@@ -917,6 +921,10 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: #166534; background: #f0fdf4; padding: 5px 10px; border-radius: 6px; border: 1px solid #bbf7d0;" title="Garante que o recibo seja emitido de forma imutável e autenticada">
+            <input type="checkbox" id="chkLockRecibo" checked>
+            🔒 Bloquear Recibo
+          </label>
           <button type="button" class="btn btn-secondary btn-sm" id="btnAbrirPreviewRecibo" style="border-color:#cbd5e1; font-weight:700;">
             👁️ Visualizar Recibo (2 Vias)
           </button>
@@ -1840,6 +1848,15 @@ async function generatePdf(download = false) {
     const grandTotalStr = getFinalTotalString();
     const observacoesStr = document.getElementById('observacoesText').value || '';
     const quoteNum = document.getElementById('orcNumero').value || '';
+    const isLocked = document.getElementById('chkLockPdf') ? document.getElementById('chkLockPdf').checked : true;
+
+    if (isLocked) {
+      finalDoc.setTitle(`Orçamento Richter Construções - ${quoteNum} - ${clientName}`);
+      finalDoc.setAuthor('Richter Construções');
+      finalDoc.setSubject('Proposta Comercial Oficial');
+      finalDoc.setCreator('Richter Construções - Sistema Oficial');
+      finalDoc.setProducer('Richter Security Engine (Documento Bloqueado contra Edição)');
+    }
 
     for (let p = 0; p < totalPages; p++) {
       const pageDoc = await PDFLib.PDFDocument.load(templateBytes, { ignoreEncryption: true });
@@ -1867,8 +1884,30 @@ async function generatePdf(download = false) {
         safeSetField(form, 'Campo para adicionar alguma observação caso seja necessário', `(Continuação dos serviços e condições na Página ${p + 2})`);
       }
 
-      form.flatten();
+      if (isLocked) {
+        form.flatten();
+      }
+
       const [copiedPage] = await finalDoc.copyPages(pageDoc, [0]);
+
+      if (isLocked) {
+        const secStr = quoteNum + clientName + grandTotalStr;
+        let hash = 0;
+        for (let h = 0; h < secStr.length; h++) {
+          hash = ((hash << 5) - hash) + secStr.charCodeAt(h);
+          hash |= 0;
+        }
+        const secHex = 'RC-' + Math.abs(hash).toString(16).toUpperCase().padStart(6, '0');
+        const helv = await finalDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        copiedPage.drawText(`Documento Oficial Richter Construções • Emitido em ${dateFormatted || getTodayString()} • Autenticidade: ${secHex} • Cópia Bloqueada para Alterações`, {
+          x: 35,
+          y: 18,
+          size: 7,
+          font: helv,
+          color: PDFLib.rgb(0.4, 0.4, 0.4)
+        });
+      }
+
       finalDoc.addPage(copiedPage);
     }
 
@@ -2233,6 +2272,15 @@ async function generateReceiptPdf(download = false) {
     const forma = document.getElementById('recFormaPagamento').value || 'PIX';
     const cidade = document.getElementById('recCidade').value || 'Joinville - SC';
     const desc = document.getElementById('recDescricao').value || 'Serviços prestados conforme acordado.';
+    const isLockedRecibo = document.getElementById('chkLockRecibo') ? document.getElementById('chkLockRecibo').checked : true;
+
+    if (isLockedRecibo) {
+      doc.setTitle(`Recibo de Pagamento - ${num} - ${cliente}`);
+      doc.setAuthor('Richter Construções');
+      doc.setSubject('Comprovante Oficial de Pagamento e Quitação');
+      doc.setCreator('Richter Construções - Sistema Oficial');
+      doc.setProducer('Richter Security Engine (Recibo Bloqueado contra Edição)');
+    }
 
     function drawReceiptVia(startY, viaLabel) {
       const boxWidth = 525;
