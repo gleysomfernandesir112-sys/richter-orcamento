@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Richter Construções — Painel Administrativo de Orçamentos e Recibos</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Richter Construções — Gestão de Obras, Orçamentos e Recibos</title>
 <style>
 :root {
   --primary: #d61820;
@@ -28,27 +28,28 @@
   --warning-bg: #fffbeb;
   --warning-border: #fef3c7;
   --danger: #dc2626;
-  --radius: 10px;
-  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-sm: 8px;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
   --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.05);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--gray-bg);
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  padding-bottom: 75px; /* Espaço para barra inferior no celular */
 }
 
-/* Header Superior */
+/* Header Superior Desktop/Tablet */
 header {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
-  padding: 10px 24px;
+  padding: 10px 20px;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -56,27 +57,27 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 .brand-badge {
   background: var(--primary);
   color: #fff;
   font-weight: 800;
-  font-size: 15px;
-  padding: 6px 11px;
+  font-size: 14px;
+  padding: 6px 10px;
   border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 .brand-info h1 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--dark);
 }
@@ -85,18 +86,18 @@ header {
   color: var(--text-muted);
 }
 
-/* Navegação Principal (Tabs) */
+/* Navegação Principal (Tabs) no Desktop */
 .main-nav {
   display: flex;
   background: #f1f5f9;
   padding: 4px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   gap: 4px;
 }
 .nav-tab {
   border: 0;
   background: transparent;
-  padding: 7px 14px;
+  padding: 8px 14px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-muted);
@@ -107,9 +108,7 @@ header {
   align-items: center;
   gap: 6px;
 }
-.nav-tab:hover {
-  color: var(--dark);
-}
+.nav-tab:hover { color: var(--dark); }
 .nav-tab.active {
   background: #ffffff;
   color: var(--primary);
@@ -127,13 +126,44 @@ header {
   color: var(--primary);
 }
 
-.header-quick-actions {
+/* Barra de Navegação Inferior para Celular (Mobile App Style) */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+  z-index: 90;
+  justify-content: space-around;
+  padding: 6px 4px env(safe-area-inset-bottom, 6px);
+}
+.mobile-nav-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  gap: 2px;
+  flex: 1;
+}
+.mobile-nav-item .icon {
+  font-size: 19px;
+  line-height: 1;
+}
+.mobile-nav-item.active {
+  color: var(--primary);
 }
 
-/* Botões */
+/* Botões Globais Touch-Friendly */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -141,13 +171,15 @@ header {
   gap: 6px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
+  min-height: 42px;
 }
+.btn:active { transform: scale(0.98); }
 .btn-primary { background: var(--primary); color: #ffffff; }
 .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 2px 8px rgba(214, 24, 32, 0.35); }
 .btn-success { background: var(--success); color: #ffffff; }
@@ -158,14 +190,14 @@ header {
 .btn-outline-danger:hover { background: var(--primary-light); }
 .btn-whatsapp { background: #25d366; color: #ffffff; }
 .btn-whatsapp:hover { background: #20ba5a; box-shadow: 0 2px 8px rgba(37, 211, 102, 0.35); }
-.btn-sm { padding: 6px 10px; font-size: 12px; }
+.btn-sm { padding: 6px 12px; font-size: 12px; min-height: 34px; }
 
 /* Status Badges */
 .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 8px;
+  padding: 3px 9px;
   border-radius: 12px;
   font-size: 11px;
   font-weight: 700;
@@ -177,37 +209,42 @@ header {
 .badge-aprovado { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
 .badge-recusado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
+.badge-em-andamento { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.badge-concluida    { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.badge-pausada      { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
 /* Container Principal das Páginas/Abas */
 .app-container {
-  max-width: 1580px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 20px;
 }
-.tab-content-panel {
-  display: none;
-}
-.tab-content-panel.active {
-  display: block;
+.tab-content-panel { display: none; }
+.tab-content-panel.active { display: block; animation: fadeIn 0.2s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================================================
-   1. DASHBOARD & MÉTRICAS
+   DASHBOARD & MÉTRICAS
    ========================================================================== */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
 }
 .kpi-card {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 16px 18px;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 .kpi-header {
   display: flex;
@@ -220,89 +257,211 @@ header {
   letter-spacing: 0.5px;
 }
 .kpi-icon { font-size: 18px; }
-.kpi-value { font-size: 26px; font-weight: 800; color: var(--dark); }
+.kpi-value { font-size: 24px; font-weight: 800; color: var(--dark); }
 .kpi-subtext { font-size: 12px; color: var(--text-muted); }
 .kpi-card.highlight { border-left: 4px solid var(--primary); }
 .kpi-card.highlight-success { border-left: 4px solid var(--success); }
+.kpi-card.highlight-warning { border-left: 4px solid var(--warning); }
 .kpi-card.highlight-info { border-left: 4px solid var(--info); }
 
-.dashboard-tables-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
+/* ==========================================================================
+   PASTAS DE OBRAS / CLIENTES (GESTÃO FINANCEIRA E PARCELAS)
+   ========================================================================== */
+.obras-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
 }
-
-.data-table-card {
+.obras-search {
+  flex: 1;
+  min-width: 260px;
+}
+.obras-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 18px;
+}
+.obra-folder-card {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
 }
-.data-table-header {
-  padding: 14px 20px;
+.obra-folder-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow);
+}
+.obra-folder-header {
+  padding: 16px 18px 12px;
   border-bottom: 1px solid var(--border);
+  background: #ffffff;
+}
+.obra-folder-top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 6px;
 }
-.data-table-header h3 {
-  font-size: 15px;
+.obra-client-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dark);
+  line-height: 1.3;
+}
+.obra-subname {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+.obra-address {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Barra de Progresso Financeiro */
+.obra-progress-section {
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border);
+}
+.progress-bar-container {
+  height: 9px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+.obra-financial-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  text-align: center;
+}
+.fin-box {
+  background: #ffffff;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.fin-box-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.fin-box-val {
+  font-size: 13px;
+  font-weight: 800;
+}
+.fin-box-val.total { color: var(--dark); }
+.fin-box-val.pago { color: var(--success); }
+.fin-box-val.falta { color: var(--primary); }
+
+/* Lista de Pagamentos/Recibos da Obra */
+.obra-payments-list {
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.payment-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  gap: 8px;
+}
+.payment-item-row.pago {
+  border-left: 3px solid var(--success);
+}
+.payment-item-row.pendente {
+  border-left: 3px solid var(--warning);
+}
+.payment-info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.payment-title {
   font-weight: 700;
   color: var(--dark);
+}
+.payment-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.payment-actions-right {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.table-responsive { width: 100%; overflow-x: auto; }
-table.custom-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
+.payment-val {
+  font-weight: 800;
   font-size: 13px;
-}
-table.custom-table th {
-  background: #f8fafc;
-  padding: 11px 16px;
-  font-weight: 600;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
-table.custom-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
+
+.obra-folder-footer {
+  padding: 12px 18px;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
-table.custom-table tr:hover { background: #f8fafc; }
-table.custom-table tr:last-child td { border-bottom: 0; }
 
 /* ==========================================================================
-   2. FORMULÁRIO CENTRALIZADO (SEM PREVIEW POLUINDO O LADO)
+   FORMULÁRIOS AMPLOS E TOUCH-FRIENDLY
    ========================================================================== */
 .form-center-wrapper {
-  max-width: 940px;
+  max-width: 920px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .form-toolbar-sticky {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px 20px;
+  padding: 12px 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: var(--shadow-sm);
   position: sticky;
-  top: 65px;
+  top: 60px;
   z-index: 40;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -314,7 +473,7 @@ table.custom-table tr:last-child td { border-bottom: 0; }
   overflow: hidden;
 }
 .card-header {
-  padding: 14px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border);
   background: #ffffff;
   display: flex;
@@ -324,7 +483,7 @@ table.custom-table tr:last-child td { border-bottom: 0; }
 .card-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-size: 15px;
   font-weight: 700;
   color: var(--dark);
@@ -342,23 +501,26 @@ table.custom-table tr:last-child td { border-bottom: 0; }
   font-weight: 800;
 }
 .card-body {
-  padding: 18px 20px;
+  padding: 18px;
 }
 
-.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.form-grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px; }
-.form-group { margin-bottom: 14px; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; }
+.form-group { margin-bottom: 12px; }
 .form-group:last-child { margin-bottom: 0; }
-.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 5px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 5px; }
+
+/* Inputs com tamanho mínimo 16px no mobile para nunca dar zoom involuntário */
 .form-control {
   width: 100%;
-  padding: 10px 13px;
-  font-size: 13px;
+  padding: 10px 14px;
+  font-size: 15px;
   font-family: inherit;
   color: var(--dark);
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
+  min-height: 44px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .form-control:focus {
@@ -366,7 +528,7 @@ table.custom-table tr:last-child td { border-bottom: 0; }
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgba(214, 24, 32, 0.12);
 }
-textarea.form-control { min-height: 90px; resize: vertical; }
+textarea.form-control { min-height: 90px; resize: vertical; font-size: 14px; }
 
 .items-container { display: flex; flex-direction: column; gap: 10px; }
 .item-row {
@@ -377,20 +539,20 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: border-color 0.15s, background-color 0.15s;
+  transition: border-color 0.15s;
 }
-.item-row:hover { border-color: #cbd5e1; background: #f1f5f9; }
+.item-row:hover { border-color: #cbd5e1; }
 .item-row-header { display: flex; justify-content: space-between; align-items: center; }
-.item-index-badge { font-size: 11px; font-weight: 700; color: var(--text-muted); background: #e2e8f0; padding: 2px 8px; border-radius: 4px; }
-.item-remove-btn { background: transparent; border: 0; color: #94a3b8; font-size: 12px; font-weight: 600; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.item-index-badge { font-size: 11px; font-weight: 700; color: var(--text-muted); background: #e2e8f0; padding: 3px 8px; border-radius: 4px; }
+.item-remove-btn { background: transparent; border: 0; color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
 .item-remove-btn:hover { color: var(--primary); background: var(--primary-light); }
-.item-inputs-grid { display: grid; grid-template-columns: 1fr 100px 130px; gap: 10px; }
+.item-inputs-grid { display: grid; grid-template-columns: 1fr 90px 120px; gap: 8px; }
 
 .quick-chips-wrapper { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
-.quick-chips-title { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.4px; }
-.chips-list { display: flex; flex-wrap: wrap; gap: 7px; }
-.chip { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 16px; padding: 5px 12px; font-size: 12px; color: var(--text-main); cursor: pointer; transition: all 0.15s; user-select: none; }
-.chip:hover { background: var(--primary-light); border-color: var(--primary-border); color: var(--primary); }
+.quick-chips-title { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.4px; }
+.chips-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--text-main); cursor: pointer; transition: all 0.15s; user-select: none; min-height: 32px; display: inline-flex; align-items: center; }
+.chip:active, .chip:hover { background: var(--primary-light); border-color: var(--primary-border); color: var(--primary); }
 
 .pagination-info { background: #f1f5f9; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; margin-top: 14px; }
 .pagination-pill { background: var(--dark); color: #ffffff; padding: 3px 10px; border-radius: 12px; font-weight: 700; font-size: 11px; }
@@ -398,12 +560,12 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 .total-card-body { background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%); }
 .financial-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
 .financial-row.grand-total { border-top: 2px dashed #cbd5e1; margin-top: 10px; padding-top: 14px; }
-.grand-total-label { font-size: 16px; font-weight: 800; color: var(--dark); }
+.grand-total-label { font-size: 15px; font-weight: 800; color: var(--dark); }
 .grand-total-value { font-size: 26px; font-weight: 800; color: var(--primary); }
 
-.obs-templates { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
-.obs-chip { background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--text-main); cursor: pointer; }
-.obs-chip:hover { background: #e2e8f0; }
+.obs-templates { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.obs-chip { background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--text-main); cursor: pointer; min-height: 32px; }
+.obs-chip:active { background: #e2e8f0; }
 
 .form-bottom-actions {
   display: flex;
@@ -412,11 +574,10 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   padding: 16px 0;
   border-top: 1px solid var(--border);
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
-/* ==========================================================================
-   MODAIS (PREVIEW EM TELA CHEIA E GERENCIAMENTO)
-   ========================================================================== */
+/* Modais */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -429,30 +590,22 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 14px;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
 }
-.modal-backdrop.open {
-  opacity: 1;
-  visibility: visible;
-}
+.modal-backdrop.open { opacity: 1; visibility: visible; }
 .modal-dialog {
   background: #ffffff;
   border-radius: var(--radius);
   width: 100%;
-  max-width: 820px;
-  max-height: 85vh;
+  max-width: 650px;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-lg);
-  transform: translateY(15px);
-  transition: transform 0.2s ease;
   overflow: hidden;
-}
-.modal-backdrop.open .modal-dialog {
-  transform: translateY(0);
 }
 .modal-dialog.modal-pdf-preview {
   max-width: 980px;
@@ -461,71 +614,118 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   max-height: 94vh;
 }
 .modal-header {
-  padding: 14px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
 }
 .modal-close-btn {
   background: transparent;
   border: 0;
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1;
   color: var(--text-muted);
   cursor: pointer;
   padding: 2px 8px;
-  border-radius: 4px;
 }
-.modal-close-btn:hover { background: #f1f5f9; color: var(--dark); }
 .modal-body {
-  padding: 16px 20px;
+  padding: 18px;
   overflow-y: auto;
   flex: 1;
 }
 
-/* Toast Container */
-.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-.toast { background: var(--dark); color: #ffffff; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 8px; pointer-events: auto; animation: slideUp 0.25s ease; }
+/* Tabelas */
+.data-table-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.data-table-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.table-responsive { width: 100%; overflow-x: auto; }
+table.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+table.custom-table th {
+  background: #f8fafc;
+  padding: 11px 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table.custom-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+table.custom-table tr:hover { background: #f8fafc; }
+
+/* Toast */
+.toast-container { position: fixed; bottom: 85px; right: 20px; z-index: 200; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { background: var(--dark); color: #ffffff; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 8px; pointer-events: auto; animation: slideUp 0.25s ease; }
 .toast.success { background: #15803d; }
 .toast.info { background: #0369a1; }
 .toast.danger { background: #b91c1c; }
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Responsividade */
-@media (max-width: 768px) {
+/* Responsividade Mobile-First */
+@media (max-width: 820px) {
+  body { padding-bottom: 80px; }
   header { padding: 10px 14px; }
-  .main-nav { width: 100%; order: 3; overflow-x: auto; }
-  .app-container { padding: 14px; }
+  .main-nav { display: none; } /* Usa barra inferior no celular */
+  .mobile-bottom-nav { display: flex; }
+  .app-container { padding: 12px; }
   .form-toolbar-sticky { top: 0; position: static; }
   .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
   .item-inputs-grid { grid-template-columns: 1fr; }
+  .obras-list-grid { grid-template-columns: 1fr; }
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .form-bottom-actions { justify-content: stretch; }
+  .form-bottom-actions .btn { flex: 1; }
+  .modal-dialog.modal-pdf-preview { width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; }
+  .toast-container { left: 14px; right: 14px; bottom: 80px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Header Principal -->
+<!-- Header Principal (Desktop / Celular) -->
 <header>
   <div class="brand">
     <div class="brand-badge">RICHTER</div>
     <div class="brand-info">
       <h1>Richter Construções</h1>
-      <p>Painel Administrativo & Gestão Financeira</p>
+      <p>Gestão de Obras, Orçamentos & Recibos</p>
     </div>
   </div>
 
   <nav class="main-nav">
-    <button type="button" class="nav-tab active" data-tab="dashboard">
+    <button type="button" class="nav-tab active" data-tab="obras">
+      📁 Obras & Clientes <span class="tab-badge" id="tabCountObras">0</span>
+    </button>
+    <button type="button" class="nav-tab" data-tab="dashboard">
       📊 Painel Geral
     </button>
     <button type="button" class="nav-tab" data-tab="orcamento">
       📋 Novo Orçamento
     </button>
     <button type="button" class="nav-tab" data-tab="todos-orcamentos">
-      📁 Orçamentos <span class="tab-badge" id="tabCountOrc">0</span>
+      📄 Orçamentos <span class="tab-badge" id="tabCountOrc">0</span>
     </button>
     <button type="button" class="nav-tab" data-tab="recibos">
       🧾 Recibos <span class="tab-badge" id="tabCountRec">0</span>
@@ -546,125 +746,112 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 <div class="app-container">
 
   <!-- ==========================================================================
-       TAB 1: PAINEL GERAL (DASHBOARD & MÉTRICAS)
+       TAB 1: PASTAS DE OBRAS & CLIENTES (DESTAQUE PRINCIPAL)
        ========================================================================== -->
-  <section id="tab-dashboard" class="tab-content-panel active">
+  <section id="tab-obras" class="tab-content-panel active">
+    <div class="obras-toolbar">
+      <input type="text" id="searchObrasInput" class="form-control obras-search" placeholder="🔍 Buscar por cliente, obra ou telefone...">
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-primary" id="btnAbrirModalNovaObra">
+          ➕ Nova Pasta de Obra
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid das Pastas das Obras -->
+    <div id="obrasListGrid" class="obras-list-grid">
+      <!-- Cards renderizados dinamicamente via JS -->
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       TAB 2: PAINEL GERAL (DASHBOARD & INDICADORES GLOBAIS)
+       ========================================================================== -->
+  <section id="tab-dashboard" class="tab-content-panel">
     <!-- Grid de Indicadores Chave (KPIs) -->
     <div class="dashboard-grid">
-      <div class="kpi-card highlight">
-        <div class="kpi-header">
-          <span>Total Orçado</span>
-          <span class="kpi-icon">💰</span>
-        </div>
-        <div class="kpi-value" id="kpiTotalOrcado">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas cadastradas</div>
-      </div>
-
       <div class="kpi-card highlight-success">
         <div class="kpi-header">
-          <span>Aprovados</span>
-          <span class="kpi-icon">🟢</span>
+          <span>Já Recebido (Obras)</span>
+          <span class="kpi-icon">💵</span>
         </div>
-        <div class="kpi-value" id="kpiAprovadosValor">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiAprovadosQtd">0 orçamentos fechados</div>
+        <div class="kpi-value" id="kpiObrasRecebido" style="color:var(--success);">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasRecebidoSub">Total comprovado em recibos</div>
+      </div>
+
+      <div class="kpi-card highlight">
+        <div class="kpi-header">
+          <span>Falta Receber (Saldo)</span>
+          <span class="kpi-icon">⏳</span>
+        </div>
+        <div class="kpi-value" id="kpiObrasFaltaReceber" style="color:var(--primary);">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasFaltaSub">A receber nas obras ativas</div>
       </div>
 
       <div class="kpi-card highlight-info">
         <div class="kpi-header">
-          <span>Em Negociação</span>
-          <span class="kpi-icon">🔵</span>
+          <span>Total Contratado</span>
+          <span class="kpi-icon">🏗️</span>
         </div>
-        <div class="kpi-value" id="kpiEmNegociacaoValor">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiEmNegociacaoQtd">0 orçamentos enviados</div>
+        <div class="kpi-value" id="kpiObrasTotalContratado">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasAtivasQtd">0 obras em andamento</div>
       </div>
 
-      <div class="kpi-card">
+      <div class="kpi-card highlight-warning">
         <div class="kpi-header">
-          <span>Total em Recibos</span>
-          <span class="kpi-icon">🧾</span>
+          <span>Total em Orçamentos</span>
+          <span class="kpi-icon">📋</span>
         </div>
-        <div class="kpi-value" id="kpiRecibosValor" style="color: var(--success);">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiRecibosQtd">0 pagamentos comprovados</div>
+        <div class="kpi-value" id="kpiTotalOrcado">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas cadastradas</div>
       </div>
     </div>
 
-    <!-- Seções Rápidas do Dashboard -->
-    <div class="dashboard-tables-grid">
-      <!-- Tabela de Orçamentos Recentes -->
-      <div class="data-table-card">
-        <div class="data-table-header">
-          <h3>📋 Orçamentos Recentes</h3>
-          <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('orcamento')">
-            ➕ Novo Orçamento
-          </button>
-        </div>
-        <div class="table-responsive">
-          <table class="custom-table" id="dashboardRecentQuotesTable">
-            <thead>
-              <tr>
-                <th>Nº</th>
-                <th>Cliente</th>
-                <th>Data</th>
-                <th>Status</th>
-                <th>Valor Total</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Renderizado via JS -->
-            </tbody>
-          </table>
-        </div>
+    <div class="data-table-card" style="margin-top: 18px;">
+      <div class="data-table-header">
+        <h3>📋 Propostas Recentes</h3>
+        <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('orcamento')">
+          ➕ Novo Orçamento
+        </button>
       </div>
-
-      <!-- Recibos Recentes -->
-      <div class="data-table-card">
-        <div class="data-table-header">
-          <h3>🧾 Últimos Recibos</h3>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="switchTab('recibos')">
-            Ver Todos
-          </button>
-        </div>
-        <div class="table-responsive">
-          <table class="custom-table" id="dashboardRecentReceiptsTable">
-            <thead>
-              <tr>
-                <th>Nº</th>
-                <th>Cliente</th>
-                <th>Valor</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Renderizado via JS -->
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive">
+        <table class="custom-table" id="dashboardRecentQuotesTable">
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>Cliente</th>
+              <th>Status</th>
+              <th>Valor Total</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </section>
 
   <!-- ==========================================================================
-       TAB 2: GERADOR DE ORÇAMENTOS (LAYOUT AMPLO, LIMPO E SEM PREVIEW LATERAL)
+       TAB 3: GERADOR DE ORÇAMENTOS (FOCO TOTAL E DESIGN LIMPO)
        ========================================================================== -->
   <section id="tab-orcamento" class="tab-content-panel">
     <div class="form-center-wrapper">
       
-      <!-- Barra Superior de Ferramentas com o Botão de Visualizar PDF -->
+      <!-- Barra Superior de Ferramentas -->
       <div class="form-toolbar-sticky">
         <div style="display: flex; align-items: center; gap: 8px;">
           <button type="button" class="btn btn-success btn-sm" id="btnSalvarOrcamento">
             💾 Salvar Orçamento
           </button>
           <button type="button" class="btn btn-secondary btn-sm" id="btnNovoOrcamento">
-            ✨ Limpar / Novo
+            ✨ Limpar
           </button>
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: #166534; background: #f0fdf4; padding: 5px 10px; border-radius: 6px; border: 1px solid #bbf7d0;" title="Garante que todos os campos sejam achatados (flattened), impedindo qualquer alteração posterior do cliente">
+          <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: #166534; background: #f0fdf4; padding: 6px 10px; border-radius: 6px; border: 1px solid #bbf7d0;" title="Achatamento definitivo e proteção do PDF">
             <input type="checkbox" id="chkLockPdf" checked>
-            🔒 Bloquear contra edições
+            🔒 Bloquear PDF
           </label>
           <button type="button" class="btn btn-secondary btn-sm" id="btnAbrirPreviewOrc" style="border-color:#cbd5e1; font-weight:700;">
             👁️ Visualizar PDF
@@ -685,9 +872,9 @@ textarea.form-control { min-height: 90px; resize: vertical; }
             <span class="step-number">1</span>
             <span>Dados do Cliente & Proposta</span>
           </div>
-          <div style="display: flex; gap: 8px; align-items: center;">
+          <div style="display: flex; gap: 6px; align-items: center;">
             <span id="currentStatusBadge" class="status-badge badge-rascunho">Rascunho</span>
-            <button type="button" class="btn btn-secondary btn-sm" id="btnHojeOrc" style="padding: 3px 8px; font-size: 11px;">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnHojeOrc" style="padding: 2px 8px; font-size: 11px;">
               📅 Hoje
             </button>
           </div>
@@ -715,7 +902,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 
           <div class="form-grid-2">
             <div class="form-group">
-              <label class="form-label" for="clienteNome">Nome do Cliente</label>
+              <label class="form-label" for="clienteNome">Nome Completo do Cliente</label>
               <input type="text" id="clienteNome" class="form-control" placeholder="Ex: João da Silva">
             </div>
             <div class="form-group">
@@ -759,7 +946,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
             <div class="chips-list">
               <span class="chip" data-title="Pintura geral interna e externa (2 demãos)">🎨 Pintura Geral</span>
               <span class="chip" data-title="Assentamento de piso cerâmico / porcelanato">📐 Piso / Porcelanato</span>
-              <span class="chip" data-title="Instalação e reparos elétricos">⚡ Instalação Elétrica</span>
+              <span class="chip" data-title="Instalação e reparos elétricos">⚡ Elétrica</span>
               <span class="chip" data-title="Instalação e revisão de encanamento / hidráulica">🚰 Hidráulica</span>
               <span class="chip" data-title="Alvenaria, reboco e regularização de parede">🧱 Alvenaria & Reboco</span>
               <span class="chip" data-title="Demolição, remoção e descarte de entulho">🔨 Demolição & Limpeza</span>
@@ -769,7 +956,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
           </div>
 
           <div class="pagination-info">
-            <span>Capacidade do modelo oficial: <strong>10 itens por página</strong> (novas páginas são criadas automaticamente se passar de 10)</span>
+            <span>Capacidade oficial: <strong>10 itens por folha</strong> (novas páginas são geradas automaticamente se passar de 10)</span>
             <span class="pagination-pill" id="pageCounterPill">Página 1 de 1</span>
           </div>
         </div>
@@ -798,7 +985,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
           </div>
 
           <div class="financial-row grand-total">
-            <div class="grand-total-label">VALOR TOTAL DO ORÇAMENTO:</div>
+            <div class="grand-total-label">VALOR TOTAL:</div>
             <div style="text-align: right;">
               <div id="grandTotalDisplay" class="grand-total-value">R$ 0,00</div>
               <input type="text" id="inputManualTotal" class="form-control" style="display:none; width: 180px; text-align: right; font-size: 19px; font-weight: 800; color: var(--primary);" placeholder="R$ 0,00">
@@ -812,19 +999,19 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         <div class="card-header">
           <div class="card-title">
             <span class="step-number">4</span>
-            <span>Observações & Condições Comerciais</span>
+            <span>Observações & Condições</span>
           </div>
         </div>
         <div class="card-body">
           <div class="form-group">
-            <textarea id="observacoesText" class="form-control" placeholder="Garantia, formas de pagamento, o que está ou não incluso..."></textarea>
+            <textarea id="observacoesText" class="form-control" placeholder="Garantia, prazos, formas de pagamento..."></textarea>
           </div>
 
-          <div class="quick-chips-title" style="margin-top: 10px;">Inserir termos padrão com 1 clique:</div>
+          <div class="quick-chips-title" style="margin-top: 10px;">Inserir termos com 1 clique:</div>
           <div class="obs-templates">
             <button type="button" class="obs-chip" data-insert="• Validade desta proposta: 15 dias corridos.">⏳ Validade 15 dias</button>
             <button type="button" class="obs-chip" data-insert="• Pagamento: 50% de entrada no início e 50% na conclusão dos serviços.">💳 50% entrada + 50% entrega</button>
-            <button type="button" class="obs-chip" data-insert="• Pagamento à vista com 5% de desconto via PIX.">💰 Desconto à vista no PIX</button>
+            <button type="button" class="obs-chip" data-insert="• Pagamento à vista com 5% de desconto via PIX.">💰 Desconto à vista PIX</button>
             <button type="button" class="obs-chip" data-insert="• O valor inclui apenas a mão de obra especializada. Materiais por conta do contratante.">👷 Apenas Mão de Obra</button>
             <button type="button" class="obs-chip" data-insert="• O valor inclui mão de obra e todos os materiais necessários.">📦 Mão de Obra + Material</button>
             <button type="button" class="obs-chip" data-insert="• Garantia de 1 ano para os serviços executados pela Richter Construções.">🛡️ Garantia de 1 ano</button>
@@ -833,18 +1020,18 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         </div>
       </section>
 
-      <!-- Ação Especial: Gerar Recibo a partir deste Orçamento -->
-      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <!-- Botões de Ação na Obra a partir do Orçamento -->
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div>
-          <div style="font-weight: 700; color: #166534; font-size: 14px;">🧾 Precisa emitir um recibo para este cliente?</div>
-          <div style="font-size: 12px; color: #15803d;">Crie o recibo com o nome do cliente e valor já preenchidos automaticamente.</div>
+          <div style="font-weight: 700; color: #1e40af; font-size: 14px;">📁 Criar Pasta de Obra para este Orçamento</div>
+          <div style="font-size: 12px; color: #3b82f6;">Gera a pasta para controlar pagamentos recebidos e saldo restante.</div>
         </div>
-        <button type="button" class="btn btn-success btn-sm" id="btnGerarReciboDeOrcamento">
-          🧾 Emitir Recibo Deste Orçamento
+        <button type="button" class="btn btn-primary btn-sm" id="btnCriarObraDeOrcamento">
+          📁 Criar Pasta de Obra
         </button>
       </div>
 
-      <!-- Barra Inferior de Ações -->
+      <!-- Barra Inferior -->
       <div class="form-bottom-actions">
         <button type="button" class="btn btn-secondary" id="btnAbrirPreviewOrcBottom">
           👁️ Visualizar PDF
@@ -861,50 +1048,42 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   </section>
 
   <!-- ==========================================================================
-       TAB 3: TODOS OS ORÇAMENTOS (TABELA & FILTROS)
+       TAB 4: TODOS OS ORÇAMENTOS (TABELA & FILTROS)
        ========================================================================== -->
   <section id="tab-todos-orcamentos" class="tab-content-panel">
     <div class="data-table-card">
       <div class="data-table-header">
-        <div style="display: flex; gap: 12px; align-items: center; flex: 1; flex-wrap: wrap;">
-          <input type="text" id="searchAllQuotesInput" class="form-control" style="max-width: 320px;" placeholder="🔍 Buscar por cliente, número ou endereço...">
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn active" data-filter="todos">Todos</button>
-            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Rascunho">Rascunhos</button>
-            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Enviado">Enviados</button>
-            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Aprovado">Aprovados</button>
-            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Recusado">Recusados</button>
-          </div>
+        <input type="text" id="searchAllQuotesInput" class="form-control" style="max-width: 320px;" placeholder="🔍 Buscar por cliente, número ou endereço...">
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm filter-orc-btn active" data-filter="todos">Todos</button>
+          <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Rascunho">Rascunhos</button>
+          <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Enviado">Enviados</button>
+          <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Aprovado">Aprovados</button>
+          <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Recusado">Recusados</button>
         </div>
-        <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('orcamento')">
-          ➕ Novo Orçamento
-        </button>
       </div>
 
       <div class="table-responsive">
         <table class="custom-table" id="allQuotesTable">
           <thead>
             <tr>
-              <th>Nº Proposta</th>
+              <th>Nº</th>
               <th>Cliente</th>
               <th>Telefone</th>
               <th>Data</th>
-              <th>Itens (Páginas)</th>
               <th>Status</th>
               <th>Valor Total</th>
               <th style="text-align: right;">Ações</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Renderizado via JS -->
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>
   </section>
 
   <!-- ==========================================================================
-       TAB 4: EMISSÃO & GESTÃO DE RECIBOS (LAYOUT AMPLO COM PRÉVIA VIA BOTÃO)
+       TAB 5: EMISSÃO & GESTÃO DE RECIBOS (COM VÍNCULO ÀS OBRAS)
        ========================================================================== -->
   <section id="tab-recibos" class="tab-content-panel">
     <div class="form-center-wrapper">
@@ -916,17 +1095,17 @@ textarea.form-control { min-height: 90px; resize: vertical; }
             💾 Salvar Recibo
           </button>
           <button type="button" class="btn btn-secondary btn-sm" id="btnNovoRecibo">
-            ✨ Novo Recibo
+            ✨ Novo
           </button>
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: #166534; background: #f0fdf4; padding: 5px 10px; border-radius: 6px; border: 1px solid #bbf7d0;" title="Garante que o recibo seja emitido de forma imutável e autenticada">
+          <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: #166534; background: #f0fdf4; padding: 6px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
             <input type="checkbox" id="chkLockRecibo" checked>
             🔒 Bloquear Recibo
           </label>
           <button type="button" class="btn btn-secondary btn-sm" id="btnAbrirPreviewRecibo" style="border-color:#cbd5e1; font-weight:700;">
-            👁️ Visualizar Recibo (2 Vias)
+            👁️ Visualizar Recibo
           </button>
           <button type="button" class="btn btn-whatsapp btn-sm" id="btnWhatsappRecibo">
             📱 WhatsApp
@@ -942,9 +1121,9 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         <div class="card-header">
           <div class="card-title">
             <span class="step-number" style="background:#f0fdf4; color:#16a34a;">🧾</span>
-            <span>Emissão de Recibo de Pagamento</span>
+            <span>Emissão de Recibo Oficial (2 Vias A4)</span>
           </div>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnHojeRecibo" style="padding: 3px 8px; font-size: 11px;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnHojeRecibo" style="padding: 2px 8px; font-size: 11px;">
             📅 Hoje
           </button>
         </div>
@@ -960,7 +1139,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
             </div>
             <div class="form-group">
               <label class="form-label" for="recValor">Valor Pago (R$)</label>
-              <input type="text" id="recValor" class="form-control" style="font-weight:700; color:var(--primary); font-size:15px;" placeholder="R$ 0,00">
+              <input type="text" id="recValor" class="form-control" style="font-weight:700; color:var(--primary); font-size:16px;" placeholder="R$ 0,00">
             </div>
           </div>
 
@@ -972,7 +1151,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
           <div class="form-grid-2">
             <div class="form-group">
               <label class="form-label" for="recClienteNome">Recebemos de (Cliente / Pagador)</label>
-              <input type="text" id="recClienteNome" class="form-control" placeholder="Nome completo do pagador">
+              <input type="text" id="recClienteNome" class="form-control" placeholder="Nome do cliente">
             </div>
             <div class="form-group">
               <label class="form-label" for="recClienteDoc">CPF ou CNPJ (Opcional)</label>
@@ -986,7 +1165,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
               <select id="recFormaPagamento" class="form-control">
                 <option value="PIX">⚡ PIX</option>
                 <option value="Dinheiro">💵 Dinheiro (em espécie)</option>
-                <option value="Transferência Bancária (TED/DOC)">🏦 Transferência Bancária</option>
+                <option value="Transferência Bancária">🏦 Transferência Bancária</option>
                 <option value="Cartão de Crédito">💳 Cartão de Crédito</option>
                 <option value="Cartão de Débito">💳 Cartão de Débito</option>
                 <option value="Boleto Bancário">📄 Boleto Bancário</option>
@@ -1000,8 +1179,8 @@ textarea.form-control { min-height: 90px; resize: vertical; }
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="recDescricao">Referente a (Descrição dos Serviços / Parcela)</label>
-            <textarea id="recDescricao" class="form-control" placeholder="Ex: Pagamento referente à entrada de 50% dos serviços de reforma e pintura residencial..."></textarea>
+            <label class="form-label" for="recDescricao">Referente a (Descrição do Pagamento / Obra)</label>
+            <textarea id="recDescricao" class="form-control" placeholder="Ex: Pagamento da Entrada (50%) referente à reforma residencial..."></textarea>
           </div>
         </div>
       </section>
@@ -1009,7 +1188,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
       <!-- Histórico de Recibos Emitidos -->
       <div class="data-table-card">
         <div class="data-table-header">
-          <h3>📑 Histórico de Recibos Emitidos</h3>
+          <h3>📑 Todos os Recibos Emitidos</h3>
         </div>
         <div class="table-responsive">
           <table class="custom-table" id="allReceiptsTable">
@@ -1023,9 +1202,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
                 <th style="text-align: right;">Ações</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Renderizado via JS -->
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>
@@ -1035,9 +1212,144 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 
 </div>
 
+<!-- Barra de Navegação Inferior para Celular -->
+<nav class="mobile-bottom-nav">
+  <button type="button" class="mobile-nav-item active" data-tab="obras">
+    <span class="icon">📁</span>
+    <span>Obras</span>
+  </button>
+  <button type="button" class="mobile-nav-item" data-tab="dashboard">
+    <span class="icon">📊</span>
+    <span>Painel</span>
+  </button>
+  <button type="button" class="mobile-nav-item" data-tab="orcamento">
+    <span class="icon">📋</span>
+    <span>Orçamento</span>
+  </button>
+  <button type="button" class="mobile-nav-item" data-tab="recibos">
+    <span class="icon">🧾</span>
+    <span>Recibos</span>
+  </button>
+</nav>
+
 <!-- ==========================================================================
-     MODAL DE PRÉ-VISUALIZAÇÃO DO PDF DO ORÇAMENTO (ABRE VIA BOTÃO)
+     MODAIS
      ========================================================================== -->
+
+<!-- Modal: Criar / Editar Pasta de Obra -->
+<div class="modal-backdrop" id="obraModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalObraTitle">📁 Nova Pasta de Obra</h3>
+      <button type="button" class="modal-close-btn" id="btnCloseModalObra">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="modalObraId">
+      
+      <div class="form-group">
+        <label class="form-label" for="modalObraCliente">Nome do Cliente</label>
+        <input type="text" id="modalObraCliente" class="form-control" placeholder="Ex: João da Silva">
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalObraTitulo">Identificação da Obra / Serviço</label>
+          <input type="text" id="modalObraTitulo" class="form-control" placeholder="Ex: Reforma da Fachada e Pintura">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="modalObraTelefone">Telefone / WhatsApp</label>
+          <input type="text" id="modalObraTelefone" class="form-control" placeholder="(00) 00000-0000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="modalObraEndereco">Endereço da Obra</label>
+        <input type="text" id="modalObraEndereco" class="form-control" placeholder="Rua, número, bairro, cidade">
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalObraValorTotal">Valor Total Contratado (R$)</label>
+          <input type="text" id="modalObraValorTotal" class="form-control" style="font-weight:700; color:var(--primary); font-size:16px;" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="modalObraStatus">Status da Obra</label>
+          <select id="modalObraStatus" class="form-control">
+            <option value="Em Andamento">🟢 Em Andamento</option>
+            <option value="Concluída">🏁 Concluída</option>
+            <option value="Pausada">⏸️ Pausada</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid var(--border); margin-top:10px;">
+        <span style="font-size:12px; color:var(--text-muted);">
+          💡 <strong>Dica:</strong> Após salvar a pasta da obra, você poderá registrar os pagamentos parcelados (Pagamento 1, 2, 3...) e emitir os recibos correspondentes automaticamente.
+        </span>
+      </div>
+    </div>
+    <div style="padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px;">
+      <button type="button" class="btn btn-secondary btn-sm" id="btnCancelModalObra">Cancelar</button>
+      <button type="button" class="btn btn-success" id="btnSalvarObra">💾 Salvar Pasta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar Pagamento / Parcela na Obra -->
+<div class="modal-backdrop" id="pagamentoModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalPagamentoTitle">💵 Registrar Pagamento na Obra</h3>
+      <button type="button" class="modal-close-btn" id="btnCloseModalPagamento">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="modalPagamentoObraId">
+      <input type="hidden" id="modalPagamentoIndex">
+
+      <div class="form-group">
+        <label class="form-label" for="modalPagamentoDesc">Descrição do Pagamento / Parcela</label>
+        <input type="text" id="modalPagamentoDesc" class="form-control" placeholder="Ex: Pagamento 1 (Entrada de 50%)">
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalPagamentoValor">Valor deste Pagamento (R$)</label>
+          <input type="text" id="modalPagamentoValor" class="form-control" style="font-weight:700; color:var(--primary); font-size:16px;" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="modalPagamentoData">Data</label>
+          <input type="date" id="modalPagamentoData" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="modalPagamentoForma">Forma de Pagamento</label>
+        <select id="modalPagamentoForma" class="form-control">
+          <option value="PIX">⚡ PIX</option>
+          <option value="Dinheiro">💵 Dinheiro (em espécie)</option>
+          <option value="Transferência Bancária">🏦 Transferência Bancária</option>
+          <option value="Cartão de Crédito">💳 Cartão de Crédito</option>
+          <option value="Cartão de Débito">💳 Cartão de Débito</option>
+          <option value="Boleto Bancário">📄 Boleto Bancário</option>
+          <option value="Cheque">📑 Cheque</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="checkbox" id="modalPagamentoEmitirRecibo" checked>
+          🧾 Emitir Recibo Oficial (PDF) automaticamente para este pagamento
+        </label>
+      </div>
+    </div>
+    <div style="padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px;">
+      <button type="button" class="btn btn-secondary btn-sm" id="btnCancelModalPagamento">Cancelar</button>
+      <button type="button" class="btn btn-success" id="btnConfirmarPagamento">✅ Confirmar Pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Pré-visualização do PDF do Orçamento -->
 <div class="modal-backdrop" id="orcPreviewModal">
   <div class="modal-dialog modal-pdf-preview">
     <div class="modal-header">
@@ -1049,12 +1361,8 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         </div>
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
-        <button type="button" class="btn btn-primary btn-sm" id="btnDownloadFromModal">
-          📥 Baixar PDF
-        </button>
-        <button type="button" class="btn btn-secondary btn-sm" id="btnOpenNewTabFromModal">
-          ↗️ Nova Aba
-        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="btnDownloadFromModal">📥 Baixar PDF</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnOpenNewTabFromModal">↗️ Nova Aba</button>
         <button type="button" class="modal-close-btn" id="btnCloseOrcPreview">&times;</button>
       </div>
     </div>
@@ -1064,9 +1372,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   </div>
 </div>
 
-<!-- ==========================================================================
-     MODAL DE PRÉ-VISUALIZAÇÃO DO PDF DO RECIBO (ABRE VIA BOTÃO)
-     ========================================================================== -->
+<!-- Modal: Pré-visualização do PDF do Recibo -->
 <div class="modal-backdrop" id="recPreviewModal">
   <div class="modal-dialog modal-pdf-preview">
     <div class="modal-header">
@@ -1078,12 +1384,8 @@ textarea.form-control { min-height: 90px; resize: vertical; }
         </div>
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
-        <button type="button" class="btn btn-primary btn-sm" id="btnDownloadRecFromModal">
-          📥 Baixar Recibo (PDF)
-        </button>
-        <button type="button" class="btn btn-secondary btn-sm" id="btnOpenRecNewTabFromModal">
-          ↗️ Nova Aba
-        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="btnDownloadRecFromModal">📥 Baixar Recibo (PDF)</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnOpenRecNewTabFromModal">↗️ Nova Aba</button>
         <button type="button" class="modal-close-btn" id="btnCloseRecPreview">&times;</button>
       </div>
     </div>
@@ -1093,10 +1395,10 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   </div>
 </div>
 
-<!-- Container Toast -->
+<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Bibliotecas Locais com Contingência CDN -->
+<!-- Bibliotecas Locais com Fallback CDN -->
 <script src="pdf-lib.min.js"></script>
 <script>
 if (typeof PDFLib === 'undefined') {
@@ -1109,10 +1411,12 @@ if (typeof PDFLib === 'undefined') {
 /* ==========================================================================
    BANCO DE DADOS LOCAL (STORAGE)
    ========================================================================== */
+const OBRAS_DB_KEY = 'richter_obras_v1';
 const QUOTES_DB_KEY = 'richter_saved_quotes_v2';
 const RECEIPTS_DB_KEY = 'richter_saved_receipts_v1';
 const DRAFT_KEY = 'richter_current_draft_v2';
 
+let savedObras = [];
 let savedQuotes = [];
 let savedReceipts = [];
 let currentQuoteId = null;
@@ -1148,6 +1452,11 @@ let receiptState = {
 
 function initDatabase() {
   try {
+    const rawO = localStorage.getItem(OBRAS_DB_KEY);
+    savedObras = rawO ? JSON.parse(rawO) : [];
+  } catch (e) { savedObras = []; }
+
+  try {
     const rawQ = localStorage.getItem(QUOTES_DB_KEY);
     savedQuotes = rawQ ? JSON.parse(rawQ) : [];
   } catch (e) { savedQuotes = []; }
@@ -1158,9 +1467,17 @@ function initDatabase() {
   } catch (e) { savedReceipts = []; }
 
   updateCounts();
+  renderObrasGrid();
   renderDashboard();
   renderAllQuotesTable();
   renderAllReceiptsTable();
+}
+
+function persistObras() {
+  localStorage.setItem(OBRAS_DB_KEY, JSON.stringify(savedObras));
+  updateCounts();
+  renderObrasGrid();
+  renderDashboard();
 }
 
 function persistQuotes() {
@@ -1178,6 +1495,7 @@ function persistReceipts() {
 }
 
 function updateCounts() {
+  document.getElementById('tabCountObras').textContent = savedObras.length;
   document.getElementById('tabCountOrc').textContent = savedQuotes.length;
   document.getElementById('tabCountRec').textContent = savedReceipts.length;
 }
@@ -1197,25 +1515,29 @@ function showToast(message, type = 'info') {
 }
 
 /* ==========================================================================
-   NAVEGAÇÃO POR ABAS
+   NAVEGAÇÃO POR ABAS (DESKTOP E MOBILE)
    ========================================================================== */
 function switchTab(tabId) {
   document.querySelectorAll('.main-nav .nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content-panel').forEach(p => p.classList.remove('active'));
 
-  const btn = document.querySelector(`.main-nav .nav-tab[data-tab="${tabId}"]`);
+  const desktopBtn = document.querySelector(`.main-nav .nav-tab[data-tab="${tabId}"]`);
+  const mobileBtn = document.querySelector(`.mobile-bottom-nav .mobile-nav-item[data-tab="${tabId}"]`);
   const panel = document.getElementById(`tab-${tabId}`);
-  if (btn) btn.classList.add('active');
+
+  if (desktopBtn) desktopBtn.classList.add('active');
+  if (mobileBtn) mobileBtn.classList.add('active');
   if (panel) panel.classList.add('active');
 
-  if (tabId === 'dashboard') {
-    renderDashboard();
-  } else if (tabId === 'todos-orcamentos') {
-    renderAllQuotesTable();
-  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (tabId === 'obras') renderObrasGrid();
+  else if (tabId === 'dashboard') renderDashboard();
+  else if (tabId === 'todos-orcamentos') renderAllQuotesTable();
 }
 
-document.querySelectorAll('.main-nav .nav-tab').forEach(btn => {
+document.querySelectorAll('.main-nav .nav-tab, .mobile-bottom-nav .mobile-nav-item').forEach(btn => {
   btn.onclick = () => switchTab(btn.dataset.tab);
 });
 
@@ -1266,9 +1588,7 @@ function escapeHtml(text) {
 }
 
 function numeroParaExtenso(valor) {
-  if (typeof valor === 'string') {
-    valor = parseBRL(valor);
-  }
+  if (typeof valor === 'string') valor = parseBRL(valor);
   if (isNaN(valor) || valor === 0) return 'Zero reais';
   
   const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
@@ -1293,7 +1613,6 @@ function numeroParaExtenso(valor) {
 
   let inteiro = Math.floor(valor);
   let centavos = Math.round((valor - inteiro) * 100);
-
   let partesReais = [];
   let milhoes = Math.floor(inteiro / 1000000);
   let milhares = Math.floor((inteiro % 1000000) / 1000);
@@ -1308,9 +1627,7 @@ function numeroParaExtenso(valor) {
   else if (inteiro > 1) strReais += ' reais';
 
   let strCentavos = '';
-  if (centavos > 0) {
-    strCentavos = trio(centavos) + (centavos === 1 ? ' centavo' : ' centavos');
-  }
+  if (centavos > 0) strCentavos = trio(centavos) + (centavos === 1 ? ' centavo' : ' centavos');
 
   let finalStr = '';
   if (strReais && strCentavos) finalStr = strReais + ' e ' + strCentavos;
@@ -1322,78 +1639,395 @@ function numeroParaExtenso(valor) {
 }
 
 /* ==========================================================================
-   DASHBOARD: RENDERIZAÇÃO E MÉTRICAS
+   PASTAS DE OBRAS & CLIENTES (GESTÃO FINANCEIRA)
    ========================================================================== */
-function renderDashboard() {
-  let totalOrcado = 0;
-  let aprovadosValor = 0;
-  let aprovadosQtd = 0;
-  let negociacaoValor = 0;
-  let negociacaoQtd = 0;
+function renderObrasGrid() {
+  const container = document.getElementById('obrasListGrid');
+  const query = (document.getElementById('searchObrasInput').value || '').trim().toLowerCase();
 
-  savedQuotes.forEach(q => {
-    const val = parseBRL(q.totalFormatted || '0');
-    totalOrcado += val;
-    if (q.status === 'Aprovado') {
-      aprovadosValor += val;
-      aprovadosQtd++;
-    } else if (q.status === 'Enviado') {
-      negociacaoValor += val;
-      negociacaoQtd++;
+  let filtered = savedObras.filter(o => {
+    if (!query) return true;
+    return (o.clienteNome || '').toLowerCase().includes(query) ||
+           (o.tituloObra || '').toLowerCase().includes(query) ||
+           (o.clienteTelefone || '').toLowerCase().includes(query) ||
+           (o.clienteEndereco || '').toLowerCase().includes(query);
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align:center; padding:48px 20px; background:#fff; border:1px solid var(--border); border-radius:var(--radius);">
+        <div style="font-size:42px; margin-bottom:10px;">📁</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--dark);">Nenhuma pasta de obra encontrada</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:4px; max-width:440px; margin: 4px auto 16px;">
+          Crie sua primeira pasta de obra para gerenciar pagamentos por etapas (Pagamento 1, 2, 3...), controlar o saldo que falta receber e emitir recibos oficiais.
+        </p>
+        <button type="button" class="btn btn-primary" onclick="abrirModalNovaObra()">
+          ➕ Criar Primeira Pasta de Obra
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(o => {
+    const totalContratado = parseBRL(o.valorTotalContratado || '0');
+    let totalPago = 0;
+    (o.pagamentos || []).forEach(p => {
+      if (p.pago) totalPago += parseBRL(p.valor || '0');
+    });
+
+    const saldoFalta = Math.max(0, totalContratado - totalPago);
+    const percPago = totalContratado > 0 ? Math.min(100, Math.round((totalPago / totalContratado) * 100)) : 0;
+    const statusClass = (o.status || 'Em Andamento').toLowerCase().replace(/\s+/g, '-');
+
+    return `
+      <div class="obra-folder-card">
+        <div class="obra-folder-header">
+          <div class="obra-folder-top">
+            <div>
+              <div class="obra-client-title">${escapeHtml(o.clienteNome || 'Cliente sem nome')}</div>
+              <div class="obra-subname">🏗️ ${escapeHtml(o.tituloObra || 'Obra Geral')}</div>
+            </div>
+            <span class="status-badge badge-${statusClass}">${escapeHtml(o.status || 'Em Andamento')}</span>
+          </div>
+          <div class="obra-address">📍 ${escapeHtml(o.clienteEndereco || 'Endereço não informado')}</div>
+        </div>
+
+        <div class="obra-progress-section">
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; margin-bottom:5px;">
+            <span>Progresso dos Pagamentos</span>
+            <span style="color:var(--success);">${percPago}% Recebido</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: ${percPago}%;"></div>
+          </div>
+          <div class="obra-financial-boxes">
+            <div class="fin-box">
+              <div class="fin-box-label">Total Obra</div>
+              <div class="fin-box-val total">${formatBRL(totalContratado)}</div>
+            </div>
+            <div class="fin-box">
+              <div class="fin-box-label">Já Recebido</div>
+              <div class="fin-box-val pago">${formatBRL(totalPago)}</div>
+            </div>
+            <div class="fin-box">
+              <div class="fin-box-label">Falta Receber</div>
+              <div class="fin-box-val falta">${formatBRL(saldoFalta)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="obra-payments-list">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">
+            Histórico de Parcelas & Pagamentos:
+          </div>
+          ${(o.pagamentos && o.pagamentos.length > 0) ? o.pagamentos.map((p, idx) => `
+            <div class="payment-item-row ${p.pago ? 'pago' : 'pendente'}">
+              <div class="payment-info-left">
+                <span class="payment-title">${escapeHtml(p.titulo || `Pagamento ${idx + 1}`)}</span>
+                <span class="payment-sub">${p.data ? p.data.split('-').reverse().join('/') : '-'} &bull; ${escapeHtml(p.forma || 'PIX')} ${p.reciboNumero ? `&bull; <strong>${p.reciboNumero}</strong>` : ''}</span>
+              </div>
+              <div class="payment-actions-right">
+                <span class="payment-val" style="color:${p.pago ? 'var(--success)' : 'var(--warning)'};">${escapeHtml(p.valor || 'R$ 0,00')}</span>
+                ${p.pago ? 
+                  `<button type="button" class="btn btn-secondary btn-sm" onclick="verReciboDePagamento('${p.reciboId}')" title="Ver Recibo" style="padding:2px 6px;">🧾</button>` : 
+                  `<button type="button" class="btn btn-success btn-sm" onclick="abrirModalRegistrarPagamento('${o.id}', ${idx})" style="padding:2px 8px; font-size:11px;">Receber</button>`
+                }
+                <button type="button" class="item-remove-btn" onclick="removerPagamentoDaObra('${o.id}', ${idx})" title="Excluir Pagamento">&times;</button>
+              </div>
+            </div>
+          `).join('') : '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:10px;">Nenhum pagamento registrado ainda.</div>'}
+        </div>
+
+        <div class="obra-folder-footer">
+          <button type="button" class="btn btn-primary btn-sm" onclick="abrirModalNovoPagamento('${o.id}')">
+            ➕ Novo Pagamento / Recibo
+          </button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-whatsapp btn-sm" onclick="enviarExtratoWhatsApp('${o.id}')" title="Enviar extrato financeiro no WhatsApp">
+              📱 Cobrança / Extrato
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="editarPastaObra('${o.id}')" title="Editar dados da Obra">
+              ✏️
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="excluirPastaObra('${o.id}')" title="Excluir Pasta">
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('searchObrasInput').addEventListener('input', renderObrasGrid);
+
+/* Modais de Obra */
+function abrirModalNovaObra() {
+  document.getElementById('modalObraId').value = '';
+  document.getElementById('modalObraTitle').textContent = '📁 Nova Pasta de Obra';
+  document.getElementById('modalObraCliente').value = '';
+  document.getElementById('modalObraTitulo').value = '';
+  document.getElementById('modalObraTelefone').value = '';
+  document.getElementById('modalObraEndereco').value = '';
+  document.getElementById('modalObraValorTotal').value = '';
+  document.getElementById('modalObraStatus').value = 'Em Andamento';
+  document.getElementById('obraModal').classList.add('open');
+  document.getElementById('modalObraCliente').focus();
+}
+
+document.getElementById('btnAbrirModalNovaObra').onclick = abrirModalNovaObra;
+document.getElementById('btnCloseModalObra').onclick = () => document.getElementById('obraModal').classList.remove('open');
+document.getElementById('btnCancelModalObra').onclick = () => document.getElementById('obraModal').classList.remove('open');
+
+document.getElementById('modalObraValorTotal').addEventListener('input', (e) => {
+  e.target.value = formatBRL(e.target.value);
+});
+document.getElementById('modalObraTelefone').addEventListener('input', (e) => {
+  e.target.value = maskPhone(e.target.value);
+});
+
+document.getElementById('btnSalvarObra').onclick = () => {
+  const cliente = document.getElementById('modalObraCliente').value.trim();
+  const titulo = document.getElementById('modalObraTitulo').value.trim() || 'Obra Geral';
+  const valorTotal = document.getElementById('modalObraValorTotal').value.trim() || 'R$ 0,00';
+  const id = document.getElementById('modalObraId').value || ('obra_' + Date.now());
+
+  if (!cliente) {
+    alert('Por favor, informe o nome do cliente.');
+    document.getElementById('modalObraCliente').focus();
+    return;
+  }
+
+  const existingIdx = savedObras.findIndex(o => o.id === id);
+  if (existingIdx >= 0) {
+    savedObras[existingIdx].clienteNome = cliente;
+    savedObras[existingIdx].tituloObra = titulo;
+    savedObras[existingIdx].clienteTelefone = document.getElementById('modalObraTelefone').value;
+    savedObras[existingIdx].clienteEndereco = document.getElementById('modalObraEndereco').value;
+    savedObras[existingIdx].valorTotalContratado = valorTotal;
+    savedObras[existingIdx].status = document.getElementById('modalObraStatus').value;
+    showToast('Pasta de obra atualizada!', 'success');
+  } else {
+    savedObras.unshift({
+      id: id,
+      clienteNome: cliente,
+      tituloObra: titulo,
+      clienteTelefone: document.getElementById('modalObraTelefone').value,
+      clienteEndereco: document.getElementById('modalObraEndereco').value,
+      valorTotalContratado: valorTotal,
+      status: document.getElementById('modalObraStatus').value,
+      dataCriacao: new Date().toISOString(),
+      pagamentos: []
+    });
+    showToast('Pasta de obra criada com sucesso!', 'success');
+  }
+
+  persistObras();
+  document.getElementById('obraModal').classList.remove('open');
+};
+
+function editarPastaObra(id) {
+  const o = savedObras.find(item => item.id === id);
+  if (!o) return;
+
+  document.getElementById('modalObraId').value = o.id;
+  document.getElementById('modalObraTitle').textContent = '✏️ Editar Pasta de Obra';
+  document.getElementById('modalObraCliente').value = o.clienteNome || '';
+  document.getElementById('modalObraTitulo').value = o.tituloObra || '';
+  document.getElementById('modalObraTelefone').value = o.clienteTelefone || '';
+  document.getElementById('modalObraEndereco').value = o.clienteEndereco || '';
+  document.getElementById('modalObraValorTotal').value = o.valorTotalContratado || '';
+  document.getElementById('modalObraStatus').value = o.status || 'Em Andamento';
+  document.getElementById('obraModal').classList.add('open');
+}
+
+function excluirPastaObra(id) {
+  const o = savedObras.find(item => item.id === id);
+  if (!o) return;
+  if (confirm(`Deseja excluir a pasta da obra de "${o.clienteNome}"? Todos os pagamentos vinculados serão removidos.`)) {
+    savedObras = savedObras.filter(item => item.id !== id);
+    persistObras();
+    showToast('Pasta de obra excluída.', 'danger');
+  }
+}
+
+/* Modais de Pagamento da Obra */
+function abrirModalNovoPagamento(obraId) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o) return;
+
+  const totalContratado = parseBRL(o.valorTotalContratado || '0');
+  let totalPago = 0;
+  (o.pagamentos || []).forEach(p => { if (p.pago) totalPago += parseBRL(p.valor || '0'); });
+  const saldoFalta = Math.max(0, totalContratado - totalPago);
+
+  const numParcela = (o.pagamentos ? o.pagamentos.length : 0) + 1;
+  document.getElementById('modalPagamentoObraId').value = obraId;
+  document.getElementById('modalPagamentoIndex').value = '-1';
+  document.getElementById('modalPagamentoTitle').textContent = `💵 Novo Pagamento — ${o.clienteNome}`;
+  document.getElementById('modalPagamentoDesc').value = `Pagamento ${numParcela} (${o.tituloObra || 'Serviços'})`;
+  document.getElementById('modalPagamentoValor').value = formatBRL(saldoFalta > 0 ? saldoFalta : 0);
+  document.getElementById('modalPagamentoData').value = getTodayString();
+  document.getElementById('modalPagamentoForma').value = 'PIX';
+  document.getElementById('modalPagamentoEmitirRecibo').checked = true;
+
+  document.getElementById('pagamentoModal').classList.add('open');
+}
+
+document.getElementById('btnCloseModalPagamento').onclick = () => document.getElementById('pagamentoModal').classList.remove('open');
+document.getElementById('btnCancelModalPagamento').onclick = () => document.getElementById('pagamentoModal').classList.remove('open');
+document.getElementById('modalPagamentoValor').addEventListener('input', (e) => { e.target.value = formatBRL(e.target.value); });
+
+document.getElementById('btnConfirmarPagamento').onclick = () => {
+  const obraId = document.getElementById('modalPagamentoObraId').value;
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o) return;
+
+  const desc = document.getElementById('modalPagamentoDesc').value.trim() || 'Pagamento';
+  const valor = document.getElementById('modalPagamentoValor').value.trim() || 'R$ 0,00';
+  const data = document.getElementById('modalPagamentoData').value || getTodayString();
+  const forma = document.getElementById('modalPagamentoForma').value || 'PIX';
+  const emitirRecibo = document.getElementById('modalPagamentoEmitirRecibo').checked;
+
+  let recId = null;
+  let recNum = null;
+
+  if (emitirRecibo) {
+    recId = 'rec_' + Date.now();
+    recNum = `REC-${new Date().getFullYear()}-${String(savedReceipts.length + 1).padStart(3, '0')}`;
+    savedReceipts.unshift({
+      id: recId,
+      numero: recNum,
+      data: data,
+      valor: valor,
+      valorExtenso: numeroParaExtenso(valor),
+      clienteNome: o.clienteNome || 'Cliente',
+      clienteDoc: '',
+      formaPagamento: forma,
+      cidade: 'Joinville - SC',
+      descricao: `${desc} — Obra: ${o.tituloObra || 'Geral'}`,
+      createdAt: new Date().toISOString()
+    });
+    persistReceipts();
+  }
+
+  if (!o.pagamentos) o.pagamentos = [];
+  const idx = parseInt(document.getElementById('modalPagamentoIndex').value, 10);
+  if (idx >= 0 && idx < o.pagamentos.length) {
+    o.pagamentos[idx] = { titulo: desc, valor: valor, data: data, forma: forma, pago: true, reciboId: recId, reciboNumero: recNum };
+  } else {
+    o.pagamentos.push({ titulo: desc, valor: valor, data: data, forma: forma, pago: true, reciboId: recId, reciboNumero: recNum });
+  }
+
+  persistObras();
+  document.getElementById('pagamentoModal').classList.remove('open');
+  showToast(emitirRecibo ? `Pagamento registrado e Recibo ${recNum} emitido com sucesso!` : 'Pagamento registrado com sucesso!', 'success');
+};
+
+function removerPagamentoDaObra(obraId, pagIdx) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o || !o.pagamentos) return;
+  if (confirm(`Remover este registro de pagamento?`)) {
+    o.pagamentos.splice(pagIdx, 1);
+    persistObras();
+    showToast('Registro de pagamento removido.', 'info');
+  }
+}
+
+function verReciboDePagamento(reciboId) {
+  if (!reciboId) return;
+  editReceipt(reciboId);
+}
+
+function enviarExtratoWhatsApp(obraId) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o) return;
+
+  const totalContratado = parseBRL(o.valorTotalContratado || '0');
+  let totalPago = 0;
+  let detalhePagos = '';
+
+  (o.pagamentos || []).forEach((p, i) => {
+    if (p.pago) {
+      totalPago += parseBRL(p.valor || '0');
+      detalhePagos += `  • ${p.titulo || `Pagamento ${i+1}`}: *${p.valor}* (${p.data ? p.data.split('-').reverse().join('/') : ''} via ${p.forma})\n`;
     }
   });
 
-  let totalRecibos = 0;
-  savedReceipts.forEach(r => {
-    totalRecibos += parseBRL(r.valor || '0');
+  const saldoFalta = Math.max(0, totalContratado - totalPago);
+  const fone = (o.clienteTelefone || '').replace(/\D/g, '');
+
+  let msg = `*EXTRATO FINANCEIRO DA OBRA — RICHTER CONSTRUÇÕES*\n` +
+            `Cliente: *${o.clienteNome}*\n` +
+            `Obra: *${o.tituloObra || 'Serviços'}*\n` +
+            `Local: ${o.clienteEndereco || 'Conforme contrato'}\n\n` +
+            `📊 *Resumo Financeiro:*\n` +
+            `• Valor Total Contratado: *${formatBRL(totalContratado)}*\n` +
+            `• Total Já Pago: *${formatBRL(totalPago)}*\n` +
+            (detalhePagos ? `\n*Pagamentos Realizados:*\n${detalhePagos}\n` : '') +
+            `💰 *SALDO RESTANTE A PAGAR: ${formatBRL(saldoFalta)}*\n\n` +
+            `Qualquer dúvida estamos à disposição!`;
+
+  const url = fone ? `https://api.whatsapp.com/send?phone=55${fone}&text=${encodeURIComponent(msg)}` : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+/* Criar Pasta de Obra a partir de um Orçamento */
+document.getElementById('btnCriarObraDeOrcamento').onclick = () => {
+  saveCurrentQuote();
+  const nome = document.getElementById('clienteNome').value.trim() || 'Cliente';
+  const total = getFinalTotalString();
+  const endereco = document.getElementById('clienteEndereco').value || '';
+  const fone = document.getElementById('clienteTelefone').value || '';
+  const numOrc = document.getElementById('orcNumero').value || 'Orçamento';
+
+  abrirModalNovaObra();
+  document.getElementById('modalObraCliente').value = nome;
+  document.getElementById('modalObraTitulo').value = `Obra Proposta ${numOrc}`;
+  document.getElementById('modalObraTelefone').value = fone;
+  document.getElementById('modalObraEndereco').value = endereco;
+  document.getElementById('modalObraValorTotal').value = total;
+};
+
+/* ==========================================================================
+   DASHBOARD: RENDERIZAÇÃO
+   ========================================================================== */
+function renderDashboard() {
+  let totalContratado = 0;
+  let totalRecebido = 0;
+  savedObras.forEach(o => {
+    const tot = parseBRL(o.valorTotalContratado || '0');
+    totalContratado += tot;
+    (o.pagamentos || []).forEach(p => {
+      if (p.pago) totalRecebido += parseBRL(p.valor || '0');
+    });
   });
 
+  const totalFalta = Math.max(0, totalContratado - totalRecebido);
+  document.getElementById('kpiObrasTotalContratado').textContent = formatBRL(totalContratado);
+  document.getElementById('kpiObrasAtivasQtd').textContent = `${savedObras.length} obras cadastradas`;
+  document.getElementById('kpiObrasRecebido').textContent = formatBRL(totalRecebido);
+  document.getElementById('kpiObrasFaltaReceber').textContent = formatBRL(totalFalta);
+
+  let totalOrcado = 0;
+  savedQuotes.forEach(q => { totalOrcado += parseBRL(q.totalFormatted || '0'); });
   document.getElementById('kpiTotalOrcado').textContent = formatBRL(totalOrcado);
   document.getElementById('kpiTotalOrcamentosQtd').textContent = `${savedQuotes.length} propostas cadastradas`;
 
-  document.getElementById('kpiAprovadosValor').textContent = formatBRL(aprovadosValor);
-  document.getElementById('kpiAprovadosQtd').textContent = `${aprovadosQtd} fechados (${savedQuotes.length ? Math.round((aprovadosQtd/savedQuotes.length)*100) : 0}%)`;
-
-  document.getElementById('kpiEmNegociacaoValor').textContent = formatBRL(negociacaoValor);
-  document.getElementById('kpiEmNegociacaoQtd').textContent = `${negociacaoQtd} propostas enviadas`;
-
-  document.getElementById('kpiRecibosValor').textContent = formatBRL(totalRecibos);
-  document.getElementById('kpiRecibosQtd').textContent = `${savedReceipts.length} recibos emitidos`;
-
-  // Renderiza tabela recente de orçamentos
   const tbodyQ = document.querySelector('#dashboardRecentQuotesTable tbody');
-  const recentQuotes = savedQuotes.slice(0, 6);
+  const recentQuotes = savedQuotes.slice(0, 5);
   if (recentQuotes.length === 0) {
-    tbodyQ.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:24px;">Nenhum orçamento cadastrado ainda.</td></tr>`;
+    tbodyQ.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Nenhum orçamento cadastrado.</td></tr>`;
   } else {
     tbodyQ.innerHTML = recentQuotes.map(q => `
       <tr>
         <td style="font-weight:700;">${escapeHtml(q.numero || '')}</td>
         <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong></td>
-        <td>${q.data ? q.data.split('-').reverse().join('/') : '-'}</td>
         <td><span class="status-badge badge-${(q.status||'rascunho').toLowerCase()}">${escapeHtml(q.status||'Rascunho')}</span></td>
         <td style="font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️ Editar</button>
-          <button class="btn btn-success btn-sm" onclick="createReceiptFromQuote('${q.id}')">🧾 Recibo</button>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-  // Renderiza tabela recente de recibos
-  const tbodyR = document.querySelector('#dashboardRecentReceiptsTable tbody');
-  const recentReceipts = savedReceipts.slice(0, 6);
-  if (recentReceipts.length === 0) {
-    tbodyR.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:24px;">Nenhum recibo emitido ainda.</td></tr>`;
-  } else {
-    tbodyR.innerHTML = recentReceipts.map(r => `
-      <tr>
-        <td style="font-weight:700;">${escapeHtml(r.numero || '')}</td>
-        <td>${escapeHtml(r.clienteNome || 'Sem nome')}</td>
-        <td style="font-weight:700; color:var(--success);">${escapeHtml(r.valor || '')}</td>
-        <td>
-          <button class="btn btn-secondary btn-sm" onclick="editReceipt('${r.id}')">👁️ Ver</button>
+          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️</button>
         </td>
       </tr>
     `).join('');
@@ -1401,7 +2035,7 @@ function renderDashboard() {
 }
 
 /* ==========================================================================
-   TABELA GERAL DE ORÇAMENTOS (TAB 3)
+   TODOS OS ORÇAMENTOS (TABELA & FILTROS)
    ========================================================================== */
 let filterOrcStatus = 'todos';
 
@@ -1412,49 +2046,33 @@ function renderAllQuotesTable() {
   let filtered = savedQuotes.filter(q => {
     if (filterOrcStatus !== 'todos' && q.status !== filterOrcStatus) return false;
     if (query) {
-      const matchName = (q.nome || '').toLowerCase().includes(query);
-      const matchNum = (q.numero || '').toLowerCase().includes(query);
-      const matchEnd = (q.endereco || '').toLowerCase().includes(query);
-      return matchName || matchNum || matchEnd;
+      return (q.nome || '').toLowerCase().includes(query) ||
+             (q.numero || '').toLowerCase().includes(query) ||
+             (q.endereco || '').toLowerCase().includes(query);
     }
     return true;
   });
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:32px; color:var(--text-muted);">Nenhum orçamento encontrado com os filtros selecionados.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">Nenhum orçamento encontrado.</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = filtered.map(q => {
-    const itemsCount = (q.items || []).filter(it => it.desc && it.desc.trim()).length;
-    const pagesCount = Math.max(1, Math.ceil(itemsCount / 10));
-    const dateFormatted = q.data ? q.data.split('-').reverse().join('/') : '-';
-
-    return `
-      <tr>
-        <td style="font-weight:800; color:var(--dark);">${escapeHtml(q.numero || '')}</td>
-        <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong><br><small style="color:var(--text-muted);">${escapeHtml(q.endereco || '')}</small></td>
-        <td>${escapeHtml(q.telefone || '-')}</td>
-        <td>${dateFormatted}</td>
-        <td>${itemsCount} itens (${pagesCount} pág.)</td>
-        <td>
-          <select onchange="updateQuoteStatus('${q.id}', this.value)" style="padding:3px 6px; font-size:11px; font-weight:700; border-radius:12px; border:1px solid #cbd5e1; background:#f8fafc;">
-            <option value="Rascunho" ${q.status==='Rascunho'?'selected':''}>🟡 Rascunho</option>
-            <option value="Enviado" ${q.status==='Enviado'?'selected':''}>🔵 Enviado</option>
-            <option value="Aprovado" ${q.status==='Aprovado'?'selected':''}>🟢 Aprovado</option>
-            <option value="Recusado" ${q.status==='Recusado'?'selected':''}>🔴 Recusado</option>
-          </select>
-        </td>
-        <td style="font-size:15px; font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
-        <td style="text-align:right; white-space:nowrap;">
-          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')" title="Editar Orçamento">✏️ Editar</button>
-          <button class="btn btn-success btn-sm" onclick="createReceiptFromQuote('${q.id}')" title="Emitir Recibo deste Orçamento">🧾 Recibo</button>
-          <button class="btn btn-whatsapp btn-sm" onclick="sendWhatsappQuote('${q.id}')" title="Enviar WhatsApp">📱</button>
-          <button class="btn btn-outline-danger btn-sm" onclick="deleteQuote('${q.id}')" title="Excluir">🗑️</button>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  tbody.innerHTML = filtered.map(q => `
+    <tr>
+      <td style="font-weight:800;">${escapeHtml(q.numero || '')}</td>
+      <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong></td>
+      <td>${escapeHtml(q.telefone || '-')}</td>
+      <td>${q.data ? q.data.split('-').reverse().join('/') : '-'}</td>
+      <td><span class="status-badge badge-${(q.status||'rascunho').toLowerCase()}">${escapeHtml(q.status||'Rascunho')}</span></td>
+      <td style="font-size:14px; font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
+      <td style="text-align:right; white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️ Editar</button>
+        <button class="btn btn-whatsapp btn-sm" onclick="sendWhatsappQuote('${q.id}')">📱</button>
+        <button class="btn btn-outline-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
 }
 
 document.querySelectorAll('.filter-orc-btn').forEach(btn => {
@@ -1467,17 +2085,8 @@ document.querySelectorAll('.filter-orc-btn').forEach(btn => {
 });
 document.getElementById('searchAllQuotesInput').addEventListener('input', renderAllQuotesTable);
 
-function updateQuoteStatus(id, newStatus) {
-  const quote = savedQuotes.find(q => q.id === id);
-  if (quote) {
-    quote.status = newStatus;
-    persistQuotes();
-    showToast(`Status de ${quote.numero} alterado para ${newStatus}!`, 'info');
-  }
-}
-
 /* ==========================================================================
-   GESTÃO DO FORMULÁRIO DO ORÇAMENTO (TAB 2)
+   ORÇAMENTO: FORMULÁRIO E AÇÕES
    ========================================================================== */
 const itemsContainer = document.getElementById('itemsContainer');
 
@@ -1633,7 +2242,7 @@ function editQuote(id) {
 function deleteQuote(id) {
   const quote = savedQuotes.find(q => q.id === id);
   if (!quote) return;
-  if (confirm(`Tem certeza que deseja excluir o orçamento ${quote.numero} (${quote.nome})?`)) {
+  if (confirm(`Excluir o orçamento ${quote.numero} (${quote.nome})?`)) {
     savedQuotes = savedQuotes.filter(q => q.id !== id);
     persistQuotes();
     if (currentQuoteId === id) currentQuoteId = null;
@@ -1726,26 +2335,21 @@ document.getElementById('clienteTelefone').addEventListener('input', (e) => {
   e.target.value = maskPhone(e.target.value);
   saveDraft();
 });
-
 document.getElementById('inputDesconto').addEventListener('input', (e) => {
   e.target.value = formatBRL(e.target.value);
   calculateTotals();
 });
-
 document.getElementById('inputManualTotal').addEventListener('input', (e) => {
   e.target.value = formatBRL(e.target.value);
   saveDraft();
 });
-
 document.getElementById('chkAutoTotal').addEventListener('change', (e) => {
   appState.autoTotal = e.target.checked;
   calculateTotals();
 });
 
 ['orcNumero', 'clienteData', 'clienteNome', 'clienteEndereco', 'observacoesText'].forEach(id => {
-  document.getElementById(id).addEventListener('input', () => {
-    saveDraft();
-  });
+  document.getElementById(id).addEventListener('input', () => saveDraft());
 });
 
 document.getElementById('btnHojeOrc').onclick = () => {
@@ -1794,7 +2398,7 @@ document.getElementById('btnWhatsappOrc').onclick = () => {
 };
 
 /* ==========================================================================
-   GERAÇÃO E VISUALIZAÇÃO DO PDF DO ORÇAMENTO (VIA MODAL)
+   GERAÇÃO DO PDF DO ORÇAMENTO (COM PROTEÇÃO)
    ========================================================================== */
 let previewBlobUrl = null;
 
@@ -1814,7 +2418,7 @@ async function loadTemplateBytes() {
 async function generatePdf(download = false) {
   try {
     if (typeof PDFLib === 'undefined') {
-      alert('Biblioteca PDF ainda carregando. Aguarde um instante...');
+      alert('Biblioteca PDF carregando. Aguarde um instante...');
       return;
     }
 
@@ -1884,9 +2488,7 @@ async function generatePdf(download = false) {
         safeSetField(form, 'Campo para adicionar alguma observação caso seja necessário', `(Continuação dos serviços e condições na Página ${p + 2})`);
       }
 
-      if (isLocked) {
-        form.flatten();
-      }
+      if (isLocked) form.flatten();
 
       const [copiedPage] = await finalDoc.copyPages(pageDoc, [0]);
 
@@ -1928,7 +2530,7 @@ async function generatePdf(download = false) {
       showToast('Download do Orçamento iniciado!', 'success');
     }
   } catch (err) {
-    console.error('Erro ao gerar PDF do orçamento:', err);
+    console.error('Erro ao gerar PDF:', err);
     alert('Erro ao processar PDF: ' + err.message);
   }
 }
@@ -1972,7 +2574,6 @@ document.getElementById('btnDownloadFromModal').onclick = () => {
 document.getElementById('btnOpenNewTabFromModal').onclick = () => {
   if (previewBlobUrl) window.open(previewBlobUrl, '_blank');
 };
-
 document.getElementById('btnDownloadOrc').onclick = () => {
   saveCurrentQuote();
   generatePdf(true);
@@ -1992,7 +2593,6 @@ function saveDraft() {
   appState.desconto = document.getElementById('inputDesconto').value;
   appState.totalManual = document.getElementById('inputManualTotal').value;
   appState.observacoes = document.getElementById('observacoesText').value;
-
   try { localStorage.setItem(DRAFT_KEY, JSON.stringify(appState)); } catch (e) {}
 }
 
@@ -2028,7 +2628,7 @@ function loadDraft() {
 }
 
 /* ==========================================================================
-   4. SISTEMA DE EMISSÃO & GESTÃO DE RECIBOS (TAB 4)
+   RECIBOS: FORMULÁRIO E AÇÕES
    ========================================================================== */
 let previewReceiptBlobUrl = null;
 
@@ -2056,41 +2656,6 @@ function initReceiptForm() {
   document.getElementById('recCidade').value = receiptState.cidade;
   document.getElementById('recDescricao').value = receiptState.descricao;
 }
-
-function createReceiptFromQuote(quoteId) {
-  const quote = savedQuotes.find(q => q.id === quoteId);
-  if (!quote) return;
-
-  currentReceiptId = null;
-  receiptState.id = null;
-  receiptState.numero = `REC-${new Date().getFullYear()}-${String(savedReceipts.length + 1).padStart(3, '0')}`;
-  receiptState.data = getTodayString();
-  receiptState.valor = quote.totalFormatted || 'R$ 0,00';
-  receiptState.valorExtenso = numeroParaExtenso(receiptState.valor);
-  receiptState.clienteNome = quote.nome || '';
-  receiptState.clienteDoc = '';
-  receiptState.formaPagamento = 'PIX';
-  receiptState.cidade = 'Joinville - SC';
-  receiptState.descricao = `Pagamento referente aos serviços e materiais previstos na proposta ${quote.numero}.`;
-
-  document.getElementById('recNumero').value = receiptState.numero;
-  document.getElementById('recData').value = receiptState.data;
-  document.getElementById('recValor').value = receiptState.valor;
-  document.getElementById('recValorExtenso').value = receiptState.valorExtenso;
-  document.getElementById('recClienteNome').value = receiptState.clienteNome;
-  document.getElementById('recClienteDoc').value = receiptState.clienteDoc;
-  document.getElementById('recFormaPagamento').value = receiptState.formaPagamento;
-  document.getElementById('recCidade').value = receiptState.cidade;
-  document.getElementById('recDescricao').value = receiptState.descricao;
-
-  switchTab('recibos');
-  showToast(`Recibo preparado com os dados do orçamento ${quote.numero}!`, 'success');
-}
-
-document.getElementById('btnGerarReciboDeOrcamento').onclick = () => {
-  saveCurrentQuote();
-  createReceiptFromQuote(currentQuoteId);
-};
 
 document.getElementById('recValor').addEventListener('input', (e) => {
   e.target.value = formatBRL(e.target.value);
@@ -2195,7 +2760,7 @@ function renderAllReceiptsTable() {
       <td><span class="status-badge" style="background:#f1f5f9; color:#334155;">${escapeHtml(r.formaPagamento || 'PIX')}</span></td>
       <td style="font-weight:800; color:var(--success); font-size:14px;">${escapeHtml(r.valor || '')}</td>
       <td style="text-align:right; white-space:nowrap;">
-        <button class="btn btn-secondary btn-sm" onclick="editReceipt('${r.id}')">✏️ Editar / Ver</button>
+        <button class="btn btn-secondary btn-sm" onclick="editReceipt('${r.id}')">✏️ Ver</button>
         <button class="btn btn-whatsapp btn-sm" onclick="sendWhatsappReceipt('${r.id}')">📱</button>
         <button class="btn btn-outline-danger btn-sm" onclick="deleteReceipt('${r.id}')">🗑️</button>
       </td>
@@ -2240,9 +2805,7 @@ document.getElementById('btnWhatsappRecibo').onclick = () => {
   window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
 };
 
-/* ==========================================================================
-   GERADOR DO PDF DE RECIBO (2 VIAS PROFISSIONAIS NA FOLHA A4)
-   ========================================================================== */
+/* Geração do PDF do Recibo (2 Vias Oficiais A4) */
 async function generateReceiptPdf(download = false) {
   try {
     if (typeof PDFLib === 'undefined') {
@@ -2287,7 +2850,6 @@ async function generateReceiptPdf(download = false) {
       const boxHeight = 355;
       const startX = 35;
 
-      // Caixa externa
       page.drawRectangle({
         x: startX,
         y: startY,
@@ -2298,7 +2860,6 @@ async function generateReceiptPdf(download = false) {
         color: rgb(1, 1, 1),
       });
 
-      // Barra de cabeçalho
       page.drawRectangle({
         x: startX,
         y: startY + boxHeight - 58,
@@ -2307,7 +2868,6 @@ async function generateReceiptPdf(download = false) {
         color: primaryRed,
       });
 
-      // Título e logotipo
       page.drawText('RICHTER CONSTRUCOES', {
         x: startX + 16,
         y: startY + boxHeight - 26,
@@ -2323,7 +2883,6 @@ async function generateReceiptPdf(download = false) {
         color: rgb(0.98, 0.9, 0.9),
       });
 
-      // Número e Valor à Direita do cabeçalho
       page.drawText(num, {
         x: startX + boxWidth - 140,
         y: startY + boxHeight - 24,
@@ -2339,7 +2898,6 @@ async function generateReceiptPdf(download = false) {
         color: rgb(1, 0.95, 0.2),
       });
 
-      // Linhas do Recibo
       let curY = startY + boxHeight - 85;
 
       page.drawText('Recebemos de:', { x: startX + 16, y: curY, size: 10, font: fontBold, color: mutedColor });
@@ -2402,10 +2960,8 @@ async function generateReceiptPdf(download = false) {
       });
     }
 
-    // 1ª Via: Cliente
     drawReceiptVia(445, '1a VIA - CLIENTE');
 
-    // Linha de Corte
     page.drawLine({
       start: { x: 30, y: 418 },
       end: { x: 565, y: 418 },
@@ -2421,7 +2977,6 @@ async function generateReceiptPdf(download = false) {
       color: rgb(0.5, 0.5, 0.5),
     });
 
-    // 2ª Via: Empresa
     drawReceiptVia(45, '2a VIA - EMPRESA');
 
     const finalBytes = await doc.save();
@@ -2473,20 +3028,20 @@ document.getElementById('btnDownloadRecFromModal').onclick = () => {
 document.getElementById('btnOpenRecNewTabFromModal').onclick = () => {
   if (previewReceiptBlobUrl) window.open(previewReceiptBlobUrl, '_blank');
 };
-
 document.getElementById('btnDownloadRecibo').onclick = () => {
   saveCurrentReceipt();
   generateReceiptPdf(true);
 };
 
 /* ==========================================================================
-   BACKUP GLOBAL UNIFICADO (ORÇAMENTOS + RECIBOS)
+   BACKUP GLOBAL UNIFICADO (OBRAS + ORÇAMENTOS + RECIBOS)
    ========================================================================== */
 function exportAllBackup() {
   const unifiedData = {
     appName: 'Richter Construções',
-    version: '2.6',
+    version: '3.0',
     exportedAt: new Date().toISOString(),
+    obras: savedObras,
     quotes: savedQuotes,
     receipts: savedReceipts
   };
@@ -2495,7 +3050,7 @@ function exportAllBackup() {
   const link = document.createElement('a');
   link.href = dataStr;
   const d = new Date().toISOString().split('T')[0];
-  link.download = `backup-richter-completo-${d}.json`;
+  link.download = `backup-richter-obras-e-recibos-${d}.json`;
   link.click();
   showToast('Backup completo exportado com sucesso!', 'success');
 }
@@ -2505,8 +3060,18 @@ function importAllBackupFile(file) {
   reader.onload = (e) => {
     try {
       const data = JSON.parse(e.target.result);
+      let obrasAdded = 0;
       let quotesAdded = 0;
       let receiptsAdded = 0;
+
+      const oList = data.obras || [];
+      oList.forEach(imp => {
+        if (!imp.id) imp.id = 'obra_' + Date.now() + Math.random().toString(36).substr(2, 4);
+        if (!savedObras.some(o => o.id === imp.id)) {
+          savedObras.push(imp);
+          obrasAdded++;
+        }
+      });
 
       const qList = Array.isArray(data) ? data : (data.quotes || []);
       qList.forEach(imp => {
@@ -2526,10 +3091,10 @@ function importAllBackupFile(file) {
         }
       });
 
+      persistObras();
       persistQuotes();
       persistReceipts();
-      renderDashboard();
-      showToast(`Restaurado: +${quotesAdded} orçamentos e +${receiptsAdded} recibos!`, 'success');
+      showToast(`Restaurado com sucesso: +${obrasAdded} obras, +${quotesAdded} orçamentos e +${receiptsAdded} recibos!`, 'success');
     } catch (err) {
       alert('Erro ao importar backup: ' + err.message);
     }
