@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Richter Construções — Sistema de Orçamentos</title>
+<title>Richter Construções — Painel Administrativo de Orçamentos e Recibos</title>
 <style>
 :root {
   --primary: #d61820;
   --primary-hover: #b81219;
   --primary-light: #fef2f2;
   --primary-border: #fecaca;
-  --dark: #1e293b;
-  --dark-heading: #0f172a;
+  --dark: #0f172a;
+  --dark-surface: #1e293b;
   --gray-bg: #f8fafc;
   --card-bg: #ffffff;
   --border: #e2e8f0;
@@ -48,7 +48,7 @@ body {
 header {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
+  padding: 10px 24px;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -70,26 +70,67 @@ header {
   color: #fff;
   font-weight: 800;
   font-size: 15px;
-  padding: 7px 11px;
+  padding: 6px 11px;
   border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 .brand-info h1 {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--dark-heading);
+  color: var(--dark);
 }
 .brand-info p {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
 }
 
-.header-actions {
+/* Navegação Principal (Tabs) */
+.main-nav {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 8px;
+  gap: 4px;
+}
+.nav-tab {
+  border: 0;
+  background: transparent;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-tab:hover {
+  color: var(--dark);
+}
+.nav-tab.active {
+  background: #ffffff;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.tab-badge {
+  background: #e2e8f0;
+  color: #334155;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+.nav-tab.active .tab-badge {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.header-quick-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 /* Botões */
@@ -107,53 +148,19 @@ header {
   transition: all 0.15s ease;
   white-space: nowrap;
 }
-.btn-primary {
-  background: var(--primary);
-  color: #ffffff;
-}
-.btn-primary:hover {
-  background: var(--primary-hover);
-  box-shadow: 0 2px 8px rgba(214, 24, 32, 0.35);
-}
-.btn-success {
-  background: var(--success);
-  color: #ffffff;
-}
-.btn-success:hover {
-  background: #15803d;
-  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35);
-}
-.btn-secondary {
-  background: #ffffff;
-  border-color: var(--border);
-  color: var(--text-main);
-}
-.btn-secondary:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-}
-.btn-outline-danger {
-  background: #ffffff;
-  border-color: var(--primary-border);
-  color: var(--primary);
-}
-.btn-outline-danger:hover {
-  background: var(--primary-light);
-}
-.btn-whatsapp {
-  background: #25d366;
-  color: #ffffff;
-}
-.btn-whatsapp:hover {
-  background: #20ba5a;
-  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.35);
-}
-.btn-sm {
-  padding: 6px 10px;
-  font-size: 12px;
-}
+.btn-primary { background: var(--primary); color: #ffffff; }
+.btn-primary:hover { background: var(--primary-hover); box-shadow: 0 2px 8px rgba(214, 24, 32, 0.35); }
+.btn-success { background: var(--success); color: #ffffff; }
+.btn-success:hover { background: #15803d; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35); }
+.btn-secondary { background: #ffffff; border-color: var(--border); color: var(--text-main); }
+.btn-secondary:hover { background: #f1f5f9; border-color: #cbd5e1; }
+.btn-outline-danger { background: #ffffff; border-color: var(--primary-border); color: var(--primary); }
+.btn-outline-danger:hover { background: var(--primary-light); }
+.btn-whatsapp { background: #25d366; color: #ffffff; }
+.btn-whatsapp:hover { background: #20ba5a; box-shadow: 0 2px 8px rgba(37, 211, 102, 0.35); }
+.btn-sm { padding: 5px 9px; font-size: 12px; }
 
-/* Badges e Status */
+/* Status Badges */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -170,18 +177,141 @@ header {
 .badge-aprovado { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
 .badge-recusado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
-/* Layout Principal */
-main {
+/* Container Principal das Páginas/Abas */
+.app-container {
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.tab-content-panel {
+  display: none;
+}
+.tab-content-panel.active {
+  display: block;
+}
+
+/* ==========================================================================
+   1. DASHBOARD & MÉTRICAS
+   ========================================================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.kpi-icon {
+  font-size: 18px;
+}
+.kpi-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--dark);
+}
+.kpi-subtext {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.kpi-card.highlight {
+  border-left: 4px solid var(--primary);
+}
+.kpi-card.highlight-success {
+  border-left: 4px solid var(--success);
+}
+.kpi-card.highlight-info {
+  border-left: 4px solid var(--info);
+}
+
+.dashboard-tables-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* Tabela Genérica */
+.data-table-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.data-table-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.data-table-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+table.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+table.custom-table th {
+  background: #f8fafc;
+  padding: 11px 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table.custom-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+table.custom-table tr:hover {
+  background: #f8fafc;
+}
+table.custom-table tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ==========================================================================
+   2. GERADOR DE ORÇAMENTOS (LAYOUT SPLIT)
+   ========================================================================== */
+.editor-layout {
   display: grid;
   grid-template-columns: 530px 1fr;
   gap: 20px;
-  padding: 20px;
-  max-width: 1720px;
-  margin: 0 auto;
   align-items: start;
 }
 
-/* Cartões do Formulário */
 .form-column {
   display: flex;
   flex-direction: column;
@@ -195,7 +325,6 @@ main {
   box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
-
 .card-header {
   padding: 13px 18px;
   border-bottom: 1px solid var(--border);
@@ -210,7 +339,7 @@ main {
   gap: 8px;
   font-size: 14px;
   font-weight: 700;
-  color: var(--dark-heading);
+  color: var(--dark);
 }
 .step-number {
   display: inline-flex;
@@ -224,41 +353,21 @@ main {
   font-size: 12px;
   font-weight: 800;
 }
-
 .card-body {
   padding: 16px 18px;
 }
 
-/* Campos de Formulário */
-.form-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.form-grid-3 {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
-  gap: 12px;
-}
-.form-group {
-  margin-bottom: 12px;
-}
-.form-group:last-child {
-  margin-bottom: 0;
-}
-.form-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--dark-heading);
-  margin-bottom: 4px;
-}
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; }
+.form-group { margin-bottom: 12px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
 .form-control {
   width: 100%;
   padding: 9px 12px;
   font-size: 13px;
   font-family: inherit;
-  color: var(--dark-heading);
+  color: var(--dark);
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -269,21 +378,9 @@ main {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgba(214, 24, 32, 0.12);
 }
-.form-control::placeholder {
-  color: #94a3b8;
-}
-textarea.form-control {
-  min-height: 85px;
-  resize: vertical;
-}
+textarea.form-control { min-height: 85px; resize: vertical; }
 
-/* Lista de Itens do Orçamento */
-.items-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+.items-container { display: flex; flex-direction: column; gap: 10px; }
 .item-row {
   background: #f8fafc;
   border: 1px solid var(--border);
@@ -292,757 +389,639 @@ textarea.form-control {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  position: relative;
   transition: border-color 0.15s, background-color 0.15s;
 }
-.item-row:hover {
-  border-color: #cbd5e1;
-  background: #f1f5f9;
-}
-.item-row-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.item-index-badge {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  background: #e2e8f0;
-  padding: 2px 7px;
-  border-radius: 4px;
-}
-.item-remove-btn {
-  background: transparent;
-  border: 0;
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.item-remove-btn:hover {
-  color: var(--primary);
-  background: var(--primary-light);
-}
-.item-inputs-grid {
-  display: grid;
-  grid-template-columns: 1fr 90px 110px;
-  gap: 8px;
-}
+.item-row:hover { border-color: #cbd5e1; background: #f1f5f9; }
+.item-row-header { display: flex; justify-content: space-between; align-items: center; }
+.item-index-badge { font-size: 11px; font-weight: 700; color: var(--text-muted); background: #e2e8f0; padding: 2px 7px; border-radius: 4px; }
+.item-remove-btn { background: transparent; border: 0; color: #94a3b8; font-size: 12px; font-weight: 600; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.item-remove-btn:hover { color: var(--primary); background: var(--primary-light); }
+.item-inputs-grid { display: grid; grid-template-columns: 1fr 90px 110px; gap: 8px; }
 
-/* Sugestões Rápidas (Chips) */
-.quick-chips-wrapper {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border);
-}
-.quick-chips-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-.chips-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.chip {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: all 0.15s;
-  user-select: none;
-}
-.chip:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-border);
-  color: var(--primary);
-}
+.quick-chips-wrapper { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.quick-chips-title { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+.chips-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 16px; padding: 4px 10px; font-size: 11px; color: var(--text-main); cursor: pointer; transition: all 0.15s; user-select: none; }
+.chip:hover { background: var(--primary-light); border-color: var(--primary-border); color: var(--primary); }
 
-/* Banner de Paginação */
-.pagination-info {
-  background: #f1f5f9;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 9px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  margin-top: 12px;
-}
-.pagination-pill {
-  background: var(--dark);
-  color: #ffffff;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 11px;
-}
+.pagination-info { background: #f1f5f9; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; margin-top: 12px; }
+.pagination-pill { background: var(--dark); color: #ffffff; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 11px; }
 
-/* Resumo Financeiro */
-.total-card-body {
-  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-}
-.financial-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  font-size: 13px;
-}
-.financial-row.grand-total {
-  border-top: 2px dashed #cbd5e1;
-  margin-top: 8px;
-  padding-top: 12px;
-}
-.grand-total-label {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--dark-heading);
-}
-.grand-total-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--primary);
-}
+.total-card-body { background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%); }
+.financial-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
+.financial-row.grand-total { border-top: 2px dashed #cbd5e1; margin-top: 8px; padding-top: 12px; }
+.grand-total-label { font-size: 15px; font-weight: 800; color: var(--dark); }
+.grand-total-value { font-size: 24px; font-weight: 800; color: var(--primary); }
 
-/* Sugestões de Observação */
-.obs-templates {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-.obs-chip {
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 11px;
-  color: var(--text-main);
-  cursor: pointer;
-}
-.obs-chip:hover {
-  background: #e2e8f0;
-}
+.obs-templates { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.obs-chip { background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; font-size: 11px; color: var(--text-main); cursor: pointer; }
+.obs-chip:hover { background: #e2e8f0; }
 
-/* Coluna de Pré-visualização */
-.preview-column {
-  position: sticky;
-  top: 75px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+/* Visualizador de PDF */
+.preview-column { position: sticky; top: 70px; display: flex; flex-direction: column; gap: 12px; }
+.preview-header-bar { display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; box-shadow: var(--shadow-sm); }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+.status-dot.loading { background: #f59e0b; animation: pulse 1s infinite; }
+.viewer-wrapper { background: #475569; border: 1px solid #334155; border-radius: var(--radius); padding: 14px; min-height: 800px; display: flex; flex-direction: column; align-items: center; box-shadow: var(--shadow-lg); overflow: auto; }
+.viewer-wrapper iframe { width: 100%; max-width: 850px; height: 1100px; border: 0; background: #ffffff; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
 
-.preview-header-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 16px;
-  box-shadow: var(--shadow-sm);
-}
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--success);
-}
-.status-dot.loading {
-  background: #f59e0b;
-  animation: pulse 1s infinite;
-}
-
-.viewer-wrapper {
-  background: #475569;
-  border: 1px solid #334155;
-  border-radius: var(--radius);
-  padding: 14px;
-  min-height: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: var(--shadow-lg);
-  overflow: auto;
-}
-.viewer-wrapper iframe {
-  width: 100%;
-  max-width: 850px;
-  height: 1100px;
-  border: 0;
-  background: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-
-/* Modal de Histórico e Gerenciador de Orçamentos */
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(3px);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-}
-.modal-backdrop.open {
-  opacity: 1;
-  visibility: visible;
-}
-.modal-dialog {
-  background: #ffffff;
-  border-radius: var(--radius);
-  width: 100%;
-  max-width: 820px;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-lg);
-  transform: translateY(15px);
-  transition: transform 0.2s ease;
-  overflow: hidden;
-}
-.modal-backdrop.open .modal-dialog {
-  transform: translateY(0);
-}
-.modal-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-header h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--dark-heading);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.modal-close-btn {
-  background: transparent;
-  border: 0;
-  font-size: 20px;
-  line-height: 1;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-.modal-close-btn:hover {
-  background: #f1f5f9;
-  color: var(--dark);
-}
-.modal-body {
-  padding: 16px 20px;
-  overflow-y: auto;
-  flex: 1;
-}
-.modal-toolbar {
+/* ==========================================================================
+   3. GESTÃO DE RECIBOS
+   ========================================================================== */
+.receipts-header-actions {
   display: flex;
   gap: 10px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-search {
-  flex: 1;
-  min-width: 240px;
-}
-.modal-filters {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  background: #f1f5f9;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--text-muted);
-}
-.filter-btn.active {
-  background: var(--dark);
-  color: #ffffff;
-  border-color: var(--dark);
-}
-
-.quotes-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.quote-item-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  transition: all 0.15s;
-}
-.quote-item-card:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
-  box-shadow: var(--shadow-sm);
-}
-.quote-item-card.current {
-  border-color: var(--primary);
-  background: var(--primary-light);
-}
-.quote-meta-left {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  flex: 1;
-}
-.quote-title-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.quote-number {
-  font-weight: 800;
-  font-size: 13px;
-  color: var(--dark-heading);
-}
-.quote-client-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--dark);
-}
-.quote-subline {
-  font-size: 12px;
-  color: var(--text-muted);
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.quote-meta-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.quote-price-tag {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--primary);
-  white-space: nowrap;
-}
-.quote-actions-group {
-  display: flex;
-  gap: 6px;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-muted);
-}
-.empty-state-icon {
-  font-size: 36px;
-  margin-bottom: 8px;
-}
-
-.modal-footer {
-  padding: 12px 20px;
-  border-top: 1px solid var(--border);
-  background: #f8fafc;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
-/* Toast Notifications */
-.toast-container {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-}
-.toast {
-  background: var(--dark);
-  color: #ffffff;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  pointer-events: auto;
-  animation: slideUp 0.25s ease;
-}
+/* Toast Container */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { background: var(--dark); color: #ffffff; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 8px; pointer-events: auto; animation: slideUp 0.25s ease; }
 .toast.success { background: #15803d; }
 .toast.info { background: #0369a1; }
 .toast.danger { background: #b91c1c; }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
 
 /* Responsividade */
-@media (max-width: 1050px) {
-  main {
-    grid-template-columns: 1fr;
-  }
-  .preview-column {
-    position: static;
-  }
-  .viewer-wrapper {
-    min-height: 550px;
-  }
-  .viewer-wrapper iframe {
-    height: 750px;
-  }
+@media (max-width: 1100px) {
+  .editor-layout, .dashboard-tables-grid { grid-template-columns: 1fr; }
+  .preview-column { position: static; }
+  .viewer-wrapper { min-height: 550px; }
+  .viewer-wrapper iframe { height: 750px; }
 }
-@media (max-width: 600px) {
-  header {
-    padding: 10px 14px;
-  }
-  main {
-    padding: 12px;
-  }
-  .form-grid-2, .form-grid-3 {
-    grid-template-columns: 1fr;
-  }
-  .item-inputs-grid {
-    grid-template-columns: 1fr;
-  }
-  .quote-item-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .quote-meta-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.2); }
+@media (max-width: 768px) {
+  header { padding: 10px 14px; }
+  .main-nav { width: 100%; order: 3; overflow-x: auto; }
+  .app-container { padding: 12px; }
+  .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+  .item-inputs-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- Header Principal -->
+<!-- Header Principal com Navegação Integrada -->
 <header>
   <div class="brand">
     <div class="brand-badge">RICHTER</div>
     <div class="brand-info">
       <h1>Richter Construções</h1>
-      <p>Gerenciador Profissional de Orçamentos</p>
+      <p>Painel Administrativo & Gestão Financeira</p>
     </div>
   </div>
 
-  <div class="header-actions">
-    <button type="button" class="btn btn-secondary" id="btnOpenHistory" title="Ver lista de orçamentos salvos">
-      📁 Meus Orçamentos <span id="headerQuotesCount" style="background:#e2e8f0; color:#334155; padding:1px 6px; border-radius:10px; font-size:11px; margin-left:3px;">0</span>
+  <nav class="main-nav">
+    <button type="button" class="nav-tab active" data-tab="dashboard">
+      📊 Painel Geral
     </button>
-    <button type="button" class="btn btn-success" id="btnSalvarOrcamento" title="Salva as alterações deste orçamento no sistema">
-      💾 Salvar
+    <button type="button" class="nav-tab" data-tab="orcamento">
+      📋 Orçamento
     </button>
-    <button type="button" class="btn btn-secondary btn-sm" id="btnNovo" title="Iniciar um novo orçamento limpo">
-      ✨ Novo
+    <button type="button" class="nav-tab" data-tab="todos-orcamentos">
+      📁 Orçamentos <span class="tab-badge" id="tabCountOrc">0</span>
     </button>
-    <button type="button" class="btn btn-whatsapp btn-sm" id="btnWhatsapp" title="Enviar resumo pelo WhatsApp">
-      📱 WhatsApp
+    <button type="button" class="nav-tab" data-tab="recibos">
+      🧾 Recibos <span class="tab-badge" id="tabCountRec">0</span>
     </button>
-    <button type="button" class="btn btn-primary" id="btnDownload">
-      📥 Baixar PDF
+  </nav>
+
+  <div class="header-quick-actions">
+    <button type="button" class="btn btn-secondary btn-sm" id="btnExportAllBackup" title="Exportar Backup de todos os dados">
+      📤 Backup
     </button>
+    <button type="button" class="btn btn-secondary btn-sm" id="btnImportAllBackup" title="Restaurar backup">
+      📥 Restaurar
+    </button>
+    <input type="file" id="backupFileInput" style="display:none" accept=".json">
   </div>
 </header>
 
-<main>
-  <!-- Coluna da Esquerda: Formulário Amigável -->
-  <div class="form-column">
+<div class="app-container">
 
-    <!-- 1. Identificação e Dados do Cliente -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="step-number">1</span>
-          <span>Dados do Cliente & Proposta</span>
+  <!-- ==========================================================================
+       TAB 1: PAINEL GERAL (DASHBOARD & MÉTRICAS)
+       ========================================================================== -->
+  <section id="tab-dashboard" class="tab-content-panel active">
+    <!-- Grid de Indicadores Chave (KPIs) -->
+    <div class="dashboard-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-header">
+          <span>Total Orçado</span>
+          <span class="kpi-icon">💰</span>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center;">
-          <span id="currentStatusBadge" class="status-badge badge-rascunho">Rascunho</span>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnHoje" style="padding: 2px 7px; font-size: 11px;">
-            📅 Hoje
+        <div class="kpi-value" id="kpiTotalOrcado">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas geradas</div>
+      </div>
+
+      <div class="kpi-card highlight-success">
+        <div class="kpi-header">
+          <span>Aprovados</span>
+          <span class="kpi-icon">🟢</span>
+        </div>
+        <div class="kpi-value" id="kpiAprovadosValor">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiAprovadosQtd">0 orçamentos fechados</div>
+      </div>
+
+      <div class="kpi-card highlight-info">
+        <div class="kpi-header">
+          <span>Em Negociação</span>
+          <span class="kpi-icon">🔵</span>
+        </div>
+        <div class="kpi-value" id="kpiEmNegociacaoValor">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiEmNegociacaoQtd">0 orçamentos enviados</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span>Total em Recibos</span>
+          <span class="kpi-icon">🧾</span>
+        </div>
+        <div class="kpi-value" id="kpiRecibosValor" style="color: var(--success);">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiRecibosQtd">0 pagamentos comprovados</div>
+      </div>
+    </div>
+
+    <!-- Seções Rápidas do Dashboard -->
+    <div class="dashboard-tables-grid">
+      <!-- Tabela de Orçamentos Recentes -->
+      <div class="data-table-card">
+        <div class="data-table-header">
+          <h3>📋 Orçamentos Recentes</h3>
+          <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('orcamento')">
+            ➕ Novo Orçamento
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="custom-table" id="dashboardRecentQuotesTable">
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Valor Total</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Renderizado via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Ações Rápidas & Recibos Recentes -->
+      <div class="data-table-card">
+        <div class="data-table-header">
+          <h3>🧾 Últimos Recibos</h3>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="switchTab('recibos')">
+            Ver Todos
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="custom-table" id="dashboardRecentReceiptsTable">
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Cliente</th>
+                <th>Valor</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Renderizado via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       TAB 2: GERADOR DE ORÇAMENTOS
+       ========================================================================== -->
+  <section id="tab-orcamento" class="tab-content-panel">
+    <div class="editor-layout">
+      <!-- Coluna de Edição -->
+      <div class="form-column">
+        <!-- Barra de Ações do Orçamento -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn btn-success btn-sm" id="btnSalvarOrcamento">
+              💾 Salvar Orçamento
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnNovoOrcamento">
+              ✨ Limpar / Novo
+            </button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn btn-whatsapp btn-sm" id="btnWhatsappOrc">
+              📱 WhatsApp
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnDownloadOrc">
+              📥 Baixar PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Dados do Cliente & Proposta -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="step-number">1</span>
+              <span>Dados do Cliente & Proposta</span>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <span id="currentStatusBadge" class="status-badge badge-rascunho">Rascunho</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnHojeOrc" style="padding: 2px 7px; font-size: 11px;">
+                📅 Hoje
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label" for="orcNumero">Nº Proposta</label>
+                <input type="text" id="orcNumero" class="form-control" placeholder="#2026-001">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="orcStatus">Status</label>
+                <select id="orcStatus" class="form-control">
+                  <option value="Rascunho">🟡 Rascunho</option>
+                  <option value="Enviado">🔵 Enviado</option>
+                  <option value="Aprovado">🟢 Aprovado</option>
+                  <option value="Recusado">🔴 Recusado</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="clienteData">Data da Proposta</label>
+                <input type="date" id="clienteData" class="form-control">
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="clienteNome">Nome do Cliente</label>
+                <input type="text" id="clienteNome" class="form-control" placeholder="Ex: João da Silva">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="clienteTelefone">Telefone / WhatsApp</label>
+                <input type="text" id="clienteTelefone" class="form-control" placeholder="(00) 00000-0000">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="clienteEndereco">Endereço da Obra</label>
+              <input type="text" id="clienteEndereco" class="form-control" placeholder="Rua, número, bairro, cidade/UF">
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Itens do Orçamento -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="step-number">2</span>
+              <span>Serviços & Materiais</span>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="btnAddItem">
+              ➕ Adicionar Item
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="itemsContainer" class="items-container">
+              <!-- Linhas de itens geradas aqui -->
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddEmptyPage">
+                📄 Adicionar Nova Página (+10 linhas)
+              </button>
+            </div>
+
+            <!-- Chips de Serviços -->
+            <div class="quick-chips-wrapper">
+              <div class="quick-chips-title">Sugestões rápidas:</div>
+              <div class="chips-list">
+                <span class="chip" data-title="Pintura geral interna e externa (2 demãos)">🎨 Pintura Geral</span>
+                <span class="chip" data-title="Assentamento de piso cerâmico / porcelanato">📐 Piso / Porcelanato</span>
+                <span class="chip" data-title="Instalação e reparos elétricos">⚡ Instalação Elétrica</span>
+                <span class="chip" data-title="Instalação e revisão de encanamento / hidráulica">🚰 Hidráulica</span>
+                <span class="chip" data-title="Alvenaria, reboco e regularização de parede">🧱 Alvenaria & Reboco</span>
+                <span class="chip" data-title="Demolição, remoção e descarte de entulho">🔨 Demolição & Limpeza</span>
+                <span class="chip" data-title="Instalação de forro de gesso acartonado">🏗️ Forro de Gesso</span>
+                <span class="chip" data-title="Mão de obra especializada Richter Construções">👷 Mão de Obra</span>
+              </div>
+            </div>
+
+            <div class="pagination-info">
+              <span>Capacidade do modelo: <strong>10 itens por página</strong></span>
+              <span class="pagination-pill" id="pageCounterPill">Página 1 de 1</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Totais Financeiros -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="step-number">3</span>
+              <span>Valor Total</span>
+            </div>
+            <label style="font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+              <input type="checkbox" id="chkAutoTotal" checked> Calcular soma automaticamente
+            </label>
+          </div>
+          <div class="card-body total-card-body">
+            <div class="financial-row">
+              <span style="color: var(--text-muted);">Soma dos itens:</span>
+              <span id="subtotalDisplay" style="font-weight: 600;">R$ 0,00</span>
+            </div>
+
+            <div class="financial-row">
+              <label for="inputDesconto" style="color: var(--text-muted); font-size: 13px;">Desconto / Ajuste (opcional):</label>
+              <input type="text" id="inputDesconto" class="form-control" style="width: 140px; text-align: right;" placeholder="R$ 0,00">
+            </div>
+
+            <div class="financial-row grand-total">
+              <div class="grand-total-label">VALOR TOTAL DO ORÇAMENTO:</div>
+              <div style="text-align: right;">
+                <div id="grandTotalDisplay" class="grand-total-value">R$ 0,00</div>
+                <input type="text" id="inputManualTotal" class="form-control" style="display:none; width: 170px; text-align: right; font-size: 18px; font-weight: 800; color: var(--primary);" placeholder="R$ 0,00">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Observações & Condições -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="step-number">4</span>
+              <span>Observações & Condições</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <textarea id="observacoesText" class="form-control" placeholder="Garantia, formas de pagamento, o que está ou não incluso..."></textarea>
+            </div>
+
+            <div class="quick-chips-title" style="margin-top: 10px;">Inserir termos padrão com 1 clique:</div>
+            <div class="obs-templates">
+              <button type="button" class="obs-chip" data-insert="• Validade desta proposta: 15 dias corridos.">⏳ Validade 15 dias</button>
+              <button type="button" class="obs-chip" data-insert="• Pagamento: 50% de entrada no início e 50% na conclusão dos serviços.">💳 50% entrada + 50% entrega</button>
+              <button type="button" class="obs-chip" data-insert="• Pagamento à vista com 5% de desconto via PIX.">💰 Desconto à vista no PIX</button>
+              <button type="button" class="obs-chip" data-insert="• O valor inclui apenas a mão de obra especializada. Materiais por conta do contratante.">👷 Apenas Mão de Obra</button>
+              <button type="button" class="obs-chip" data-insert="• O valor inclui mão de obra e todos os materiais necessários.">📦 Mão de Obra + Material</button>
+              <button type="button" class="obs-chip" data-insert="• Garantia de 1 ano para os serviços executados pela Richter Construções.">🛡️ Garantia de 1 ano</button>
+              <button type="button" class="obs-chip" data-insert="• Limpeza diária e descarte correto de todo o entulho da obra.">🧹 Limpeza de Entulho Inclusa</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Ação Especial: Gerar Recibo a partir deste Orçamento -->
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 700; color: #166534; font-size: 14px;">🧾 Gerar Recibo deste Orçamento</div>
+            <div style="font-size: 12px; color: #15803d;">Crie o recibo com o nome do cliente e valor já preenchidos.</div>
+          </div>
+          <button type="button" class="btn btn-success btn-sm" id="btnGerarReciboDeOrcamento">
+            🧾 Emitir Recibo Agora
           </button>
         </div>
       </div>
-      <div class="card-body">
-        <div class="form-grid-3">
-          <div class="form-group">
-            <label class="form-label" for="orcNumero">Nº do Orçamento</label>
-            <input type="text" id="orcNumero" class="form-control" placeholder="#2026-001">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="orcStatus">Status</label>
-            <select id="orcStatus" class="form-control">
-              <option value="Rascunho">🟡 Rascunho</option>
-              <option value="Enviado">🔵 Enviado</option>
-              <option value="Aprovado">🟢 Aprovado</option>
-              <option value="Recusado">🔴 Recusado</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="clienteData">Data da Proposta</label>
-            <input type="date" id="clienteData" class="form-control">
-          </div>
-        </div>
 
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label class="form-label" for="clienteNome">Nome Completo do Cliente</label>
-            <input type="text" id="clienteNome" class="form-control" placeholder="Ex: João da Silva">
+      <!-- Coluna da Direita: Pré-visualização do PDF do Orçamento -->
+      <div class="preview-column">
+        <div class="preview-header-bar">
+          <div class="status-pill">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Prévia atualizada em tempo real</span>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="clienteTelefone">Telefone / WhatsApp</label>
-            <input type="text" id="clienteTelefone" class="form-control" placeholder="(00) 00000-0000">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="clienteEndereco">Endereço da Obra / Serviço</label>
-          <input type="text" id="clienteEndereco" class="form-control" placeholder="Rua, número, bairro, cidade/UF">
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. Itens do Orçamento -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="step-number">2</span>
-          <span>Serviços & Materiais</span>
-        </div>
-        <button type="button" class="btn btn-primary btn-sm" id="btnAddItem">
-          ➕ Adicionar Item
-        </button>
-      </div>
-      <div class="card-body">
-        <div id="itemsContainer" class="items-container">
-          <!-- Os itens são gerados aqui dinamicamente -->
-        </div>
-
-        <!-- Botões de Ação Rápida de Itens -->
-        <div style="display: flex; gap: 8px; margin-top: 12px;">
-          <button type="button" class="btn btn-secondary btn-sm" id="btnAddEmptyPage" title="Adiciona linhas para preencher uma nova página completa de 10 itens">
-            📄 Adicionar Nova Página (+10 itens)
+          <button type="button" class="btn btn-secondary btn-sm" id="btnZoomFit" title="Abrir PDF em nova aba">
+            ↗️ Abrir PDF
           </button>
         </div>
 
-        <!-- Chips de Serviços Frequentes -->
-        <div class="quick-chips-wrapper">
-          <div class="quick-chips-title">Sugestões rápidas (clique para adicionar):</div>
-          <div class="chips-list">
-            <span class="chip" data-title="Pintura geral interna e externa (2 demãos)">🎨 Pintura Geral</span>
-            <span class="chip" data-title="Assentamento de piso cerâmico / porcelanato">📐 Assentamento de Piso</span>
-            <span class="chip" data-title="Instalação e reparos elétricos">⚡ Instalação Elétrica</span>
-            <span class="chip" data-title="Instalação e revisão de encanamento / hidráulica">🚰 Hidráulica</span>
-            <span class="chip" data-title="Alvenaria, reboco e regularização de parede">🧱 Alvenaria & Reboco</span>
-            <span class="chip" data-title="Demolição, remoção e descarte de entulho">🔨 Demolição & Limpeza</span>
-            <span class="chip" data-title="Instalação de forro de gesso acartonado">🏗️ Forro de Gesso</span>
-            <span class="chip" data-title="Mão de obra especializada Richter Construções">👷 Mão de Obra</span>
+        <div class="viewer-wrapper">
+          <iframe id="pdfPreviewIframe" title="Pré-visualização do Orçamento"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       TAB 3: TODOS OS ORÇAMENTOS (TABELA & FILTROS)
+       ========================================================================== -->
+  <section id="tab-todos-orcamentos" class="tab-content-panel">
+    <div class="data-table-card">
+      <div class="data-table-header">
+        <div style="display: flex; gap: 12px; align-items: center; flex: 1; flex-wrap: wrap;">
+          <input type="text" id="searchAllQuotesInput" class="form-control" style="max-width: 320px;" placeholder="🔍 Buscar por cliente, número ou endereço...">
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn active" data-filter="todos">Todos</button>
+            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Rascunho">Rascunhos</button>
+            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Enviado">Enviados</button>
+            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Aprovado">Aprovados</button>
+            <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Recusado">Recusados</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('orcamento')">
+          ➕ Novo Orçamento
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="custom-table" id="allQuotesTable">
+          <thead>
+            <tr>
+              <th>Nº Proposta</th>
+              <th>Cliente</th>
+              <th>Telefone</th>
+              <th>Data</th>
+              <th>Itens (Páginas)</th>
+              <th>Status</th>
+              <th>Valor Total</th>
+              <th style="text-align: right;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Renderizado via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       TAB 4: EMISSÃO & GESTÃO DE RECIBOS
+       ========================================================================== -->
+  <section id="tab-recibos" class="tab-content-panel">
+    <div class="editor-layout">
+      <!-- Formulário do Recibo -->
+      <div class="form-column">
+        <!-- Ações do Recibo -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn btn-success btn-sm" id="btnSalvarRecibo">
+              💾 Salvar Recibo
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnNovoRecibo">
+              ✨ Novo Recibo
+            </button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn btn-whatsapp btn-sm" id="btnWhatsappRecibo">
+              📱 WhatsApp
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnDownloadRecibo">
+              📥 Baixar Recibo (PDF)
+            </button>
           </div>
         </div>
 
-        <!-- Informações de Paginação do PDF -->
-        <div class="pagination-info">
-          <span>Capacidade do modelo: <strong>10 itens por folha</strong></span>
-          <span class="pagination-pill" id="pageCounterPill">Página 1 de 1</span>
-        </div>
-      </div>
-    </section>
+        <!-- Cartão dos Dados do Recibo -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="step-number" style="background:#f0fdf4; color:#16a34a;">🧾</span>
+              <span>Emissão de Recibo de Pagamento</span>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnHojeRecibo" style="padding: 2px 7px; font-size: 11px;">
+              📅 Hoje
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label" for="recNumero">Nº do Recibo</label>
+                <input type="text" id="recNumero" class="form-control" placeholder="REC-2026-001">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="recData">Data do Pagamento</label>
+                <input type="date" id="recData" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="recValor">Valor Pago (R$)</label>
+                <input type="text" id="recValor" class="form-control" style="font-weight:700; color:var(--primary);" placeholder="R$ 0,00">
+              </div>
+            </div>
 
-    <!-- 3. Totais Financeiros -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="step-number">3</span>
-          <span>Valor Total</span>
-        </div>
-        <label style="font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; cursor: pointer;">
-          <input type="checkbox" id="chkAutoTotal" checked> Calcular soma automaticamente
-        </label>
-      </div>
-      <div class="card-body total-card-body">
-        <div class="financial-row">
-          <span style="color: var(--text-muted);">Soma dos itens:</span>
-          <span id="subtotalDisplay" style="font-weight: 600;">R$ 0,00</span>
-        </div>
+            <div class="form-group">
+              <label class="form-label" for="recValorExtenso">Valor por Extenso (Gerado Automaticamente)</label>
+              <input type="text" id="recValorExtenso" class="form-control" style="background: #f8fafc; font-style: italic;" placeholder="Zero reais">
+            </div>
 
-        <div class="financial-row">
-          <label for="inputDesconto" style="color: var(--text-muted); font-size: 13px;">Desconto / Ajuste (opcional):</label>
-          <input type="text" id="inputDesconto" class="form-control" style="width: 140px; text-align: right;" placeholder="R$ 0,00">
-        </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="recClienteNome">Recebemos de (Cliente / Pagador)</label>
+                <input type="text" id="recClienteNome" class="form-control" placeholder="Nome completo do pagador">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="recClienteDoc">CPF ou CNPJ (Opcional)</label>
+                <input type="text" id="recClienteDoc" class="form-control" placeholder="000.000.000-00">
+              </div>
+            </div>
 
-        <div class="financial-row grand-total">
-          <div class="grand-total-label">VALOR TOTAL DO ORÇAMENTO:</div>
-          <div style="text-align: right;">
-            <div id="grandTotalDisplay" class="grand-total-value">R$ 0,00</div>
-            <input type="text" id="inputManualTotal" class="form-control" style="display:none; width: 170px; text-align: right; font-size: 18px; font-weight: 800; color: var(--primary);" placeholder="R$ 0,00">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="recFormaPagamento">Forma de Pagamento</label>
+                <select id="recFormaPagamento" class="form-control">
+                  <option value="PIX">⚡ PIX</option>
+                  <option value="Dinheiro">💵 Dinheiro (em espécie)</option>
+                  <option value="Transferência Bancária (TED/DOC)">🏦 Transferência Bancária</option>
+                  <option value="Cartão de Crédito">💳 Cartão de Crédito</option>
+                  <option value="Cartão de Débito">💳 Cartão de Débito</option>
+                  <option value="Boleto Bancário">📄 Boleto Bancário</option>
+                  <option value="Cheque">📑 Cheque</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="recCidade">Cidade e UF de Emissão</label>
+                <input type="text" id="recCidade" class="form-control" placeholder="Joinville - SC" value="Joinville - SC">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recDescricao">Referente a (Descrição dos Serviços / Parcela)</label>
+              <textarea id="recDescricao" class="form-control" placeholder="Ex: Pagamento referente à entrada de 50% dos serviços de reforma e pintura residencial..."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Histórico de Recibos Emitidos -->
+        <div class="data-table-card">
+          <div class="data-table-header">
+            <h3>📑 Histórico de Recibos Emitidos</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" id="allReceiptsTable">
+              <thead>
+                <tr>
+                  <th>Nº</th>
+                  <th>Cliente</th>
+                  <th>Data</th>
+                  <th>Forma</th>
+                  <th>Valor</th>
+                  <th style="text-align: right;">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Renderizado via JS -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- 4. Observações & Condições -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="step-number">4</span>
-          <span>Observações & Condições Comerciais</span>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="form-group">
-          <textarea id="observacoesText" class="form-control" placeholder="Descreva garantias, prazos, formas de pagamento, o que está ou não incluso..."></textarea>
+      <!-- Coluna da Direita: Prévia do Recibo PDF -->
+      <div class="preview-column">
+        <div class="preview-header-bar">
+          <div class="status-pill">
+            <span class="status-dot" id="statusDotRecibo"></span>
+            <span id="statusTextRecibo">Recibo Oficial (2 Vias na Folha A4)</span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnZoomFitRecibo" title="Abrir PDF em nova aba">
+            ↗️ Abrir PDF
+          </button>
         </div>
 
-        <div class="quick-chips-title" style="margin-top: 10px;">Inserir termos padrão com 1 clique:</div>
-        <div class="obs-templates">
-          <button type="button" class="obs-chip" data-insert="• Validade desta proposta: 15 dias corridos.">⏳ Validade 15 dias</button>
-          <button type="button" class="obs-chip" data-insert="• Pagamento: 50% de entrada no início e 50% na conclusão dos serviços.">💳 50% entrada + 50% entrega</button>
-          <button type="button" class="obs-chip" data-insert="• Pagamento à vista com 5% de desconto via PIX.">💰 Desconto à vista no PIX</button>
-          <button type="button" class="obs-chip" data-insert="• O valor inclui apenas a mão de obra especializada. Materiais por conta do contratante.">👷 Apenas Mão de Obra</button>
-          <button type="button" class="obs-chip" data-insert="• O valor inclui mão de obra e todos os materiais necessários.">📦 Mão de Obra + Material</button>
-          <button type="button" class="obs-chip" data-insert="• Garantia de 1 ano para os serviços executados pela Richter Construções.">🛡️ Garantia de 1 ano</button>
-          <button type="button" class="obs-chip" data-insert="• Limpeza diária e descarte correto de todo o entulho da obra.">🧹 Limpeza de Entulho Inclusa</button>
+        <div class="viewer-wrapper">
+          <iframe id="pdfPreviewIframeRecibo" title="Pré-visualização do Recibo"></iframe>
         </div>
       </div>
-    </section>
-
-  </div>
-
-  <!-- Coluna da Direita: Pré-visualização ao Vivo -->
-  <div class="preview-column">
-    <div class="preview-header-bar">
-      <div class="status-pill">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Prévia atualizada em tempo real</span>
-      </div>
-      <div style="display: flex; gap: 8px;">
-        <button type="button" class="btn btn-secondary btn-sm" id="btnZoomFit" title="Abrir PDF em nova aba">
-          ↗️ Abrir PDF
-        </button>
-      </div>
     </div>
+  </section>
 
-    <div class="viewer-wrapper">
-      <iframe id="pdfPreviewIframe" title="Pré-visualização do Orçamento"></iframe>
-    </div>
-  </div>
-</main>
-
-<!-- Modal: Meus Orçamentos (Histórico e Gerenciador) -->
-<div class="modal-backdrop" id="historyModal">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <h3>📁 Orçamentos Salvos</h3>
-      <button type="button" class="modal-close-btn" id="btnCloseHistory">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-toolbar">
-        <input type="text" id="searchQuotesInput" class="form-control modal-search" placeholder="🔍 Buscar por cliente ou número...">
-        <div class="modal-filters">
-          <button type="button" class="filter-btn active" data-filter="todos">Todos</button>
-          <button type="button" class="filter-btn" data-filter="Rascunho">Rascunhos</button>
-          <button type="button" class="filter-btn" data-filter="Enviado">Enviados</button>
-          <button type="button" class="filter-btn" data-filter="Aprovado">Aprovados</button>
-          <button type="button" class="filter-btn" data-filter="Recusado">Recusados</button>
-        </div>
-      </div>
-
-      <div id="quotesListContainer" class="quotes-list">
-        <!-- Renderização da lista de orçamentos -->
-      </div>
-    </div>
-    <div class="modal-footer">
-      <div style="display: flex; gap: 8px;">
-        <button type="button" class="btn btn-secondary btn-sm" id="btnExportBackup" title="Baixar todos os orçamentos em arquivo de backup">
-          📤 Exportar Backup (JSON)
-        </button>
-        <button type="button" class="btn btn-secondary btn-sm" id="btnImportBackup" title="Importar orçamentos de arquivo de backup">
-          📥 Importar Backup
-        </button>
-        <input type="file" id="backupFileInput" style="display:none" accept=".json">
-      </div>
-      <button type="button" class="btn btn-secondary btn-sm" id="btnCloseHistoryFooter">
-        Fechar
-      </button>
-    </div>
-  </div>
 </div>
 
-<!-- Container de Avisos Toast -->
+<!-- Container Toast -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Biblioteca PDF-Lib com fallback CDN -->
+<!-- Bibliotecas Locais com Contingência CDN -->
 <script src="pdf-lib.min.js"></script>
 <script>
 if (typeof PDFLib === 'undefined') {
   document.write('<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"><\/script>');
 }
 </script>
-
-<!-- Modelo PDF Base64 para funcionamento local e no GitHub Pages 100% livre de erros -->
 <script src="template-pdf.js"></script>
 
 <script>
 /* ==========================================================================
-   SISTEMA DE BANCO DE DADOS LOCAL (STORAGE)
+   BANCO DE DADOS LOCAL (STORAGE)
    ========================================================================== */
 const QUOTES_DB_KEY = 'richter_saved_quotes_v2';
+const RECEIPTS_DB_KEY = 'richter_saved_receipts_v1';
 const DRAFT_KEY = 'richter_current_draft_v2';
 
 let savedQuotes = [];
+let savedReceipts = [];
 let currentQuoteId = null;
+let currentReceiptId = null;
 
 let appState = {
   id: null,
@@ -1059,28 +1038,53 @@ let appState = {
   observacoes: ''
 };
 
+let receiptState = {
+  id: null,
+  numero: '',
+  data: '',
+  valor: '',
+  valorExtenso: '',
+  clienteNome: '',
+  clienteDoc: '',
+  formaPagamento: 'PIX',
+  cidade: 'Joinville - SC',
+  descricao: ''
+};
+
 function initDatabase() {
   try {
-    const raw = localStorage.getItem(QUOTES_DB_KEY);
-    savedQuotes = raw ? JSON.parse(raw) : [];
-  } catch (e) {
-    savedQuotes = [];
-  }
-  updateQuotesCountBadge();
+    const rawQ = localStorage.getItem(QUOTES_DB_KEY);
+    savedQuotes = rawQ ? JSON.parse(rawQ) : [];
+  } catch (e) { savedQuotes = []; }
+
+  try {
+    const rawR = localStorage.getItem(RECEIPTS_DB_KEY);
+    savedReceipts = rawR ? JSON.parse(rawR) : [];
+  } catch (e) { savedReceipts = []; }
+
+  updateCounts();
+  renderDashboard();
+  renderAllQuotesTable();
+  renderAllReceiptsTable();
 }
 
 function persistQuotes() {
-  try {
-    localStorage.setItem(QUOTES_DB_KEY, JSON.stringify(savedQuotes));
-    updateQuotesCountBadge();
-  } catch (e) {
-    console.error('Erro ao salvar no banco local:', e);
-  }
+  localStorage.setItem(QUOTES_DB_KEY, JSON.stringify(savedQuotes));
+  updateCounts();
+  renderDashboard();
+  renderAllQuotesTable();
 }
 
-function updateQuotesCountBadge() {
-  const el = document.getElementById('headerQuotesCount');
-  if (el) el.textContent = savedQuotes.length;
+function persistReceipts() {
+  localStorage.setItem(RECEIPTS_DB_KEY, JSON.stringify(savedReceipts));
+  updateCounts();
+  renderDashboard();
+  renderAllReceiptsTable();
+}
+
+function updateCounts() {
+  document.getElementById('tabCountOrc').textContent = savedQuotes.length;
+  document.getElementById('tabCountRec').textContent = savedReceipts.length;
 }
 
 function showToast(message, type = 'info') {
@@ -1097,24 +1101,35 @@ function showToast(message, type = 'info') {
   }, 3200);
 }
 
-// Carregamento de PDF (Base64 local ou Fetch HTTP)
-async function loadTemplateBytes() {
-  if (typeof window.ORCAMENTO_MODELO_BASE64 === 'string' && window.ORCAMENTO_MODELO_BASE64.length > 0) {
-    const binStr = atob(window.ORCAMENTO_MODELO_BASE64);
-    const len = binStr.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binStr.charCodeAt(i);
-    }
-    return bytes.buffer;
+/* ==========================================================================
+   NAVEGAÇÃO POR ABAS
+   ========================================================================== */
+function switchTab(tabId) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content-panel').forEach(p => p.classList.remove('active'));
+
+  const btn = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+  const panel = document.getElementById(`tab-${tabId}`);
+  if (btn) btn.classList.add('active');
+  if (panel) panel.classList.add('active');
+
+  if (tabId === 'orcamento') {
+    schedulePdfGeneration();
+  } else if (tabId === 'recibos') {
+    scheduleReceiptPdfGeneration();
+  } else if (tabId === 'dashboard') {
+    renderDashboard();
+  } else if (tabId === 'todos-orcamentos') {
+    renderAllQuotesTable();
   }
-  const res = await fetch('orcamento-modelo.pdf');
-  if (!res.ok) throw new Error(`Falha HTTP ${res.status}`);
-  return await res.arrayBuffer();
 }
 
+document.querySelectorAll('.main-nav .nav-tab').forEach(btn => {
+  btn.onclick = () => switchTab(btn.dataset.tab);
+});
+
 /* ==========================================================================
-   UTILITÁRIOS
+   UTILITÁRIOS FINANCEIROS E VALOR POR EXTENSO
    ========================================================================== */
 function parseBRL(val) {
   if (!val) return 0;
@@ -1131,13 +1146,9 @@ function formatBRL(val) {
 function maskPhone(v) {
   v = v.replace(/\D/g, '');
   if (v.length > 11) v = v.substring(0, 11);
-  if (v.length > 10) {
-    return v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-  } else if (v.length > 5) {
-    return v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
-  } else if (v.length > 2) {
-    return v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
-  }
+  if (v.length > 10) return v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  if (v.length > 5) return v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+  if (v.length > 2) return v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
   return v;
 }
 
@@ -1159,31 +1170,238 @@ function getTodayString() {
   return `${d.getFullYear()}-${m}-${day}`;
 }
 
-function generateNextQuoteNumber() {
-  const year = new Date().getFullYear();
-  const count = savedQuotes.length + 1;
-  return `#${year}-${String(count).padStart(3, '0')}`;
+function escapeHtml(text) {
+  return String(text || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function numeroParaExtenso(valor) {
+  if (typeof valor === 'string') {
+    valor = parseBRL(valor);
+  }
+  if (isNaN(valor) || valor === 0) return 'Zero reais';
+  
+  const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+  const especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+  const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+  const centenas = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+
+  function trio(n) {
+    if (n === 100) return 'cem';
+    let c = Math.floor(n / 100);
+    let d = Math.floor((n % 100) / 10);
+    let u = n % 10;
+    let parts = [];
+    if (c > 0) parts.push(centenas[c]);
+    if (d === 1) parts.push(especiais[u]);
+    else {
+      if (d > 1) parts.push(dezenas[d]);
+      if (u > 0) parts.push(unidades[u]);
+    }
+    return parts.join(' e ');
+  }
+
+  let inteiro = Math.floor(valor);
+  let centavos = Math.round((valor - inteiro) * 100);
+
+  let partesReais = [];
+  let milhoes = Math.floor(inteiro / 1000000);
+  let milhares = Math.floor((inteiro % 1000000) / 1000);
+  let restos = inteiro % 1000;
+
+  if (milhoes > 0) partesReais.push(trio(milhoes) + (milhoes === 1 ? ' milhão' : ' milhões'));
+  if (milhares > 0) partesReais.push(trio(milhares) + ' mil');
+  if (restos > 0) partesReais.push(trio(restos));
+
+  let strReais = partesReais.join(' e ');
+  if (inteiro === 1) strReais += ' real';
+  else if (inteiro > 1) strReais += ' reais';
+
+  let strCentavos = '';
+  if (centavos > 0) {
+    strCentavos = trio(centavos) + (centavos === 1 ? ' centavo' : ' centavos');
+  }
+
+  let finalStr = '';
+  if (strReais && strCentavos) finalStr = strReais + ' e ' + strCentavos;
+  else if (strReais) finalStr = strReais;
+  else if (strCentavos) finalStr = strCentavos;
+  else finalStr = 'Zero reais';
+
+  return finalStr.charAt(0).toUpperCase() + finalStr.slice(1);
 }
 
 /* ==========================================================================
-   RENDERIZAÇÃO DA LISTA DE ITENS
+   DASHBOARD: RENDERIZAÇÃO E MÉTRICAS
+   ========================================================================== */
+function renderDashboard() {
+  let totalOrcado = 0;
+  let aprovadosValor = 0;
+  let aprovadosQtd = 0;
+  let negociacaoValor = 0;
+  let negociacaoQtd = 0;
+
+  savedQuotes.forEach(q => {
+    const val = parseBRL(q.totalFormatted || '0');
+    totalOrcado += val;
+    if (q.status === 'Aprovado') {
+      aprovadosValor += val;
+      aprovadosQtd++;
+    } else if (q.status === 'Enviado') {
+      negociacaoValor += val;
+      negociacaoQtd++;
+    }
+  });
+
+  let totalRecibos = 0;
+  savedReceipts.forEach(r => {
+    totalRecibos += parseBRL(r.valor || '0');
+  });
+
+  document.getElementById('kpiTotalOrcado').textContent = formatBRL(totalOrcado);
+  document.getElementById('kpiTotalOrcamentosQtd').textContent = `${savedQuotes.length} propostas cadastradas`;
+
+  document.getElementById('kpiAprovadosValor').textContent = formatBRL(aprovadosValor);
+  document.getElementById('kpiAprovadosQtd').textContent = `${aprovadosQtd} fechados (${savedQuotes.length ? Math.round((aprovadosQtd/savedQuotes.length)*100) : 0}%)`;
+
+  document.getElementById('kpiEmNegociacaoValor').textContent = formatBRL(negociacaoValor);
+  document.getElementById('kpiEmNegociacaoQtd').textContent = `${negociacaoQtd} propostas enviadas`;
+
+  document.getElementById('kpiRecibosValor').textContent = formatBRL(totalRecibos);
+  document.getElementById('kpiRecibosQtd').textContent = `${savedReceipts.length} recibos emitidos`;
+
+  // Renderiza tabela recente de orçamentos
+  const tbodyQ = document.querySelector('#dashboardRecentQuotesTable tbody');
+  const recentQuotes = savedQuotes.slice(0, 6);
+  if (recentQuotes.length === 0) {
+    tbodyQ.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:24px;">Nenhum orçamento cadastrado ainda.</td></tr>`;
+  } else {
+    tbodyQ.innerHTML = recentQuotes.map(q => `
+      <tr>
+        <td style="font-weight:700;">${escapeHtml(q.numero || '')}</td>
+        <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong></td>
+        <td>${q.data ? q.data.split('-').reverse().join('/') : '-'}</td>
+        <td><span class="status-badge badge-${(q.status||'rascunho').toLowerCase()}">${escapeHtml(q.status||'Rascunho')}</span></td>
+        <td style="font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️ Editar</button>
+          <button class="btn btn-success btn-sm" onclick="createReceiptFromQuote('${q.id}')">🧾 Recibo</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Renderiza tabela recente de recibos
+  const tbodyR = document.querySelector('#dashboardRecentReceiptsTable tbody');
+  const recentReceipts = savedReceipts.slice(0, 6);
+  if (recentReceipts.length === 0) {
+    tbodyR.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:24px;">Nenhum recibo emitido ainda.</td></tr>`;
+  } else {
+    tbodyR.innerHTML = recentReceipts.map(r => `
+      <tr>
+        <td style="font-weight:700;">${escapeHtml(r.numero || '')}</td>
+        <td>${escapeHtml(r.clienteNome || 'Sem nome')}</td>
+        <td style="font-weight:700; color:var(--success);">${escapeHtml(r.valor || '')}</td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="editReceipt('${r.id}')">👁️ Ver</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+}
+
+/* ==========================================================================
+   TABELA GERAL DE ORÇAMENTOS (TAB 3)
+   ========================================================================== */
+let filterOrcStatus = 'todos';
+
+function renderAllQuotesTable() {
+  const tbody = document.querySelector('#allQuotesTable tbody');
+  const query = (document.getElementById('searchAllQuotesInput').value || '').trim().toLowerCase();
+
+  let filtered = savedQuotes.filter(q => {
+    if (filterOrcStatus !== 'todos' && q.status !== filterOrcStatus) return false;
+    if (query) {
+      const matchName = (q.nome || '').toLowerCase().includes(query);
+      const matchNum = (q.numero || '').toLowerCase().includes(query);
+      const matchEnd = (q.endereco || '').toLowerCase().includes(query);
+      return matchName || matchNum || matchEnd;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:32px; color:var(--text-muted);">Nenhum orçamento encontrado com os filtros selecionados.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(q => {
+    const itemsCount = (q.items || []).filter(it => it.desc && it.desc.trim()).length;
+    const pagesCount = Math.max(1, Math.ceil(itemsCount / 10));
+    const dateFormatted = q.data ? q.data.split('-').reverse().join('/') : '-';
+
+    return `
+      <tr>
+        <td style="font-weight:800; color:var(--dark);">${escapeHtml(q.numero || '')}</td>
+        <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong><br><small style="color:var(--text-muted);">${escapeHtml(q.endereco || '')}</small></td>
+        <td>${escapeHtml(q.telefone || '-')}</td>
+        <td>${dateFormatted}</td>
+        <td>${itemsCount} itens (${pagesCount} pág.)</td>
+        <td>
+          <select onchange="updateQuoteStatus('${q.id}', this.value)" style="padding:3px 6px; font-size:11px; font-weight:700; border-radius:12px; border:1px solid #cbd5e1; background:#f8fafc;">
+            <option value="Rascunho" ${q.status==='Rascunho'?'selected':''}>🟡 Rascunho</option>
+            <option value="Enviado" ${q.status==='Enviado'?'selected':''}>🔵 Enviado</option>
+            <option value="Aprovado" ${q.status==='Aprovado'?'selected':''}>🟢 Aprovado</option>
+            <option value="Recusado" ${q.status==='Recusado'?'selected':''}>🔴 Recusado</option>
+          </select>
+        </td>
+        <td style="font-size:15px; font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
+        <td style="text-align:right; white-space:nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')" title="Editar Orçamento">✏️ Editar</button>
+          <button class="btn btn-success btn-sm" onclick="createReceiptFromQuote('${q.id}')" title="Emitir Recibo deste Orçamento">🧾 Recibo</button>
+          <button class="btn btn-whatsapp btn-sm" onclick="sendWhatsappQuote('${q.id}')" title="Enviar WhatsApp">📱</button>
+          <button class="btn btn-outline-danger btn-sm" onclick="deleteQuote('${q.id}')" title="Excluir">🗑️</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+document.querySelectorAll('.filter-orc-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.filter-orc-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterOrcStatus = btn.dataset.filter;
+    renderAllQuotesTable();
+  };
+});
+document.getElementById('searchAllQuotesInput').addEventListener('input', renderAllQuotesTable);
+
+function updateQuoteStatus(id, newStatus) {
+  const quote = savedQuotes.find(q => q.id === id);
+  if (quote) {
+    quote.status = newStatus;
+    persistQuotes();
+    showToast(`Status de ${quote.numero} alterado para ${newStatus}!`, 'info');
+  }
+}
+
+/* ==========================================================================
+   GESTÃO DO FORMULÁRIO DO ORÇAMENTO (TAB 2)
    ========================================================================== */
 const itemsContainer = document.getElementById('itemsContainer');
 
 function renderItems() {
   itemsContainer.innerHTML = '';
-
   appState.items.forEach((item, index) => {
     const row = document.createElement('div');
     row.className = 'item-row';
     row.dataset.index = index;
-
     const pageNum = Math.floor(index / 10) + 1;
 
     row.innerHTML = `
       <div class="item-row-header">
         <span class="item-index-badge">Item #${index + 1} &bull; Pág. ${pageNum}</span>
-        <button type="button" class="item-remove-btn" title="Remover este item" data-action="remove" data-index="${index}">&times; Excluir</button>
+        <button type="button" class="item-remove-btn" data-action="remove" data-index="${index}">&times; Excluir</button>
       </div>
       <div class="item-inputs-grid">
         <input type="text" class="form-control item-desc" placeholder="Descrição do serviço ou material" value="${escapeHtml(item.desc || '')}">
@@ -1191,28 +1409,15 @@ function renderItems() {
         <input type="text" class="form-control item-preco" placeholder="Valor (R$)" value="${escapeHtml(item.preco ? formatBRL(item.preco) : '')}" style="text-align: right;">
       </div>
     `;
-
     itemsContainer.appendChild(row);
   });
 
-  updatePaginationCounter();
+  const totalItems = Math.max(appState.items.length, 1);
+  const totalPages = Math.ceil(totalItems / 10);
+  document.getElementById('pageCounterPill').textContent = `${totalPages} ${totalPages === 1 ? 'Página' : 'Páginas'} (${totalItems} ${totalItems === 1 ? 'item' : 'itens'})`;
   calculateTotals();
 }
 
-function escapeHtml(text) {
-  return String(text).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-function updatePaginationCounter() {
-  const totalItems = Math.max(appState.items.length, 1);
-  const totalPages = Math.ceil(totalItems / 10);
-  const pill = document.getElementById('pageCounterPill');
-  pill.textContent = `${totalPages} ${totalPages === 1 ? 'Página' : 'Páginas'} (${totalItems} ${totalItems === 1 ? 'item' : 'itens'})`;
-}
-
-/* ==========================================================================
-   CÁLCULO DE VALORES
-   ========================================================================== */
 function calculateTotals() {
   let subtotal = 0;
   appState.items.forEach(item => {
@@ -1222,7 +1427,6 @@ function calculateTotals() {
   });
 
   document.getElementById('subtotalDisplay').textContent = formatBRL(subtotal);
-
   const descVal = parseBRL(document.getElementById('inputDesconto').value);
   const finalVal = Math.max(0, subtotal - descVal);
 
@@ -1240,23 +1444,11 @@ function calculateTotals() {
 }
 
 function getFinalTotalString() {
-  if (appState.autoTotal) {
-    return document.getElementById('grandTotalDisplay').textContent;
-  }
+  if (appState.autoTotal) return document.getElementById('grandTotalDisplay').textContent;
   return document.getElementById('inputManualTotal').value || 'R$ 0,00';
 }
 
-function updateStatusBadge() {
-  const status = document.getElementById('orcStatus').value;
-  const badge = document.getElementById('currentStatusBadge');
-  badge.textContent = status;
-  badge.className = `status-badge badge-${status.toLowerCase()}`;
-}
-
-/* ==========================================================================
-   SALVAMENTO E HISTÓRICO DE ORÇAMENTOS
-   ========================================================================== */
-function saveCurrentQuote(asNew = false) {
+function saveCurrentQuote() {
   const nome = document.getElementById('clienteNome').value.trim();
   if (!nome) {
     alert('Por favor, informe ao menos o nome do cliente antes de salvar.');
@@ -1268,11 +1460,11 @@ function saveCurrentQuote(asNew = false) {
   let id = currentQuoteId;
   let numero = document.getElementById('orcNumero').value.trim();
 
-  if (!id || asNew) {
+  if (!id) {
     id = 'orc_' + Date.now();
     currentQuoteId = id;
-    if (!numero || asNew) {
-      numero = generateNextQuoteNumber();
+    if (!numero) {
+      numero = `#${new Date().getFullYear()}-${String(savedQuotes.length + 1).padStart(3, '0')}`;
       document.getElementById('orcNumero').value = numero;
     }
   }
@@ -1302,13 +1494,13 @@ function saveCurrentQuote(asNew = false) {
     showToast(`Orçamento ${numero} atualizado com sucesso!`, 'success');
   } else {
     savedQuotes.unshift(quoteData);
-    showToast(`Orçamento ${numero} salvo com sucesso!`, 'success');
+    showToast(`Orçamento ${numero} salvo no sistema!`, 'success');
   }
 
   persistQuotes();
 }
 
-function loadQuote(id) {
+function editQuote(id) {
   const quote = savedQuotes.find(q => q.id === id);
   if (!quote) return;
 
@@ -1339,379 +1531,36 @@ function loadQuote(id) {
   document.getElementById('chkAutoTotal').checked = appState.autoTotal;
   document.getElementById('observacoesText').value = appState.observacoes;
 
-  updateStatusBadge();
+  const statusBadge = document.getElementById('currentStatusBadge');
+  statusBadge.textContent = appState.status;
+  statusBadge.className = `status-badge badge-${appState.status.toLowerCase()}`;
+
   renderItems();
-  closeHistoryModal();
-  showToast(`Orçamento ${quote.numero || ''} carregado!`, 'info');
-}
-
-function duplicateQuote(id) {
-  const quote = savedQuotes.find(q => q.id === id);
-  if (!quote) return;
-
-  const clone = JSON.parse(JSON.stringify(quote));
-  clone.id = 'orc_' + Date.now();
-  clone.numero = generateNextQuoteNumber();
-  clone.nome = clone.nome + ' (Cópia)';
-  clone.status = 'Rascunho';
-  clone.createdAt = new Date().toISOString();
-  clone.updatedAt = clone.createdAt;
-
-  savedQuotes.unshift(clone);
-  persistQuotes();
-  loadQuote(clone.id);
-  showToast(`Cópia criada como ${clone.numero}!`, 'success');
+  switchTab('orcamento');
+  showToast(`Orçamento ${quote.numero} carregado para edição.`, 'info');
 }
 
 function deleteQuote(id) {
   const quote = savedQuotes.find(q => q.id === id);
   if (!quote) return;
-
-  if (confirm(`Tem certeza que deseja excluir o orçamento ${quote.numero} de ${quote.nome}?`)) {
+  if (confirm(`Tem certeza que deseja excluir o orçamento ${quote.numero} (${quote.nome})?`)) {
     savedQuotes = savedQuotes.filter(q => q.id !== id);
     persistQuotes();
-    renderQuotesList();
-    if (currentQuoteId === id) {
-      currentQuoteId = null;
-    }
+    if (currentQuoteId === id) currentQuoteId = null;
     showToast('Orçamento excluído.', 'danger');
   }
 }
 
-/* ==========================================================================
-   MODAL DE HISTÓRICO
-   ========================================================================== */
-const historyModal = document.getElementById('historyModal');
-let currentFilter = 'todos';
-
-function openHistoryModal() {
-  historyModal.classList.add('open');
-  renderQuotesList();
-  document.getElementById('searchQuotesInput').focus();
+function sendWhatsappQuote(id) {
+  const q = savedQuotes.find(item => item.id === id);
+  if (!q) return;
+  const fone = (q.telefone || '').replace(/\D/g, '');
+  const msg = `Olá ${q.nome}! Aqui é da Richter Construções.\nSegue a proposta *${q.numero}* no valor total de *${q.totalFormatted}*.\nJá geramos o documento em PDF detalhado para você.`;
+  const url = fone ? `https://api.whatsapp.com/send?phone=55${fone}&text=${encodeURIComponent(msg)}` : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
 }
 
-function closeHistoryModal() {
-  historyModal.classList.remove('open');
-}
-
-function renderQuotesList() {
-  const container = document.getElementById('quotesListContainer');
-  const query = document.getElementById('searchQuotesInput').value.trim().toLowerCase();
-
-  let filtered = savedQuotes.filter(q => {
-    if (currentFilter !== 'todos' && q.status !== currentFilter) return false;
-    if (query) {
-      const matchName = (q.nome || '').toLowerCase().includes(query);
-      const matchNum = (q.numero || '').toLowerCase().includes(query);
-      const matchEnd = (q.endereco || '').toLowerCase().includes(query);
-      return matchName || matchNum || matchEnd;
-    }
-    return true;
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">📋</div>
-        <h4>Nenhum orçamento encontrado</h4>
-        <p style="font-size:12px; margin-top:4px;">Crie seu primeiro orçamento ou mude o filtro de busca.</p>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = filtered.map(q => {
-    const isCurrent = (q.id === currentQuoteId);
-    const dateFormatted = q.data ? q.data.split('-').reverse().join('/') : 'Sem data';
-    const itemsCount = (q.items || []).filter(it => it.desc && it.desc.trim()).length;
-    const pagesCount = Math.max(1, Math.ceil(itemsCount / 10));
-
-    return `
-      <div class="quote-item-card ${isCurrent ? 'current' : ''}">
-        <div class="quote-meta-left">
-          <div class="quote-title-line">
-            <span class="quote-number">${escapeHtml(q.numero || 'Sem nº')}</span>
-            <span class="status-badge badge-${(q.status || 'rascunho').toLowerCase()}">${escapeHtml(q.status || 'Rascunho')}</span>
-            ${isCurrent ? '<span style="font-size:10px; background:#d61820; color:#fff; padding:1px 5px; border-radius:4px; font-weight:700;">EM EDIÇÃO</span>' : ''}
-          </div>
-          <div class="quote-client-name">${escapeHtml(q.nome || 'Cliente sem nome')}</div>
-          <div class="quote-subline">
-            <span>📅 ${dateFormatted}</span>
-            <span>📱 ${escapeHtml(q.telefone || 'Sem fone')}</span>
-            <span>📦 ${itemsCount} itens (${pagesCount} pág.)</span>
-          </div>
-        </div>
-        <div class="quote-meta-right">
-          <div class="quote-price-tag">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</div>
-          <div class="quote-actions-group">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="loadQuote('${q.id}')" title="Carregar este orçamento">
-              ✏️ Abrir
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="duplicateQuote('${q.id}')" title="Criar cópia deste orçamento">
-              📋
-            </button>
-            <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteQuote('${q.id}')" title="Excluir">
-              🗑️
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-/* ==========================================================================
-   EXPORTAÇÃO E IMPORTAÇÃO DE BACKUP (JSON)
-   ========================================================================== */
-function exportBackup() {
-  if (savedQuotes.length === 0) {
-    alert('Não há orçamentos salvos para exportar.');
-    return;
-  }
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedQuotes, null, 2));
-  const link = document.createElement('a');
-  link.href = dataStr;
-  const d = new Date().toISOString().split('T')[0];
-  link.download = `backup-orcamentos-richter-${d}.json`;
-  link.click();
-  showToast('Backup exportado com sucesso!', 'success');
-}
-
-function importBackupFile(file) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) {
-        throw new Error('O arquivo não contém uma lista válida de orçamentos.');
-      }
-      
-      let added = 0;
-      imported.forEach(imp => {
-        if (!imp.id) imp.id = 'orc_' + Date.now() + Math.random().toString(36).substr(2, 4);
-        const exists = savedQuotes.some(q => q.id === imp.id);
-        if (!exists) {
-          savedQuotes.push(imp);
-          added++;
-        }
-      });
-
-      persistQuotes();
-      renderQuotesList();
-      showToast(`${added} novos orçamentos importados com sucesso!`, 'success');
-    } catch (err) {
-      alert('Erro ao importar backup: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-/* ==========================================================================
-   GERADOR DO PDF MULTI-PÁGINAS COM PDF-LIB
-   ========================================================================== */
-let previewBlobUrl = null;
-let debounceTimeout = null;
-
-function schedulePdfGeneration() {
-  const dot = document.getElementById('statusDot');
-  const text = document.getElementById('statusText');
-  dot.className = 'status-dot loading';
-  text.textContent = 'Gerando pré-visualização...';
-
-  clearTimeout(debounceTimeout);
-  debounceTimeout = setTimeout(() => {
-    generatePdf(false);
-  }, 280);
-}
-
-async function generatePdf(download = false) {
-  const dot = document.getElementById('statusDot');
-  const text = document.getElementById('statusText');
-
-  try {
-    if (typeof PDFLib === 'undefined') {
-      text.textContent = 'Carregando biblioteca PDF...';
-      return;
-    }
-
-    const templateBytes = await loadTemplateBytes();
-    
-    // Constrói lista de strings formatadas para os campos do PDF
-    const formattedItemLines = [];
-    appState.items.forEach((item) => {
-      const desc = (item.desc || '').trim();
-      if (!desc) return;
-
-      const qtd = (item.qtd || '').trim();
-      const unit = parseBRL(String(item.preco || '0'));
-      const qtdNum = parseFloat(qtd.replace(',', '.')) || 1;
-      const totalItem = qtdNum * unit;
-
-      let lineText = desc;
-      if (unit > 0) {
-        if (qtd && qtd !== '1') {
-          lineText += ` (${qtd} un. x ${formatBRL(unit)}) = ${formatBRL(totalItem)}`;
-        } else {
-          lineText += ` — ${formatBRL(totalItem)}`;
-        }
-      }
-      formattedItemLines.push(lineText);
-    });
-
-    const totalLines = formattedItemLines.length;
-    const totalPages = Math.max(1, Math.ceil(totalLines / 10));
-
-    const finalDoc = await PDFLib.PDFDocument.create();
-
-    const rawDate = document.getElementById('clienteData').value;
-    const dateFormatted = rawDate ? rawDate.split('-').reverse().join('/') : '';
-    const clientName = document.getElementById('clienteNome').value || '';
-    const clientAddress = document.getElementById('clienteEndereco').value || '';
-    const clientPhone = document.getElementById('clienteTelefone').value || '';
-    const grandTotalStr = getFinalTotalString();
-    const observacoesStr = document.getElementById('observacoesText').value || '';
-    const quoteNum = document.getElementById('orcNumero').value || '';
-
-    for (let p = 0; p < totalPages; p++) {
-      const pageDoc = await PDFLib.PDFDocument.load(templateBytes, { ignoreEncryption: true });
-      const form = pageDoc.getForm();
-
-      const pageItems = formattedItemLines.slice(p * 10, (p + 1) * 10);
-      const pageHeaderSuffix = totalPages > 1 ? ` (Pág. ${p + 1} de ${totalPages})` : '';
-
-      // Define dados do cliente
-      safeSetField(form, 'Nome do cliente', clientName + pageHeaderSuffix);
-      safeSetField(form, 'Endereço do cliente', clientAddress);
-      safeSetField(form, 'Telefone do cliente', clientPhone);
-      safeSetField(form, 'Data', dateFormatted);
-
-      // Preenche os 10 campos de descrição
-      for (let i = 0; i < 10; i++) {
-        const fieldName = `Descrição do orçamento ${i + 1}`;
-        safeSetField(form, fieldName, pageItems[i] || '');
-      }
-
-      // Total e observações na última página, ou aviso de continuação nas anteriores
-      const isLastPage = (p === totalPages - 1);
-      if (isLastPage) {
-        safeSetField(form, 'Valor total', grandTotalStr);
-        let obsFinal = observacoesStr;
-        if (quoteNum) {
-          obsFinal = `[Proposta ${quoteNum}]\n` + obsFinal;
-        }
-        safeSetField(form, 'Campo para adicionar alguma observação caso seja necessário', obsFinal);
-      } else {
-        safeSetField(form, 'Valor total', `Continua na Pág. ${p + 2}...`);
-        safeSetField(form, 'Campo para adicionar alguma observação caso seja necessário', `(Continuação dos serviços e condições na Página ${p + 2})`);
-      }
-
-      form.flatten();
-
-      const [copiedPage] = await finalDoc.copyPages(pageDoc, [0]);
-      finalDoc.addPage(copiedPage);
-    }
-
-    const finalBytes = await finalDoc.save();
-    const blob = new Blob([finalBytes], { type: 'application/pdf' });
-
-    if (previewBlobUrl) {
-      URL.revokeObjectURL(previewBlobUrl);
-    }
-    previewBlobUrl = URL.createObjectURL(blob);
-    document.getElementById('pdfPreviewIframe').src = previewBlobUrl;
-
-    dot.className = 'status-dot';
-    text.textContent = `PDF pronto • ${totalPages} ${totalPages === 1 ? 'página' : 'páginas'}`;
-
-    if (download) {
-      const link = document.createElement('a');
-      link.href = previewBlobUrl;
-      const cleanName = (clientName || 'Cliente').trim().replace(/[^a-zA-Z0-9_\-]/g, '_');
-      const cleanNum = (quoteNum || 'Orcamento').replace(/[^a-zA-Z0-9_\-]/g, '_');
-      link.download = `Orcamento-Richter_${cleanNum}_${cleanName}.pdf`;
-      link.click();
-      showToast('Download do PDF iniciado!', 'success');
-    }
-  } catch (err) {
-    console.error('Erro ao gerar PDF:', err);
-    dot.className = 'status-dot loading';
-    text.textContent = 'Erro ao processar PDF: ' + err.message;
-  }
-}
-
-function safeSetField(form, fieldName, value) {
-  try {
-    const field = form.getField(fieldName);
-    if (!field) return;
-    const sanitized = sanitizeForPdf(value || '');
-    if (typeof field.setText === 'function') {
-      field.setText(sanitized);
-    } else if (typeof field.setValue === 'function') {
-      field.setValue(sanitized);
-    }
-  } catch (e) {
-    console.warn(`Campo "${fieldName}" não encontrado ou não editável:`, e);
-  }
-}
-
-/* ==========================================================================
-   PERSISTÊNCIA DE RASCUNHO TEMPORÁRIO
-   ========================================================================== */
-function saveDraft() {
-  appState.numero = document.getElementById('orcNumero').value;
-  appState.status = document.getElementById('orcStatus').value;
-  appState.data = document.getElementById('clienteData').value;
-  appState.nome = document.getElementById('clienteNome').value;
-  appState.endereco = document.getElementById('clienteEndereco').value;
-  appState.telefone = document.getElementById('clienteTelefone').value;
-  appState.desconto = document.getElementById('inputDesconto').value;
-  appState.totalManual = document.getElementById('inputManualTotal').value;
-  appState.observacoes = document.getElementById('observacoesText').value;
-
-  try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(appState));
-  } catch (e) {}
-}
-
-function loadDraft() {
-  try {
-    const saved = localStorage.getItem(DRAFT_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      appState = Object.assign(appState, parsed);
-    }
-  } catch (e) {}
-
-  if (!appState.items || appState.items.length === 0) {
-    appState.items = [
-      { desc: '', qtd: '1', preco: '' },
-      { desc: '', qtd: '1', preco: '' },
-      { desc: '', qtd: '1', preco: '' }
-    ];
-  }
-
-  if (!appState.numero) {
-    appState.numero = generateNextQuoteNumber();
-  }
-
-  document.getElementById('orcNumero').value = appState.numero;
-  document.getElementById('orcStatus').value = appState.status || 'Rascunho';
-  document.getElementById('clienteData').value = appState.data || getTodayString();
-  document.getElementById('clienteNome').value = appState.nome || '';
-  document.getElementById('clienteEndereco').value = appState.endereco || '';
-  document.getElementById('clienteTelefone').value = appState.telefone || '';
-  document.getElementById('inputDesconto').value = appState.desconto || '';
-  document.getElementById('inputManualTotal').value = appState.totalManual || '';
-  document.getElementById('chkAutoTotal').checked = appState.autoTotal !== false;
-  document.getElementById('observacoesText').value = appState.observacoes || '';
-
-  updateStatusBadge();
-  renderItems();
-}
-
-/* ==========================================================================
-   EVENTOS DA INTERFACE
-   ========================================================================== */
+/* Eventos do Formulário de Orçamento */
 document.getElementById('btnAddItem').onclick = () => {
   appState.items.push({ desc: '', qtd: '1', preco: '' });
   renderItems();
@@ -1722,12 +1571,10 @@ document.getElementById('btnAddItem').onclick = () => {
 };
 
 document.getElementById('btnAddEmptyPage').onclick = () => {
-  const currentCount = appState.items.length;
-  const remainder = currentCount % 10;
-  const toAdd = remainder === 0 ? 10 : (10 - remainder);
-  for (let i = 0; i < toAdd; i++) {
-    appState.items.push({ desc: '', qtd: '1', preco: '' });
-  }
+  const count = appState.items.length;
+  const rem = count % 10;
+  const toAdd = rem === 0 ? 10 : (10 - rem);
+  for (let i = 0; i < toAdd; i++) appState.items.push({ desc: '', qtd: '1', preco: '' });
   renderItems();
   showToast('10 novas linhas adicionadas (Página expandida).', 'info');
 };
@@ -1737,9 +1584,7 @@ itemsContainer.addEventListener('click', (e) => {
   if (btn) {
     const idx = parseInt(btn.dataset.index, 10);
     appState.items.splice(idx, 1);
-    if (appState.items.length === 0) {
-      appState.items.push({ desc: '', qtd: '1', preco: '' });
-    }
+    if (appState.items.length === 0) appState.items.push({ desc: '', qtd: '1', preco: '' });
     renderItems();
   }
 });
@@ -1756,7 +1601,6 @@ itemsContainer.addEventListener('input', (e) => {
     precoRaw = formatBRL(precoRaw);
     e.target.value = precoRaw;
   }
-
   appState.items[idx] = { desc, qtd, preco: precoRaw };
   calculateTotals();
 });
@@ -1765,11 +1609,8 @@ document.querySelectorAll('.chip').forEach(chip => {
   chip.onclick = () => {
     const title = chip.dataset.title;
     const last = appState.items[appState.items.length - 1];
-    if (last && !last.desc) {
-      last.desc = title;
-    } else {
-      appState.items.push({ desc: title, qtd: '1', preco: '' });
-    }
+    if (last && !last.desc) last.desc = title;
+    else appState.items.push({ desc: title, qtd: '1', preco: '' });
     renderItems();
   };
 });
@@ -1778,18 +1619,17 @@ document.querySelectorAll('.obs-chip').forEach(btn => {
   btn.onclick = () => {
     const insertText = btn.dataset.insert;
     const txt = document.getElementById('observacoesText');
-    if (txt.value.trim().length > 0) {
-      txt.value = txt.value.trim() + '\n' + insertText;
-    } else {
-      txt.value = insertText;
-    }
+    txt.value = txt.value.trim() ? (txt.value.trim() + '\n' + insertText) : insertText;
     saveDraft();
     schedulePdfGeneration();
   };
 });
 
-document.getElementById('orcStatus').addEventListener('change', () => {
-  updateStatusBadge();
+document.getElementById('orcStatus').addEventListener('change', (e) => {
+  const val = e.target.value;
+  const badge = document.getElementById('currentStatusBadge');
+  badge.textContent = val;
+  badge.className = `status-badge badge-${val.toLowerCase()}`;
   saveDraft();
 });
 
@@ -1822,46 +1662,20 @@ document.getElementById('chkAutoTotal').addEventListener('change', (e) => {
   });
 });
 
-document.getElementById('btnHoje').onclick = () => {
+document.getElementById('btnHojeOrc').onclick = () => {
   document.getElementById('clienteData').value = getTodayString();
   saveDraft();
   schedulePdfGeneration();
 };
 
-document.getElementById('btnDownload').onclick = () => {
-  saveCurrentQuote(false);
-  generatePdf(true);
-};
+document.getElementById('btnSalvarOrcamento').onclick = saveCurrentQuote;
 
-document.getElementById('btnSalvarOrcamento').onclick = () => {
-  saveCurrentQuote(false);
-};
-
-document.getElementById('btnZoomFit').onclick = () => {
-  if (previewBlobUrl) {
-    window.open(previewBlobUrl, '_blank');
-  }
-};
-
-// WhatsApp Direct Share
-document.getElementById('btnWhatsapp').onclick = () => {
-  const nome = document.getElementById('clienteNome').value || 'Cliente';
-  const total = getFinalTotalString();
-  const num = document.getElementById('orcNumero').value || 'Orçamento';
-  const fone = document.getElementById('clienteTelefone').value.replace(/\D/g, '');
-  
-  const msg = `Olá ${nome}! Aqui é da Richter Construções.\nSegue a proposta *${num}* no valor total de *${total}*.\nJá geramos o documento em PDF detalhado para você.`;
-  const url = fone ? `https://api.whatsapp.com/send?phone=55${fone}&text=${encodeURIComponent(msg)}` : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
-};
-
-// Iniciar Novo Orçamento
-document.getElementById('btnNovo').onclick = () => {
+document.getElementById('btnNovoOrcamento').onclick = () => {
   if (confirm('Deseja iniciar um novo orçamento? Um novo número será gerado e os campos serão limpos.')) {
     currentQuoteId = null;
     appState = {
       id: null,
-      numero: generateNextQuoteNumber(),
+      numero: `#${new Date().getFullYear()}-${String(savedQuotes.length + 1).padStart(3, '0')}`,
       status: 'Rascunho',
       data: getTodayString(),
       nome: '',
@@ -1883,29 +1697,730 @@ document.getElementById('btnNovo').onclick = () => {
   }
 };
 
-// Modal Histórico e Filtros
-document.getElementById('btnOpenHistory').onclick = openHistoryModal;
-document.getElementById('btnCloseHistory').onclick = closeHistoryModal;
-document.getElementById('btnCloseHistoryFooter').onclick = closeHistoryModal;
-historyModal.onclick = (e) => { if (e.target === historyModal) closeHistoryModal(); };
+document.getElementById('btnDownloadOrc').onclick = () => {
+  saveCurrentQuote();
+  generatePdf(true);
+};
 
-document.getElementById('searchQuotesInput').addEventListener('input', renderQuotesList);
+document.getElementById('btnZoomFit').onclick = () => {
+  if (previewBlobUrl) window.open(previewBlobUrl, '_blank');
+};
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderQuotesList();
+document.getElementById('btnWhatsappOrc').onclick = () => {
+  const nome = document.getElementById('clienteNome').value || 'Cliente';
+  const total = getFinalTotalString();
+  const num = document.getElementById('orcNumero').value || 'Orçamento';
+  const fone = document.getElementById('clienteTelefone').value.replace(/\D/g, '');
+  const msg = `Olá ${nome}! Aqui é da Richter Construções.\nSegue a proposta *${num}* no valor total de *${total}*.\nJá geramos o documento em PDF detalhado para você.`;
+  const url = fone ? `https://api.whatsapp.com/send?phone=55${fone}&text=${encodeURIComponent(msg)}` : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+};
+
+/* ==========================================================================
+   GERADOR DO PDF DE ORÇAMENTO (OFICIAL RICHTER COM MULTI-PÁGINAS)
+   ========================================================================== */
+let previewBlobUrl = null;
+let debounceTimeout = null;
+
+async function loadTemplateBytes() {
+  if (typeof window.ORCAMENTO_MODELO_BASE64 === 'string' && window.ORCAMENTO_MODELO_BASE64.length > 0) {
+    const binStr = atob(window.ORCAMENTO_MODELO_BASE64);
+    const len = binStr.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+    return bytes.buffer;
+  }
+  const res = await fetch('orcamento-modelo.pdf');
+  if (!res.ok) throw new Error(`Falha HTTP ${res.status}`);
+  return await res.arrayBuffer();
+}
+
+function schedulePdfGeneration() {
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  dot.className = 'status-dot loading';
+  text.textContent = 'Gerando prévia...';
+
+  clearTimeout(debounceTimeout);
+  debounceTimeout = setTimeout(() => generatePdf(false), 280);
+}
+
+async function generatePdf(download = false) {
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+
+  try {
+    if (typeof PDFLib === 'undefined') {
+      text.textContent = 'Carregando biblioteca PDF...';
+      return;
+    }
+
+    const templateBytes = await loadTemplateBytes();
+    const formattedItemLines = [];
+    appState.items.forEach((item) => {
+      const desc = (item.desc || '').trim();
+      if (!desc) return;
+      const qtd = (item.qtd || '').trim();
+      const unit = parseBRL(String(item.preco || '0'));
+      const qtdNum = parseFloat(qtd.replace(',', '.')) || 1;
+      const totalItem = qtdNum * unit;
+
+      let lineText = desc;
+      if (unit > 0) {
+        if (qtd && qtd !== '1') lineText += ` (${qtd} un. x ${formatBRL(unit)}) = ${formatBRL(totalItem)}`;
+        else lineText += ` — ${formatBRL(totalItem)}`;
+      }
+      formattedItemLines.push(lineText);
+    });
+
+    const totalLines = formattedItemLines.length;
+    const totalPages = Math.max(1, Math.ceil(totalLines / 10));
+    const finalDoc = await PDFLib.PDFDocument.create();
+
+    const rawDate = document.getElementById('clienteData').value;
+    const dateFormatted = rawDate ? rawDate.split('-').reverse().join('/') : '';
+    const clientName = document.getElementById('clienteNome').value || '';
+    const clientAddress = document.getElementById('clienteEndereco').value || '';
+    const clientPhone = document.getElementById('clienteTelefone').value || '';
+    const grandTotalStr = getFinalTotalString();
+    const observacoesStr = document.getElementById('observacoesText').value || '';
+    const quoteNum = document.getElementById('orcNumero').value || '';
+
+    for (let p = 0; p < totalPages; p++) {
+      const pageDoc = await PDFLib.PDFDocument.load(templateBytes, { ignoreEncryption: true });
+      const form = pageDoc.getForm();
+      const pageItems = formattedItemLines.slice(p * 10, (p + 1) * 10);
+      const pageHeaderSuffix = totalPages > 1 ? ` (Pág. ${p + 1} de ${totalPages})` : '';
+
+      safeSetField(form, 'Nome do cliente', clientName + pageHeaderSuffix);
+      safeSetField(form, 'Endereço do cliente', clientAddress);
+      safeSetField(form, 'Telefone do cliente', clientPhone);
+      safeSetField(form, 'Data', dateFormatted);
+
+      for (let i = 0; i < 10; i++) {
+        safeSetField(form, `Descrição do orçamento ${i + 1}`, pageItems[i] || '');
+      }
+
+      const isLastPage = (p === totalPages - 1);
+      if (isLastPage) {
+        safeSetField(form, 'Valor total', grandTotalStr);
+        let obsFinal = observacoesStr;
+        if (quoteNum) obsFinal = `[Proposta ${quoteNum}]\n` + obsFinal;
+        safeSetField(form, 'Campo para adicionar alguma observação caso seja necessário', obsFinal);
+      } else {
+        safeSetField(form, 'Valor total', `Continua na Pág. ${p + 2}...`);
+        safeSetField(form, 'Campo para adicionar alguma observação caso seja necessário', `(Continuação dos serviços e condições na Página ${p + 2})`);
+      }
+
+      form.flatten();
+      const [copiedPage] = await finalDoc.copyPages(pageDoc, [0]);
+      finalDoc.addPage(copiedPage);
+    }
+
+    const finalBytes = await finalDoc.save();
+    const blob = new Blob([finalBytes], { type: 'application/pdf' });
+
+    if (previewBlobUrl) URL.revokeObjectURL(previewBlobUrl);
+    previewBlobUrl = URL.createObjectURL(blob);
+    document.getElementById('pdfPreviewIframe').src = previewBlobUrl;
+
+    dot.className = 'status-dot';
+    text.textContent = `PDF pronto • ${totalPages} ${totalPages === 1 ? 'página' : 'páginas'}`;
+
+    if (download) {
+      const link = document.createElement('a');
+      link.href = previewBlobUrl;
+      const cleanName = (clientName || 'Cliente').trim().replace(/[^a-zA-Z0-9_\-]/g, '_');
+      const cleanNum = (quoteNum || 'Orcamento').replace(/[^a-zA-Z0-9_\-]/g, '_');
+      link.download = `Orcamento-Richter_${cleanNum}_${cleanName}.pdf`;
+      link.click();
+      showToast('Download do Orçamento iniciado!', 'success');
+    }
+  } catch (err) {
+    console.error('Erro ao gerar PDF do orçamento:', err);
+    dot.className = 'status-dot loading';
+    text.textContent = 'Erro ao processar PDF: ' + err.message;
+  }
+}
+
+function safeSetField(form, fieldName, value) {
+  try {
+    const field = form.getField(fieldName);
+    if (!field) return;
+    const sanitized = sanitizeForPdf(value || '');
+    if (typeof field.setText === 'function') field.setText(sanitized);
+    else if (typeof field.setValue === 'function') field.setValue(sanitized);
+  } catch (e) {}
+}
+
+function saveDraft() {
+  appState.numero = document.getElementById('orcNumero').value;
+  appState.status = document.getElementById('orcStatus').value;
+  appState.data = document.getElementById('clienteData').value;
+  appState.nome = document.getElementById('clienteNome').value;
+  appState.endereco = document.getElementById('clienteEndereco').value;
+  appState.telefone = document.getElementById('clienteTelefone').value;
+  appState.desconto = document.getElementById('inputDesconto').value;
+  appState.totalManual = document.getElementById('inputManualTotal').value;
+  appState.observacoes = document.getElementById('observacoesText').value;
+
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(appState)); } catch (e) {}
+}
+
+function loadDraft() {
+  try {
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (saved) appState = Object.assign(appState, JSON.parse(saved));
+  } catch (e) {}
+
+  if (!appState.items || appState.items.length === 0) {
+    appState.items = [
+      { desc: '', qtd: '1', preco: '' },
+      { desc: '', qtd: '1', preco: '' },
+      { desc: '', qtd: '1', preco: '' }
+    ];
+  }
+  if (!appState.numero) {
+    appState.numero = `#${new Date().getFullYear()}-${String(savedQuotes.length + 1).padStart(3, '0')}`;
+  }
+
+  document.getElementById('orcNumero').value = appState.numero;
+  document.getElementById('orcStatus').value = appState.status || 'Rascunho';
+  document.getElementById('clienteData').value = appState.data || getTodayString();
+  document.getElementById('clienteNome').value = appState.nome || '';
+  document.getElementById('clienteEndereco').value = appState.endereco || '';
+  document.getElementById('clienteTelefone').value = appState.telefone || '';
+  document.getElementById('inputDesconto').value = appState.desconto || '';
+  document.getElementById('inputManualTotal').value = appState.totalManual || '';
+  document.getElementById('chkAutoTotal').checked = appState.autoTotal !== false;
+  document.getElementById('observacoesText').value = appState.observacoes || '';
+
+  renderItems();
+}
+
+/* ==========================================================================
+   4. SISTEMA DE EMISSÃO & GESTÃO DE RECIBOS (TAB 4)
+   ========================================================================== */
+let previewReceiptBlobUrl = null;
+let debounceReceiptTimeout = null;
+
+function initReceiptForm() {
+  receiptState = {
+    id: null,
+    numero: `REC-${new Date().getFullYear()}-${String(savedReceipts.length + 1).padStart(3, '0')}`,
+    data: getTodayString(),
+    valor: 'R$ 0,00',
+    valorExtenso: 'Zero reais',
+    clienteNome: '',
+    clienteDoc: '',
+    formaPagamento: 'PIX',
+    cidade: 'Joinville - SC',
+    descricao: ''
   };
+
+  document.getElementById('recNumero').value = receiptState.numero;
+  document.getElementById('recData').value = receiptState.data;
+  document.getElementById('recValor').value = receiptState.valor;
+  document.getElementById('recValorExtenso').value = receiptState.valorExtenso;
+  document.getElementById('recClienteNome').value = receiptState.clienteNome;
+  document.getElementById('recClienteDoc').value = receiptState.clienteDoc;
+  document.getElementById('recFormaPagamento').value = receiptState.formaPagamento;
+  document.getElementById('recCidade').value = receiptState.cidade;
+  document.getElementById('recDescricao').value = receiptState.descricao;
+}
+
+function createReceiptFromQuote(quoteId) {
+  const quote = savedQuotes.find(q => q.id === quoteId);
+  if (!quote) return;
+
+  currentReceiptId = null;
+  receiptState.id = null;
+  receiptState.numero = `REC-${new Date().getFullYear()}-${String(savedReceipts.length + 1).padStart(3, '0')}`;
+  receiptState.data = getTodayString();
+  receiptState.valor = quote.totalFormatted || 'R$ 0,00';
+  receiptState.valorExtenso = numeroParaExtenso(receiptState.valor);
+  receiptState.clienteNome = quote.nome || '';
+  receiptState.clienteDoc = '';
+  receiptState.formaPagamento = 'PIX';
+  receiptState.cidade = 'Joinville - SC';
+  receiptState.descricao = `Pagamento referente aos serviços e materiais previstos na proposta ${quote.numero}.`;
+
+  document.getElementById('recNumero').value = receiptState.numero;
+  document.getElementById('recData').value = receiptState.data;
+  document.getElementById('recValor').value = receiptState.valor;
+  document.getElementById('recValorExtenso').value = receiptState.valorExtenso;
+  document.getElementById('recClienteNome').value = receiptState.clienteNome;
+  document.getElementById('recClienteDoc').value = receiptState.clienteDoc;
+  document.getElementById('recFormaPagamento').value = receiptState.formaPagamento;
+  document.getElementById('recCidade').value = receiptState.cidade;
+  document.getElementById('recDescricao').value = receiptState.descricao;
+
+  switchTab('recibos');
+  scheduleReceiptPdfGeneration();
+  showToast(`Recibo preparado com os dados do orçamento ${quote.numero}!`, 'success');
+}
+
+document.getElementById('btnGerarReciboDeOrcamento').onclick = () => {
+  saveCurrentQuote();
+  createReceiptFromQuote(currentQuoteId);
+};
+
+document.getElementById('recValor').addEventListener('input', (e) => {
+  e.target.value = formatBRL(e.target.value);
+  const extenso = numeroParaExtenso(e.target.value);
+  document.getElementById('recValorExtenso').value = extenso;
+  receiptState.valor = e.target.value;
+  receiptState.valorExtenso = extenso;
+  scheduleReceiptPdfGeneration();
 });
 
-// Backup
-document.getElementById('btnExportBackup').onclick = exportBackup;
-document.getElementById('btnImportBackup').onclick = () => document.getElementById('backupFileInput').click();
+['recNumero', 'recData', 'recValorExtenso', 'recClienteNome', 'recClienteDoc', 'recFormaPagamento', 'recCidade', 'recDescricao'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    scheduleReceiptPdfGeneration();
+  });
+});
+
+document.getElementById('btnHojeRecibo').onclick = () => {
+  document.getElementById('recData').value = getTodayString();
+  scheduleReceiptPdfGeneration();
+};
+
+document.getElementById('btnNovoRecibo').onclick = () => {
+  currentReceiptId = null;
+  initReceiptForm();
+  scheduleReceiptPdfGeneration();
+  showToast('Novo recibo iniciado!', 'info');
+};
+
+function saveCurrentReceipt() {
+  const cliente = document.getElementById('recClienteNome').value.trim();
+  if (!cliente) {
+    alert('Por favor, informe o nome do cliente no recibo.');
+    document.getElementById('recClienteNome').focus();
+    return;
+  }
+
+  const id = currentReceiptId || ('rec_' + Date.now());
+  const numero = document.getElementById('recNumero').value.trim() || `REC-${Date.now()}`;
+
+  const recData = {
+    id: id,
+    numero: numero,
+    data: document.getElementById('recData').value,
+    valor: document.getElementById('recValor').value,
+    valorExtenso: document.getElementById('recValorExtenso').value,
+    clienteNome: cliente,
+    clienteDoc: document.getElementById('recClienteDoc').value,
+    formaPagamento: document.getElementById('recFormaPagamento').value,
+    cidade: document.getElementById('recCidade').value,
+    descricao: document.getElementById('recDescricao').value,
+    createdAt: new Date().toISOString()
+  };
+
+  currentReceiptId = id;
+  const existingIdx = savedReceipts.findIndex(r => r.id === id);
+  if (existingIdx >= 0) {
+    savedReceipts[existingIdx] = recData;
+    showToast(`Recibo ${numero} atualizado!`, 'success');
+  } else {
+    savedReceipts.unshift(recData);
+    showToast(`Recibo ${numero} salvo com sucesso!`, 'success');
+  }
+
+  persistReceipts();
+}
+
+document.getElementById('btnSalvarRecibo').onclick = saveCurrentReceipt;
+
+function editReceipt(id) {
+  const rec = savedReceipts.find(r => r.id === id);
+  if (!rec) return;
+
+  currentReceiptId = rec.id;
+  document.getElementById('recNumero').value = rec.numero || '';
+  document.getElementById('recData').value = rec.data || getTodayString();
+  document.getElementById('recValor').value = rec.valor || 'R$ 0,00';
+  document.getElementById('recValorExtenso').value = rec.valorExtenso || numeroParaExtenso(rec.valor);
+  document.getElementById('recClienteNome').value = rec.clienteNome || '';
+  document.getElementById('recClienteDoc').value = rec.clienteDoc || '';
+  document.getElementById('recFormaPagamento').value = rec.formaPagamento || 'PIX';
+  document.getElementById('recCidade').value = rec.cidade || 'Joinville - SC';
+  document.getElementById('recDescricao').value = rec.descricao || '';
+
+  switchTab('recibos');
+  scheduleReceiptPdfGeneration();
+  showToast(`Recibo ${rec.numero} carregado!`, 'info');
+}
+
+function deleteReceipt(id) {
+  const rec = savedReceipts.find(r => r.id === id);
+  if (!rec) return;
+  if (confirm(`Deseja excluir o recibo ${rec.numero}?`)) {
+    savedReceipts = savedReceipts.filter(r => r.id !== id);
+    persistReceipts();
+    if (currentReceiptId === id) currentReceiptId = null;
+    showToast('Recibo excluído.', 'danger');
+  }
+}
+
+function renderAllReceiptsTable() {
+  const tbody = document.querySelector('#allReceiptsTable tbody');
+  if (savedReceipts.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">Nenhum recibo emitido ainda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = savedReceipts.map(r => `
+    <tr>
+      <td style="font-weight:700;">${escapeHtml(r.numero || '')}</td>
+      <td><strong>${escapeHtml(r.clienteNome || 'Sem nome')}</strong></td>
+      <td>${r.data ? r.data.split('-').reverse().join('/') : '-'}</td>
+      <td><span class="status-badge" style="background:#f1f5f9; color:#334155;">${escapeHtml(r.formaPagamento || 'PIX')}</span></td>
+      <td style="font-weight:800; color:var(--success); font-size:14px;">${escapeHtml(r.valor || '')}</td>
+      <td style="text-align:right; white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="editReceipt('${r.id}')">✏️ Editar / Ver</button>
+        <button class="btn btn-whatsapp btn-sm" onclick="sendWhatsappReceipt('${r.id}')">📱</button>
+        <button class="btn btn-outline-danger btn-sm" onclick="deleteReceipt('${r.id}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function sendWhatsappReceipt(id) {
+  const r = savedReceipts.find(item => item.id === id);
+  if (!r) return;
+  const msg = `*RECIBO DE PAGAMENTO — RICHTER CONSTRUÇÕES*\n` +
+              `Nº: *${r.numero}*\n` +
+              `Recebemos de: *${r.clienteNome}*\n` +
+              `Valor: *${r.valor}* (${r.valorExtenso})\n` +
+              `Referente a: ${r.descricao}\n` +
+              `Forma de Pagamento: ${r.formaPagamento}\n` +
+              `Data: ${r.data ? r.data.split('-').reverse().join('/') : ''}\n` +
+              `Local: ${r.cidade}\n\n` +
+              `Obrigado pela confiança em nossos serviços!`;
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+document.getElementById('btnWhatsappRecibo').onclick = () => {
+  const num = document.getElementById('recNumero').value || 'Recibo';
+  const cliente = document.getElementById('recClienteNome').value || 'Cliente';
+  const valor = document.getElementById('recValor').value || 'R$ 0,00';
+  const extenso = document.getElementById('recValorExtenso').value || '';
+  const desc = document.getElementById('recDescricao').value || '';
+  const forma = document.getElementById('recFormaPagamento').value || 'PIX';
+  const data = document.getElementById('recData').value ? document.getElementById('recData').value.split('-').reverse().join('/') : '';
+  const cidade = document.getElementById('recCidade').value || 'Joinville - SC';
+
+  const msg = `*RECIBO DE PAGAMENTO — RICHTER CONSTRUÇÕES*\n` +
+              `Nº: *${num}*\n` +
+              `Recebemos de: *${cliente}*\n` +
+              `Valor: *${valor}* (${extenso})\n` +
+              `Referente a: ${desc}\n` +
+              `Forma de Pagamento: ${forma}\n` +
+              `Data: ${data}\n` +
+              `Local: ${cidade}\n\n` +
+              `Obrigado pela preferência!`;
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
+/* ==========================================================================
+   GERADOR DO PDF DE RECIBO (2 VIAS PROFISSIONAIS NA FOLHA A4)
+   ========================================================================== */
+function scheduleReceiptPdfGeneration() {
+  const dot = document.getElementById('statusDotRecibo');
+  const text = document.getElementById('statusTextRecibo');
+  dot.className = 'status-dot loading';
+  text.textContent = 'Gerando recibo...';
+
+  clearTimeout(debounceReceiptTimeout);
+  debounceReceiptTimeout = setTimeout(() => generateReceiptPdf(false), 280);
+}
+
+async function generateReceiptPdf(download = false) {
+  const dot = document.getElementById('statusDotRecibo');
+  const text = document.getElementById('statusTextRecibo');
+
+  try {
+    if (typeof PDFLib === 'undefined') {
+      text.textContent = 'Carregando biblioteca PDF...';
+      return;
+    }
+
+    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+    const doc = await PDFDocument.create();
+    const page = doc.addPage([595.28, 841.89]); // A4 padrão: 595 x 842 pt
+
+    const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
+    const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+    const fontOblique = await doc.embedFont(StandardFonts.HelveticaOblique);
+
+    const primaryRed = rgb(0.84, 0.09, 0.13); // #d61820
+    const darkText = rgb(0.06, 0.09, 0.16); // #0f172a
+    const mutedColor = rgb(0.39, 0.45, 0.55); // #64748b
+    const lightBoxBg = rgb(0.98, 0.98, 0.99);
+    const borderCol = rgb(0.85, 0.88, 0.92);
+
+    const num = document.getElementById('recNumero').value || 'REC-001';
+    const rawDate = document.getElementById('recData').value;
+    const dateFormatted = rawDate ? rawDate.split('-').reverse().join('/') : '';
+    const valorStr = document.getElementById('recValor').value || 'R$ 0,00';
+    const extensoStr = document.getElementById('recValorExtenso').value || 'Zero reais';
+    const cliente = document.getElementById('recClienteNome').value || 'Cliente Não Informado';
+    const docCliente = document.getElementById('recClienteDoc').value || '';
+    const forma = document.getElementById('recFormaPagamento').value || 'PIX';
+    const cidade = document.getElementById('recCidade').value || 'Joinville - SC';
+    const desc = document.getElementById('recDescricao').value || 'Serviços prestados conforme acordado.';
+
+    // Função interna que desenha uma via completa de recibo
+    function drawReceiptVia(startY, viaLabel) {
+      const boxWidth = 525;
+      const boxHeight = 355;
+      const startX = 35;
+
+      // Caixa externa
+      page.drawRectangle({
+        x: startX,
+        y: startY,
+        width: boxWidth,
+        height: boxHeight,
+        borderWidth: 1.5,
+        borderColor: primaryRed,
+        color: rgb(1, 1, 1),
+      });
+
+      // Barra de cabeçalho
+      page.drawRectangle({
+        x: startX,
+        y: startY + boxHeight - 58,
+        width: boxWidth,
+        height: 58,
+        color: primaryRed,
+      });
+
+      // Título e logotipo
+      page.drawText('RICHTER CONSTRUCOES', {
+        x: startX + 16,
+        y: startY + boxHeight - 26,
+        size: 15,
+        font: fontBold,
+        color: rgb(1, 1, 1),
+      });
+      page.drawText(`RECIBO DE PAGAMENTO (${viaLabel})`, {
+        x: startX + 16,
+        y: startY + boxHeight - 44,
+        size: 10,
+        font: fontBold,
+        color: rgb(0.98, 0.9, 0.9),
+      });
+
+      // Número e Valor à Direita do cabeçalho
+      page.drawText(num, {
+        x: startX + boxWidth - 140,
+        y: startY + boxHeight - 24,
+        size: 12,
+        font: fontBold,
+        color: rgb(1, 1, 1),
+      });
+      page.drawText(`VALOR: ${valorStr}`, {
+        x: startX + boxWidth - 170,
+        y: startY + boxHeight - 44,
+        size: 12,
+        font: fontBold,
+        color: rgb(1, 0.95, 0.2), // Destaque dourado
+      });
+
+      // Linhas do Recibo
+      let curY = startY + boxHeight - 85;
+
+      // "Recebemos de"
+      page.drawText('Recebemos de:', { x: startX + 16, y: curY, size: 10, font: fontBold, color: mutedColor });
+      const clienteText = sanitizeForPdf(docCliente ? `${cliente}  (CPF/CNPJ: ${docCliente})` : cliente);
+      page.drawText(clienteText, { x: startX + 110, y: curY, size: 11, font: fontBold, color: darkText });
+
+      curY -= 28;
+      // "A quantia de"
+      page.drawText('A quantia de:', { x: startX + 16, y: curY, size: 10, font: fontBold, color: mutedColor });
+      page.drawText(sanitizeForPdf(extensoStr), { x: startX + 110, y: curY, size: 10, font: fontOblique, color: darkText });
+
+      curY -= 28;
+      // "Referente a"
+      page.drawText('Referente a:', { x: startX + 16, y: curY, size: 10, font: fontBold, color: mutedColor });
+      // Descrição quebra em até 2 linhas
+      const descClean = sanitizeForPdf(desc);
+      const descLine1 = descClean.substring(0, 75);
+      const descLine2 = descClean.length > 75 ? descClean.substring(75, 150) : '';
+      page.drawText(descLine1, { x: startX + 110, y: curY, size: 10, font: fontRegular, color: darkText });
+      if (descLine2) {
+        curY -= 14;
+        page.drawText(descLine2, { x: startX + 110, y: curY, size: 10, font: fontRegular, color: darkText });
+      }
+
+      curY -= 28;
+      // "Forma de Pagto"
+      page.drawText('Forma de Pagamento:', { x: startX + 16, y: curY, size: 10, font: fontBold, color: mutedColor });
+      page.drawText(sanitizeForPdf(forma), { x: startX + 145, y: curY, size: 10, font: fontBold, color: darkText });
+
+      // Cidade e Data
+      page.drawText('Data:', { x: startX + 320, y: curY, size: 10, font: fontBold, color: mutedColor });
+      page.drawText(dateFormatted, { x: startX + 355, y: curY, size: 10, font: fontBold, color: darkText });
+
+      curY -= 32;
+      // Cláusula de quitação
+      page.drawText('Para maior clareza e firmeza do presente, passamos o presente recibo para a devida quitacao.', {
+        x: startX + 16,
+        y: curY,
+        size: 8.5,
+        font: fontOblique,
+        color: mutedColor
+      });
+
+      // Área de Assinatura
+      const signY = startY + 38;
+      page.drawLine({
+        start: { x: startX + 130, y: signY },
+        end: { x: startX + 395, y: signY },
+        thickness: 1,
+        color: rgb(0.3, 0.3, 0.3),
+      });
+
+      page.drawText('RICHTER CONSTRUCOES — ASSINATURA DO EMISSOR', {
+        x: startX + 140,
+        y: signY - 14,
+        size: 9,
+        font: fontBold,
+        color: darkText,
+      });
+
+      page.drawText(sanitizeForPdf(`${cidade}, ${dateFormatted}`), {
+        x: startX + 205,
+        y: signY - 26,
+        size: 8,
+        font: fontRegular,
+        color: mutedColor,
+      });
+    }
+
+    // 1ª Via: Cliente (Parte Superior)
+    drawReceiptVia(445, '1a VIA - CLIENTE');
+
+    // Linha Tracejada de Corte no meio da folha A4
+    page.drawLine({
+      start: { x: 30, y: 418 },
+      end: { x: 565, y: 418 },
+      thickness: 0.8,
+      dashArray: [4, 4],
+      color: rgb(0.6, 0.6, 0.6),
+    });
+    page.drawText('- - - - - - - - - - - - - - - - - - - - - - - - - - CORTE AQUI - - - - - - - - - - - - - - - - - - - - - - - - - -', {
+      x: 105,
+      y: 422,
+      size: 7.5,
+      font: fontRegular,
+      color: rgb(0.5, 0.5, 0.5),
+    });
+
+    // 2ª Via: Empresa / Canhoto (Parte Inferior)
+    drawReceiptVia(45, '2a VIA - EMPRESA');
+
+    const finalBytes = await doc.save();
+    const blob = new Blob([finalBytes], { type: 'application/pdf' });
+
+    if (previewReceiptBlobUrl) URL.revokeObjectURL(previewReceiptBlobUrl);
+    previewReceiptBlobUrl = URL.createObjectURL(blob);
+    document.getElementById('pdfPreviewIframeRecibo').src = previewReceiptBlobUrl;
+
+    dot.className = 'status-dot';
+    text.textContent = 'Recibo Pronto (2 Vias Oficiais A4)';
+
+    if (download) {
+      const link = document.createElement('a');
+      link.href = previewReceiptBlobUrl;
+      const cleanCliente = (cliente || 'Cliente').trim().replace(/[^a-zA-Z0-9_\-]/g, '_');
+      link.download = `Recibo-Richter_${num}_${cleanCliente}.pdf`;
+      link.click();
+      showToast('Download do Recibo iniciado!', 'success');
+    }
+  } catch (err) {
+    console.error('Erro ao gerar recibo PDF:', err);
+    dot.className = 'status-dot loading';
+    text.textContent = 'Erro ao processar Recibo: ' + err.message;
+  }
+}
+
+document.getElementById('btnDownloadRecibo').onclick = () => {
+  saveCurrentReceipt();
+  generateReceiptPdf(true);
+};
+
+document.getElementById('btnZoomFitRecibo').onclick = () => {
+  if (previewReceiptBlobUrl) window.open(previewReceiptBlobUrl, '_blank');
+};
+
+/* ==========================================================================
+   BACKUP GLOBAL UNIFICADO (ORÇAMENTOS + RECIBOS)
+   ========================================================================== */
+function exportAllBackup() {
+  const unifiedData = {
+    appName: 'Richter Construções',
+    version: '2.5',
+    exportedAt: new Date().toISOString(),
+    quotes: savedQuotes,
+    receipts: savedReceipts
+  };
+
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(unifiedData, null, 2));
+  const link = document.createElement('a');
+  link.href = dataStr;
+  const d = new Date().toISOString().split('T')[0];
+  link.download = `backup-richter-completo-${d}.json`;
+  link.click();
+  showToast('Backup completo exportado com sucesso!', 'success');
+}
+
+function importAllBackupFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      let quotesAdded = 0;
+      let receiptsAdded = 0;
+
+      // Importa orçamentos
+      const qList = Array.isArray(data) ? data : (data.quotes || []);
+      qList.forEach(imp => {
+        if (!imp.id) imp.id = 'orc_' + Date.now() + Math.random().toString(36).substr(2, 4);
+        if (!savedQuotes.some(q => q.id === imp.id)) {
+          savedQuotes.push(imp);
+          quotesAdded++;
+        }
+      });
+
+      // Importa recibos se houver
+      const rList = data.receipts || [];
+      rList.forEach(imp => {
+        if (!imp.id) imp.id = 'rec_' + Date.now() + Math.random().toString(36).substr(2, 4);
+        if (!savedReceipts.some(r => r.id === imp.id)) {
+          savedReceipts.push(imp);
+          receiptsAdded++;
+        }
+      });
+
+      persistQuotes();
+      persistReceipts();
+      renderDashboard();
+      showToast(`Restaurado: +${quotesAdded} orçamentos e +${receiptsAdded} recibos!`, 'success');
+    } catch (err) {
+      alert('Erro ao importar backup: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+document.getElementById('btnExportAllBackup').onclick = exportAllBackup;
+document.getElementById('btnImportAllBackup').onclick = () => document.getElementById('backupFileInput').click();
 document.getElementById('backupFileInput').onchange = (e) => {
   if (e.target.files && e.target.files[0]) {
-    importBackupFile(e.target.files[0]);
+    importAllBackupFile(e.target.files[0]);
     e.target.value = '';
   }
 };
@@ -1916,9 +2431,12 @@ document.getElementById('backupFileInput').onchange = (e) => {
 window.addEventListener('DOMContentLoaded', () => {
   initDatabase();
   loadDraft();
+  initReceiptForm();
+
   setTimeout(() => {
     generatePdf(false);
-  }, 200);
+    generateReceiptPdf(false);
+  }, 250);
 });
 </script>
 </body>
