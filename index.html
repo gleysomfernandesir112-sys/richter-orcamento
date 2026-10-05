@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Richter Construções — Gestão de Obras, Orçamentos e Recibos</title>
+<meta name="theme-color" content="#d61820">
+<meta name="description" content="Sistema de Gestão de Obras, Clientes, Parcelas e Orçamentos da Richter Construções">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Richter Obras">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <style>
 :root {
   --primary: #d61820;
@@ -700,9 +710,101 @@ table.custom-table tr:hover { background: #f8fafc; }
   .modal-dialog.modal-pdf-preview { width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; }
   .toast-container { left: 14px; right: 14px; bottom: 80px; }
 }
+
+/* PWA Install Banner & Header Button */
+.btn-install-pwa {
+  background: #16a34a;
+  color: #ffffff;
+  border: 1px solid #15803d;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: pulseGreen 2.5s infinite;
+}
+.btn-install-pwa:hover {
+  background: #15803d;
+  color: #ffffff;
+}
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+.pwa-install-banner {
+  display: none;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--primary);
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  z-index: 60;
+}
+.pwa-install-banner.visible {
+  display: flex;
+}
+.pwa-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pwa-banner-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+.pwa-banner-text h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+.pwa-banner-text p {
+  font-size: 11px;
+  color: #cbd5e1;
+  margin: 2px 0 0 0;
+  line-height: 1.2;
+}
+.pwa-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.pwa-banner-close {
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
 </style>
 </head>
 <body>
+
+<!-- Banner de Instalação Mobile PWA -->
+<div id="pwaInstallBanner" class="pwa-install-banner">
+  <div class="pwa-banner-content">
+    <img src="icon-192.png" alt="Richter Obras" class="pwa-banner-icon">
+    <div class="pwa-banner-text">
+      <h4>Instalar Richter Obras</h4>
+      <p>Acesse direto da tela inicial do seu celular, mais rápido e offline</p>
+    </div>
+  </div>
+  <div class="pwa-banner-actions">
+    <button type="button" class="btn btn-sm btn-install-pwa" id="btnBannerInstallApp">📲 Instalar</button>
+    <button type="button" class="pwa-banner-close" id="btnClosePwaBanner" aria-label="Fechar">&times;</button>
+  </div>
+</div>
 
 <!-- Header Principal (Desktop / Celular) -->
 <header>
@@ -733,6 +835,9 @@ table.custom-table tr:hover { background: #f8fafc; }
   </nav>
 
   <div class="header-quick-actions">
+    <button type="button" class="btn btn-sm btn-install-pwa" id="btnHeaderInstallApp" style="display:none;" title="Instalar aplicativo no celular ou computador">
+      📲 Instalar App
+    </button>
     <button type="button" class="btn btn-secondary btn-sm" id="btnExportAllBackup" title="Exportar Backup de todos os dados">
       📤 Backup
     </button>
@@ -3110,6 +3215,79 @@ document.getElementById('backupFileInput').onchange = (e) => {
     e.target.value = '';
   }
 };
+
+/* ==========================================================================
+   PWA SERVICE WORKER & INSTALAÇÃO MOBILE
+   ========================================================================== */
+let deferredPrompt = null;
+const pwaBanner = document.getElementById('pwaInstallBanner');
+const btnHeaderInstall = document.getElementById('btnHeaderInstallApp');
+const btnBannerInstall = document.getElementById('btnBannerInstallApp');
+const btnCloseBanner = document.getElementById('btnClosePwaBanner');
+
+// Verifica se já está instalado ou rodando em modo standalone
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+// Registra Service Worker para suporte offline e cache
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => {
+        console.log('[PWA] Service Worker registrado com sucesso:', reg.scope);
+      })
+      .catch(err => {
+        console.warn('[PWA] Falha ao registrar Service Worker:', err);
+      });
+  });
+}
+
+// Captura evento beforeinstallprompt do Chrome/Android/Edge
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Exibe botão no header e banner se o usuário ainda não fechou nesta sessão
+  if (btnHeaderInstall) btnHeaderInstall.style.display = 'inline-flex';
+  if (pwaBanner && !sessionStorage.getItem('pwa_banner_dismissed') && !isStandalone) {
+    pwaBanner.classList.add('visible');
+  }
+});
+
+// Ação de disparar o prompt de instalação
+async function triggerPwaInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log('[PWA] Resposta do usuário:', outcome);
+    deferredPrompt = null;
+    if (pwaBanner) pwaBanner.classList.remove('visible');
+    if (btnHeaderInstall) btnHeaderInstall.style.display = 'none';
+  } else {
+    // Instruções para Safari iOS ou navegadores que não suportam beforeinstallprompt
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      alert('📱 Para instalar no iPhone:\n1. Toque no ícone Compartilhar (quadrado com seta para cima)\n2. Role para baixo e selecione "Adicionar à Tela de Início"\n3. Toque em "Adicionar" no topo direito.');
+    } else {
+      alert('📲 Para instalar:\nAbra o menu do seu navegador (três pontinhos no topo) e escolha "Instalar aplicativo" ou "Adicionar à tela inicial".');
+    }
+  }
+}
+
+if (btnHeaderInstall) btnHeaderInstall.onclick = triggerPwaInstall;
+if (btnBannerInstall) btnBannerInstall.onclick = triggerPwaInstall;
+if (btnCloseBanner) {
+  btnCloseBanner.onclick = () => {
+    if (pwaBanner) pwaBanner.classList.remove('visible');
+    sessionStorage.setItem('pwa_banner_dismissed', 'true');
+  };
+}
+
+window.addEventListener('appinstalled', () => {
+  console.log('[PWA] Aplicativo Richter Obras instalado!');
+  if (pwaBanner) pwaBanner.classList.remove('visible');
+  if (btnHeaderInstall) btnHeaderInstall.style.display = 'none';
+  showToast('🎉 Richter Obras instalado com sucesso na sua tela inicial!', 'success');
+});
 
 /* ==========================================================================
    INICIALIZAÇÃO
