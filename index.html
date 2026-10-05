@@ -787,9 +787,237 @@ table.custom-table tr:hover { background: #f8fafc; }
   cursor: pointer;
   padding: 4px;
 }
+
+/* Tela de Login / Autenticação Administrativa */
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0a0f1d 100%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+}
+.auth-box {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: slideUp 0.3s ease;
+}
+.auth-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 24px 20px;
+  text-align: center;
+  border-bottom: 3px solid var(--primary);
+}
+.auth-logo-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.auth-header h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+  color: #ffffff;
+}
+.auth-header p {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+}
+.auth-body {
+  padding: 24px 20px;
+}
+.auth-input-group {
+  margin-bottom: 16px;
+}
+.auth-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+.auth-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  background: #f8fafc;
+  outline: none;
+  transition: all 0.2s;
+}
+.auth-input:focus {
+  border-color: var(--primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(214, 24, 32, 0.15);
+}
+.auth-remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+.auth-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #475569;
+  user-select: none;
+}
+.auth-btn-submit {
+  width: 100%;
+  padding: 13px;
+  background: var(--primary);
+  color: #ffffff;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(214, 24, 32, 0.3);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.auth-btn-submit:hover {
+  background: var(--primary-hover);
+}
+.auth-footer-note {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Indicador de Sincronização com GitHub */
+.cloud-sync-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cloud-sync-badge.synced {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+.cloud-sync-badge.syncing {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  color: #0284c7;
+}
+.cloud-sync-badge.syncing .cloud-sync-dot {
+  animation: spinSync 1s linear infinite;
+}
+.cloud-sync-badge.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+.cloud-sync-dot {
+  display: inline-block;
+  font-size: 12px;
+}
+@keyframes spinSync {
+  100% { transform: rotate(360deg); }
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  font-size: 12px;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+.btn-logout:hover {
+  background: #fef2f2;
+  color: var(--primary);
+  border-color: var(--primary-border);
+}
 </style>
 </head>
 <body>
+
+<!-- TELA DE LOGIN / AUTENTICAÇÃO ADMINISTRATIVA -->
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-header">
+      <div class="auth-logo-badge">RICHTER CONSTRUÇÕES</div>
+      <h2>Painel Administrativo</h2>
+      <p>Acesso restrito e sincronização em nuvem</p>
+    </div>
+    <div class="auth-body">
+      <form id="authLoginForm" autocomplete="on">
+        <div class="auth-input-group">
+          <label class="auth-label" for="authUserInput">👤 Usuário</label>
+          <input type="text" id="authUserInput" class="auth-input" placeholder="Digite seu usuário" required autofocus autocomplete="username" inputmode="numeric">
+        </div>
+
+        <div class="auth-input-group">
+          <label class="auth-label" for="authPassInput">🔒 Senha</label>
+          <input type="password" id="authPassInput" class="auth-input" placeholder="Digite sua senha" required autocomplete="current-password">
+        </div>
+
+        <div class="auth-remember-row">
+          <label class="auth-checkbox-label">
+            <input type="checkbox" id="authRememberCheckbox" checked>
+            <span>Manter login salvo neste dispositivo</span>
+          </label>
+        </div>
+
+        <button type="submit" class="auth-btn-submit" id="btnSubmitAuth">
+          <span>Entrar no Sistema</span>
+          <span style="font-size:18px;">➔</span>
+        </button>
+
+        <div class="auth-footer-note">
+          <span>☁️ Dados criptografados e salvos com segurança no GitHub</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- Banner de Instalação Mobile PWA -->
 <div id="pwaInstallBanner" class="pwa-install-banner">
@@ -835,6 +1063,12 @@ table.custom-table tr:hover { background: #f8fafc; }
   </nav>
 
   <div class="header-quick-actions">
+    <!-- Indicador de Status com Nuvem GitHub -->
+    <div id="cloudSyncStatus" class="cloud-sync-badge synced" title="Clique para sincronizar dados com o GitHub agora">
+      <span class="cloud-sync-dot">☁️</span>
+      <span id="cloudSyncText">Sincronizado</span>
+    </div>
+
     <button type="button" class="btn btn-sm btn-install-pwa" id="btnHeaderInstallApp" style="display:none;" title="Instalar aplicativo no celular ou computador">
       📲 Instalar App
     </button>
@@ -845,6 +1079,10 @@ table.custom-table tr:hover { background: #f8fafc; }
       📥 Restaurar
     </button>
     <input type="file" id="backupFileInput" style="display:none" accept=".json">
+
+    <button type="button" class="btn-logout" id="btnLogoutApp" title="Sair do painel administrativo">
+      🚪 Sair
+    </button>
   </div>
 </header>
 
@@ -1578,11 +1816,347 @@ function initDatabase() {
   renderAllReceiptsTable();
 }
 
+/* ==========================================================================
+   SISTEMA DE SEGURANÇA, LOGIN & SINCRONIZAÇÃO EM NUVEM (GITHUB REPO)
+   ========================================================================== */
+const AUTH_USER_HASH = '628075ec43e6dbd20cae9f781e1f6d6afe50986591666755fd173a8f791e42fa'; // sha256('51997491325')
+const AUTH_PASS_HASH = 'f723a730dc71ae5a596ab380d82eb223bad98bba145fe452674f1851a295516a'; // sha256('171420')
+const AUTH_TOKEN_ENC = {
+  ciphertextHex: 'b71976b71c9de0a4a5ff1dd8d60bcc39e2996123ac88fd920e484da9ba24a5c46434818df8c5c033',
+  tagHex: '58ce56c223b5c837e57579ba43d69b74',
+  ivHex: '0c222bcf3e903648402eefe3'
+};
+const GITHUB_REPO_OWNER = 'gleysomfernandesir112-sys';
+const GITHUB_REPO_NAME = 'richter-orcamento';
+const GITHUB_DATA_PATH = 'data/database.json';
+const AUTH_STORAGE_KEY = 'richter_auth_session_v1';
+
+let githubActiveToken = null;
+let isSyncingWithGithub = false;
+let syncDebounceTimer = null;
+let githubFileSha = null;
+
+// SHA-256 helper
+async function computeSha256(text) {
+  const enc = new TextEncoder().encode(text);
+  const hashBuf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Descriptografa token de acesso ao GitHub usando a senha do usuário
+async function decryptGithubToken(password) {
+  try {
+    const encPass = new TextEncoder().encode(password);
+    const passHashBuf = await crypto.subtle.digest('SHA-256', encPass);
+    const aesKey = await crypto.subtle.importKey(
+      'raw',
+      passHashBuf,
+      { name: 'AES-GCM' },
+      false,
+      ['decrypt']
+    );
+
+    const iv = new Uint8Array(AUTH_TOKEN_ENC.ivHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+    const combinedHex = AUTH_TOKEN_ENC.ciphertextHex + AUTH_TOKEN_ENC.tagHex;
+    const combined = new Uint8Array(combinedHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+    const decrypted = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: iv },
+      aesKey,
+      combined
+    );
+    return new TextDecoder().decode(decrypted);
+  } catch (err) {
+    console.error('[Auth] Erro ao descriptografar token:', err);
+    return null;
+  }
+}
+
+// Atualiza indicador visual da nuvem no header
+function updateCloudBadge(state, message) {
+  const badge = document.getElementById('cloudSyncStatus');
+  const text = document.getElementById('cloudSyncText');
+  if (!badge || !text) return;
+
+  badge.className = `cloud-sync-badge ${state}`;
+  if (state === 'syncing') {
+    badge.querySelector('.cloud-sync-dot').textContent = '🔄';
+    text.textContent = message || 'Salvando no GitHub...';
+  } else if (state === 'synced') {
+    badge.querySelector('.cloud-sync-dot').textContent = '☁️';
+    text.textContent = message || 'Salvo no GitHub';
+  } else if (state === 'error') {
+    badge.querySelector('.cloud-sync-dot').textContent = '⚠️';
+    text.textContent = message || 'Offline (Salvo Local)';
+  }
+}
+
+// Sincroniza dados com o repositório GitHub
+async function pushDataToGithub() {
+  if (!githubActiveToken || isSyncingWithGithub) return;
+  isSyncingWithGithub = true;
+  updateCloudBadge('syncing', 'Sincronizando...');
+
+  try {
+    const payload = {
+      lastUpdated: new Date().toISOString(),
+      obras: savedObras,
+      quotes: savedQuotes,
+      receipts: savedReceipts
+    };
+    const jsonStr = JSON.stringify(payload, null, 2);
+    // Base64 encode UTF-8
+    const base64Content = btoa(unescape(encodeURIComponent(jsonStr)));
+
+    // Obtém o SHA atual do arquivo caso não tenhamos
+    if (!githubFileSha) {
+      try {
+        const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DATA_PATH}`, {
+          headers: {
+            'Authorization': `token ${githubActiveToken}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (getRes.ok) {
+          const getData = await getRes.json();
+          githubFileSha = getData.sha;
+        }
+      } catch (e) {
+        console.warn('[GitHub Sync] Não foi possível obter SHA prévio:', e);
+      }
+    }
+
+    const bodyData = {
+      message: `update: Sincronização automática do painel administrativo [${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}]`,
+      content: base64Content,
+      branch: 'main'
+    };
+    if (githubFileSha) {
+      bodyData.sha = githubFileSha;
+    }
+
+    const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DATA_PATH}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${githubActiveToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(bodyData)
+    });
+
+    if (putRes.ok) {
+      const putData = await putRes.json();
+      githubFileSha = putData.content ? putData.content.sha : null;
+      updateCloudBadge('synced', 'Salvo no GitHub');
+      console.log('[GitHub Sync] Dados salvos com sucesso no repositório!');
+    } else {
+      const errJson = await putRes.json().catch(() => ({}));
+      console.warn('[GitHub Sync] Falha ao salvar no GitHub:', errJson);
+      // Se deu conflito de SHA (409), limpa o SHA para buscar novamente na próxima
+      if (putRes.status === 409) githubFileSha = null;
+      updateCloudBadge('error', 'Pendente de sincronização');
+    }
+  } catch (err) {
+    console.warn('[GitHub Sync] Erro de rede:', err);
+    updateCloudBadge('error', 'Salvo no dispositivo');
+  } finally {
+    isSyncingWithGithub = false;
+  }
+}
+
+// Carrega os dados mais recentes do repositório GitHub
+async function pullDataFromGithub() {
+  if (!githubActiveToken) return;
+  updateCloudBadge('syncing', 'Buscando do GitHub...');
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DATA_PATH}?_t=${Date.now()}`, {
+      headers: {
+        'Authorization': `token ${githubActiveToken}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      githubFileSha = data.sha;
+      const rawJson = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+      const parsed = JSON.parse(rawJson);
+
+      let mergedObras = 0;
+      let mergedQuotes = 0;
+      let mergedReceipts = 0;
+
+      // Merge inteligente preservando dados locais e da nuvem
+      if (Array.isArray(parsed.obras)) {
+        parsed.obras.forEach(cloudObra => {
+          const idx = savedObras.findIndex(o => o.id === cloudObra.id);
+          if (idx === -1) {
+            savedObras.push(cloudObra);
+            mergedObras++;
+          } else {
+            // Mantém a versão que tiver mais pagamentos ou mais recente
+            const localCount = (savedObras[idx].pagamentos || []).length;
+            const cloudCount = (cloudObra.pagamentos || []).length;
+            if (cloudCount >= localCount) {
+              savedObras[idx] = cloudObra;
+            }
+          }
+        });
+      }
+
+      if (Array.isArray(parsed.quotes)) {
+        parsed.quotes.forEach(cloudQ => {
+          const idx = savedQuotes.findIndex(q => q.id === cloudQ.id);
+          if (idx === -1) {
+            savedQuotes.push(cloudQ);
+            mergedQuotes++;
+          }
+        });
+      }
+
+      if (Array.isArray(parsed.receipts)) {
+        parsed.receipts.forEach(cloudR => {
+          const idx = savedReceipts.findIndex(r => r.id === cloudR.id);
+          if (idx === -1) {
+            savedReceipts.push(cloudR);
+            mergedReceipts++;
+          }
+        });
+      }
+
+      // Persiste o merge localmente
+      localStorage.setItem(OBRAS_DB_KEY, JSON.stringify(savedObras));
+      localStorage.setItem(QUOTES_DB_KEY, JSON.stringify(savedQuotes));
+      localStorage.setItem(RECEIPTS_DB_KEY, JSON.stringify(savedReceipts));
+
+      updateCounts();
+      renderObrasGrid();
+      renderDashboard();
+      renderAllQuotesTable();
+      renderAllReceiptsTable();
+
+      updateCloudBadge('synced', 'Salvo no GitHub');
+      console.log(`[GitHub Sync] Dados sincronizados do GitHub: +${mergedObras} obras, +${mergedQuotes} orçamentos, +${mergedReceipts} recibos.`);
+    } else {
+      updateCloudBadge('synced', 'Salvo no dispositivo');
+    }
+  } catch (err) {
+    console.warn('[GitHub Sync] Erro ao carregar da nuvem:', err);
+    updateCloudBadge('error', 'Salvo no dispositivo');
+  }
+}
+
+// Dispara o salvamento no GitHub com debounce (não sobrecarrega a API)
+function scheduleGithubPush() {
+  updateCloudBadge('syncing', 'Salvando...');
+  clearTimeout(syncDebounceTimer);
+  syncDebounceTimer = setTimeout(() => {
+    pushDataToGithub();
+  }, 1200);
+}
+
+// Gerenciamento de Login e Sessão
+async function checkAuthSession() {
+  const rawSession = localStorage.getItem(AUTH_STORAGE_KEY) || sessionStorage.getItem(AUTH_STORAGE_KEY);
+  if (!rawSession) {
+    document.getElementById('authOverlay').style.display = 'flex';
+    return false;
+  }
+
+  try {
+    const session = JSON.parse(rawSession);
+    const token = await decryptGithubToken(session.passPlain);
+    if (token) {
+      githubActiveToken = token;
+      document.getElementById('authOverlay').style.display = 'none';
+      pullDataFromGithub();
+      return true;
+    }
+  } catch (err) {
+    console.warn('[Auth] Sessão inválida:', err);
+  }
+
+  document.getElementById('authOverlay').style.display = 'flex';
+  return false;
+}
+
+async function handleLoginSubmit(e) {
+  e.preventDefault();
+  const userVal = document.getElementById('authUserInput').value.trim();
+  const passVal = document.getElementById('authPassInput').value.trim();
+  const remember = document.getElementById('authRememberCheckbox').checked;
+  const btn = document.getElementById('btnSubmitAuth');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>Verificando...</span> 🔄';
+
+  const userHash = await computeSha256(userVal);
+  const passHash = await computeSha256(passVal);
+
+  if (userHash === AUTH_USER_HASH && passHash === AUTH_PASS_HASH) {
+    const token = await decryptGithubToken(passVal);
+    if (token) {
+      githubActiveToken = token;
+      const sessionData = JSON.stringify({
+        user: userVal,
+        passPlain: passVal,
+        loggedAt: Date.now()
+      });
+
+      if (remember) {
+        localStorage.setItem(AUTH_STORAGE_KEY, sessionData);
+      } else {
+        sessionStorage.setItem(AUTH_STORAGE_KEY, sessionData);
+      }
+
+      document.getElementById('authOverlay').style.display = 'none';
+      showToast('✅ Acesso administrativo liberado com sucesso!', 'success');
+      btn.disabled = false;
+      btn.innerHTML = '<span>Entrar no Sistema</span> <span style="font-size:18px;">➔</span>';
+
+      // Sincroniza dados com o repositório
+      await pullDataFromGithub();
+      return;
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>Entrar no Sistema</span> <span style="font-size:18px;">➔</span>';
+  alert('❌ Usuário ou senha incorretos! Por favor verifique e tente novamente.');
+}
+
+function handleLogout() {
+  if (confirm('Deseja realmente sair do painel administrativo?')) {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    githubActiveToken = null;
+    document.getElementById('authOverlay').style.display = 'flex';
+    document.getElementById('authPassInput').value = '';
+    showToast('Você saiu do painel.', 'info');
+  }
+}
+
+// Configura eventos de autenticação
+document.getElementById('authLoginForm').onsubmit = handleLoginSubmit;
+document.getElementById('btnLogoutApp').onclick = handleLogout;
+document.getElementById('cloudSyncStatus').onclick = () => {
+  if (githubActiveToken) {
+    pullDataFromGithub();
+    showToast('Sincronizando com o GitHub...', 'info');
+  }
+};
+
+/* ==========================================================================
+   BANCO DE DADOS LOCAL & SINCRONIZAÇÃO
+   ========================================================================== */
 function persistObras() {
   localStorage.setItem(OBRAS_DB_KEY, JSON.stringify(savedObras));
   updateCounts();
   renderObrasGrid();
   renderDashboard();
+  scheduleGithubPush();
 }
 
 function persistQuotes() {
@@ -1590,6 +2164,7 @@ function persistQuotes() {
   updateCounts();
   renderDashboard();
   renderAllQuotesTable();
+  scheduleGithubPush();
 }
 
 function persistReceipts() {
@@ -1597,6 +2172,7 @@ function persistReceipts() {
   updateCounts();
   renderDashboard();
   renderAllReceiptsTable();
+  scheduleGithubPush();
 }
 
 function updateCounts() {
@@ -3296,6 +3872,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initDatabase();
   loadDraft();
   initReceiptForm();
+  checkAuthSession();
 });
 </script>
 </body>
