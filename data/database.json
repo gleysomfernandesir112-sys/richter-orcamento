@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T22:16:21.274Z",
+  "lastUpdated": "2026-10-07T22:16:36.133Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -58,6 +58,13 @@
         }
       ],
       "custos": [
+        {
+          "descricao": "Pagamento Edson",
+          "valor": "R$ 500,00",
+          "data": "2026-10-02",
+          "categoria": "Mão de Obra",
+          "fornecedor": "Edson"
+        },
         {
           "descricao": "Pagamento Edson",
           "valor": "R$ 1.000,00",
