@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T21:32:27.974Z",
+  "lastUpdated": "2026-10-07T21:33:49.370Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -28,12 +28,34 @@
           "pago": true,
           "reciboId": null,
           "reciboNumero": null
+        },
+        {
+          "titulo": "Pagamento 3 (Construção| Casa)",
+          "valor": "R$ 4.000,00",
+          "data": "2026-09-18",
+          "forma": "PIX",
+          "pago": true,
+          "reciboId": "rec_1791408828167",
+          "reciboNumero": "REC-2026-002"
         }
       ]
     }
   ],
   "quotes": [],
   "receipts": [
+    {
+      "id": "rec_1791408828167",
+      "numero": "REC-2026-002",
+      "data": "2026-09-18",
+      "valor": "R$ 4.000,00",
+      "valorExtenso": "Quatro mil reais",
+      "clienteNome": "Gonzalo",
+      "clienteDoc": "",
+      "formaPagamento": "PIX",
+      "cidade": "Joinville - SC",
+      "descricao": "Pagamento 3 (Construção| Casa) — Obra: Construção| Casa",
+      "createdAt": "2026-10-07T21:33:48.167Z"
+    },
     {
       "id": "rec_1791241919275",
       "numero": "REC-2026-001",
