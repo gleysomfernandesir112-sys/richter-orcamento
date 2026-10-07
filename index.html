@@ -238,41 +238,211 @@ header {
 }
 
 /* ==========================================================================
-   DASHBOARD & MÉTRICAS
+   DASHBOARD & MÉTRICAS (VISUAL & FÁCIL PARA TERCEIRA IDADE)
    ========================================================================== */
+.dash-welcome-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+  border-left: 6px solid var(--primary);
+}
+.dash-welcome-info h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dash-welcome-info p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+.dash-health-badge {
+  background: rgba(22, 163, 74, 0.2);
+  border: 1px solid #16a34a;
+  color: #4ade80;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Ações Rápidas em Botões Grandes Touch */
+.dash-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.dash-action-btn {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+.dash-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+}
+.dash-action-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.dash-action-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dark);
+  line-height: 1.2;
+}
+.dash-action-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Grid de Indicadores Grandes e Claros */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 14px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
 }
 .kpi-card {
   background: #ffffff;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 18px;
+  padding: 20px;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  position: relative;
+  transition: all 0.2s;
+}
+.kpi-card:hover {
+  box-shadow: var(--shadow);
+  border-color: #cbd5e1;
 }
 .kpi-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.3px;
 }
-.kpi-icon { font-size: 18px; }
-.kpi-value { font-size: 24px; font-weight: 800; color: var(--dark); }
-.kpi-subtext { font-size: 12px; color: var(--text-muted); }
-.kpi-card.highlight { border-left: 4px solid var(--primary); }
-.kpi-card.highlight-success { border-left: 4px solid var(--success); }
-.kpi-card.highlight-warning { border-left: 4px solid var(--warning); }
-.kpi-card.highlight-info { border-left: 4px solid var(--info); }
+.kpi-icon {
+  font-size: 26px;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--dark);
+  line-height: 1.1;
+  margin: 4px 0;
+}
+.kpi-subtext {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.kpi-card.highlight { border-top: 5px solid var(--primary); }
+.kpi-card.highlight-success { border-top: 5px solid var(--success); }
+.kpi-card.highlight-warning { border-top: 5px solid var(--warning); }
+.kpi-card.highlight-info { border-top: 5px solid var(--info); }
+.kpi-card.highlight-danger { border-top: 5px solid #ef4444; }
+.kpi-card.highlight-lucro { border-top: 5px solid #059669; background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%); }
+
+/* Painel de Termômetro de Obras */
+.dash-obras-summary {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 22px;
+}
+.dash-section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.dash-obras-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+.dash-obra-mini-card {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dash-obra-mini-card:hover {
+  background: #f1f5f9;
+  border-color: var(--primary);
+}
+.dash-mini-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.dash-mini-client {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--dark);
+}
+.dash-mini-obra {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.dash-mini-bars {
+  margin-top: 6px;
+}
+.dash-mini-bar-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
 
 /* ==========================================================================
    PASTAS DE OBRAS / CLIENTES (GESTÃO FINANCEIRA E PARCELAS)
@@ -1185,63 +1355,123 @@ table.custom-table tr:hover { background: #f8fafc; }
   </section>
 
   <!-- ==========================================================================
-       TAB 2: PAINEL GERAL (DASHBOARD & INDICADORES GLOBAIS)
+       TAB 2: PAINEL GERAL (DASHBOARD VISUAL, SIMPLES & INTUITIVO)
        ========================================================================== -->
   <section id="tab-dashboard" class="tab-content-panel">
-    <!-- Grid de Indicadores Chave (KPIs) -->
+    
+    <!-- Cartão de Boas-Vindas com Status Geral -->
+    <div class="dash-welcome-card">
+      <div class="dash-welcome-info">
+        <h2>👋 Richter Construções — Visão Financeira da Empresa</h2>
+        <p>Acompanhe de forma simples o dinheiro que já entrou, os custos e o quanto ainda falta receber.</p>
+      </div>
+      <div class="dash-health-badge" id="dashHealthBadge">
+        <span>✅ Situação Financeira Positiva</span>
+      </div>
+    </div>
+
+    <!-- Botões de Ação Rápida Grandes (Ideal para Celular e Toque Fácil) -->
+    <div class="dash-quick-actions">
+      <div class="dash-action-btn" onclick="switchTab('obras'); abrirModalNovaObra();">
+        <div class="dash-action-icon" style="background:#eff6ff; color:#2563eb;">➕</div>
+        <div>
+          <div class="dash-action-title">Nova Obra</div>
+          <div class="dash-action-desc">Cadastrar novo cliente</div>
+        </div>
+      </div>
+
+      <div class="dash-action-btn" onclick="switchTab('orcamento');">
+        <div class="dash-action-icon" style="background:#fef2f2; color:#dc2626;">📋</div>
+        <div>
+          <div class="dash-action-title">Novo Orçamento</div>
+          <div class="dash-action-desc">Gerar proposta em PDF</div>
+        </div>
+      </div>
+
+      <div class="dash-action-btn" onclick="switchTab('obras');">
+        <div class="dash-action-icon" style="background:#f0fdf4; color:#16a34a;">📁</div>
+        <div>
+          <div class="dash-action-title">Ver Obras Ativas</div>
+          <div class="dash-action-desc">Lançar pagamentos e custos</div>
+        </div>
+      </div>
+
+      <div class="dash-action-btn" onclick="switchTab('recibos');">
+        <div class="dash-action-icon" style="background:#fef3c7; color:#d97706;">🧾</div>
+        <div>
+          <div class="dash-action-title">Recibos Emitidos</div>
+          <div class="dash-action-desc">Imprimir ou baixar em PDF</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicadores Principais (Letras Grandes e Cores Autoexplicativas) -->
     <div class="dashboard-grid">
       <div class="kpi-card highlight-success">
         <div class="kpi-header">
-          <span>Já Recebido (Obras)</span>
-          <span class="kpi-icon">💵</span>
+          <span>1. Dinheiro Já Recebido</span>
+          <span class="kpi-icon">💰</span>
         </div>
         <div class="kpi-value" id="kpiObrasRecebido" style="color:var(--success);">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasRecebidoSub">Total comprovado em recibos</div>
+        <div class="kpi-subtext" id="kpiObrasRecebidoSub">Total que já entrou no caixa</div>
+      </div>
+
+      <div class="kpi-card highlight-danger">
+        <div class="kpi-header">
+          <span>2. Despesas & Custos</span>
+          <span class="kpi-icon">💸</span>
+        </div>
+        <div class="kpi-value" id="kpiObrasTotalCustos" style="color:var(--danger);">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasTotalCustosSub">0 compras e diárias lançadas</div>
+      </div>
+
+      <div class="kpi-card highlight-lucro">
+        <div class="kpi-header">
+          <span>3. Lucro no Bolso (Líquido)</span>
+          <span class="kpi-icon">📈</span>
+        </div>
+        <div class="kpi-value" id="kpiObrasLucroLiquido" style="color:#059669;">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasLucroSub">Recebido menos as despesas</div>
       </div>
 
       <div class="kpi-card highlight">
         <div class="kpi-header">
-          <span>Falta Receber (Saldo)</span>
+          <span>4. Falta Receber (A Cobrar)</span>
           <span class="kpi-icon">⏳</span>
         </div>
         <div class="kpi-value" id="kpiObrasFaltaReceber" style="color:var(--primary);">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasFaltaSub">A receber nas obras ativas</div>
+        <div class="kpi-subtext" id="kpiObrasFaltaSub">A receber dos clientes</div>
       </div>
 
       <div class="kpi-card highlight-info">
         <div class="kpi-header">
-          <span>Total Contratado</span>
+          <span>Valor Total Contratado</span>
           <span class="kpi-icon">🏗️</span>
         </div>
         <div class="kpi-value" id="kpiObrasTotalContratado">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasAtivasQtd">0 obras em andamento</div>
+        <div class="kpi-subtext" id="kpiObrasAtivasQtd">0 obras cadastradas</div>
       </div>
 
       <div class="kpi-card highlight-warning">
         <div class="kpi-header">
-          <span>Total em Orçamentos</span>
-          <span class="kpi-icon">📋</span>
+          <span>Propostas / Orçamentos</span>
+          <span class="kpi-icon">📄</span>
         </div>
         <div class="kpi-value" id="kpiTotalOrcado">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas cadastradas</div>
+        <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas salvas</div>
       </div>
+    </div>
 
-      <div class="kpi-card" style="border-left: 4px solid #ef4444;">
-        <div class="kpi-header">
-          <span>Custos / Despesas (Obras)</span>
-          <span class="kpi-icon">💸</span>
-        </div>
-        <div class="kpi-value" id="kpiObrasTotalCustos" style="color:var(--danger);">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasTotalCustosSub">0 despesas registradas</div>
+    <!-- Termômetro das Obras Ativas (Visual para acompanhar o andamento de cada uma) -->
+    <div class="dash-obras-summary">
+      <div class="dash-section-title">
+        <span>🏗️ Andamento Rápido das Obras</span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="switchTab('obras')" style="margin-left:auto;">
+          Ver todas as pastas ➔
+        </button>
       </div>
-
-      <div class="kpi-card" style="border-left: 4px solid #059669;">
-        <div class="kpi-header">
-          <span>Lucro Líquido Real</span>
-          <span class="kpi-icon">📈</span>
-        </div>
-        <div class="kpi-value" id="kpiObrasLucroLiquido" style="color:#059669;">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasLucroSub">Recebido menos Custos</div>
+      <div id="dashObrasMiniGrid" class="dash-obras-list-grid">
+        <!-- Renderizado dinamicamente -->
       </div>
     </div>
 
@@ -3034,6 +3264,73 @@ function renderDashboard() {
   }
   if (kpiLucroSubEl) {
     kpiLucroSubEl.textContent = lucroLiquidoGlobal >= 0 ? 'Recebido supera os custos' : 'Custos superam o recebido';
+  }
+
+  // Atualiza Badge Geral de Saúde Financeira
+  const healthBadge = document.getElementById('dashHealthBadge');
+  if (healthBadge) {
+    if (lucroLiquidoGlobal >= 0) {
+      healthBadge.style.background = 'rgba(22, 163, 74, 0.2)';
+      healthBadge.style.borderColor = '#16a34a';
+      healthBadge.style.color = '#4ade80';
+      healthBadge.innerHTML = `<span>✅ Situação Financeira Positiva (+${formatBRL(lucroLiquidoGlobal)} no bolso)</span>`;
+    } else {
+      healthBadge.style.background = 'rgba(220, 38, 38, 0.2)';
+      healthBadge.style.borderColor = '#dc2626';
+      healthBadge.style.color = '#f87171';
+      healthBadge.innerHTML = `<span>⚠️ Atenção: Custos maiores que o recebido (${formatBRL(lucroLiquidoGlobal)})</span>`;
+    }
+  }
+
+  // Renderiza Termômetro Rápido das Obras Ativas
+  const miniGrid = document.getElementById('dashObrasMiniGrid');
+  if (miniGrid) {
+    if (savedObras.length === 0) {
+      miniGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">
+          Nenhuma obra cadastrada ainda. Toque em <strong>"+ Nova Obra"</strong> acima para começar.
+        </div>
+      `;
+    } else {
+      miniGrid.innerHTML = savedObras.map(o => {
+        const totalContr = parseBRL(o.valorTotalContratado || '0');
+        let pago = 0;
+        (o.pagamentos || []).forEach(p => { if (p.pago) pago += parseBRL(p.valor || '0'); });
+        let cust = 0;
+        (o.custos || []).forEach(c => { cust += parseBRL(c.valor || '0'); });
+        const saldoFalta = Math.max(0, totalContr - pago);
+        const percPago = totalContr > 0 ? Math.min(100, Math.round((pago / totalContr) * 100)) : 0;
+        const lucroObra = pago - cust;
+
+        return `
+          <div class="dash-obra-mini-card" onclick="switchTab('obras');" title="Toque para abrir esta pasta de obra">
+            <div class="dash-mini-top">
+              <span class="dash-mini-client">${escapeHtml(o.clienteNome || 'Cliente')}</span>
+              <span class="status-badge badge-${(o.status || 'em-andamento').toLowerCase().replace(/\s+/g, '-')}">
+                ${escapeHtml(o.status || 'Em Andamento')}
+              </span>
+            </div>
+            <div class="dash-mini-obra">🏗️ ${escapeHtml(o.tituloObra || 'Obra')}</div>
+            
+            <div class="dash-mini-bars">
+              <div class="dash-mini-bar-title">
+                <span>Recebido: <strong>${formatBRL(pago)}</strong> (${percPago}%)</span>
+                <span style="color:var(--primary);">Falta: <strong>${formatBRL(saldoFalta)}</strong></span>
+              </div>
+              <div class="progress-bar-container" style="height:7px; margin-bottom:6px;">
+                <div class="progress-bar-fill" style="width: ${percPago}%;"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:11px; margin-top:4px;">
+                <span style="color:var(--danger);">Custos: <strong>${formatBRL(cust)}</strong></span>
+                <span style="color:${lucroObra >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:800;">
+                  Lucro: ${formatBRL(lucroObra)}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
   }
 
   let totalOrcado = 0;
