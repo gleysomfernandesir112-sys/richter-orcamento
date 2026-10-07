@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T22:12:43.250Z",
+  "lastUpdated": "2026-10-07T22:13:03.443Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -58,6 +58,13 @@
         }
       ],
       "custos": [
+        {
+          "descricao": "Pagamento Rodrigo Pix",
+          "valor": "R$ 250,00",
+          "data": "2026-09-04",
+          "categoria": "Mão de Obra",
+          "fornecedor": "Rodrigo"
+        },
         {
           "descricao": "Pagamento digao pix",
           "valor": "R$ 50,00",
