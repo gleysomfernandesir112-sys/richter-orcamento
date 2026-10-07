@@ -437,6 +437,83 @@ header {
   white-space: nowrap;
 }
 
+.obra-subtabs-nav {
+  display: flex;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--border);
+  padding: 4px 12px 0 12px;
+  gap: 6px;
+}
+.obra-subtab-btn {
+  border: 0;
+  background: transparent;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.obra-subtab-btn.active {
+  background: #ffffff;
+  color: var(--dark);
+  border-bottom-color: var(--primary);
+}
+.cost-badge-counter {
+  background: #fee2e2;
+  color: var(--danger);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.obra-cost-box-lucro {
+  grid-column: span 4;
+  margin-top: 6px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+.cost-cat-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.cat-material { background: #e0f2fe; color: #0369a1; }
+.cat-mao-de-obra { background: #fef3c7; color: #b45309; }
+.cat-equipamento { background: #ede9fe; color: #6d28d9; }
+.cat-transporte { background: #ffedd5; color: #c2410c; }
+.cat-alimentacao { background: #fce7f3; color: #be185d; }
+.cat-outro { background: #f1f5f9; color: #475569; }
+
+.cost-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-left: 3px solid #ef4444;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  gap: 8px;
+}
+
 .obra-folder-footer {
   padding: 12px 18px;
   background: #ffffff;
@@ -1148,6 +1225,24 @@ table.custom-table tr:hover { background: #f8fafc; }
         <div class="kpi-value" id="kpiTotalOrcado">R$ 0,00</div>
         <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas cadastradas</div>
       </div>
+
+      <div class="kpi-card" style="border-left: 4px solid #ef4444;">
+        <div class="kpi-header">
+          <span>Custos / Despesas (Obras)</span>
+          <span class="kpi-icon">💸</span>
+        </div>
+        <div class="kpi-value" id="kpiObrasTotalCustos" style="color:var(--danger);">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasTotalCustosSub">0 despesas registradas</div>
+      </div>
+
+      <div class="kpi-card" style="border-left: 4px solid #059669;">
+        <div class="kpi-header">
+          <span>Lucro Líquido Real</span>
+          <span class="kpi-icon">📈</span>
+        </div>
+        <div class="kpi-value" id="kpiObrasLucroLiquido" style="color:#059669;">R$ 0,00</div>
+        <div class="kpi-subtext" id="kpiObrasLucroSub">Recebido menos Custos</div>
+      </div>
     </div>
 
     <div class="data-table-card" style="margin-top: 18px;">
@@ -1692,6 +1787,58 @@ table.custom-table tr:hover { background: #f8fafc; }
   </div>
 </div>
 
+<!-- Modal: Adicionar Custo / Despesa na Obra -->
+<div class="modal-backdrop" id="custoModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalCustoTitle">💸 Registrar Despesa / Custo da Obra</h3>
+      <button type="button" class="modal-close-btn" id="btnCloseModalCusto">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="modalCustoObraId">
+      <input type="hidden" id="modalCustoIndex">
+
+      <div class="form-group">
+        <label class="form-label" for="modalCustoDesc">Descrição do Custo / Material / Serviço</label>
+        <input type="text" id="modalCustoDesc" class="form-control" placeholder="Ex: Cimento, Tijolos, Diária Pedreiro, Caçamba, Areia...">
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalCustoValor">Valor Gasto (R$)</label>
+          <input type="text" id="modalCustoValor" class="form-control" style="font-weight:700; color:var(--danger); font-size:16px;" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="modalCustoData">Data da Despesa</label>
+          <input type="date" id="modalCustoData" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalCustoCategoria">Categoria</label>
+          <select id="modalCustoCategoria" class="form-control">
+            <option value="Material">🧱 Material de Construção</option>
+            <option value="Mão de Obra">👷 Mão de Obra / Diárias</option>
+            <option value="Equipamento">🚜 Equipamento / Maquinário</option>
+            <option value="Transporte">🚚 Frete / Transporte / Caçamba</option>
+            <option value="Alimentação">🍽️ Alimentação / Refeição</option>
+            <option value="Outro">📦 Outro / Diversos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="modalCustoFornecedor">Fornecedor / Responsável (Opcional)</label>
+          <input type="text" id="modalCustoFornecedor" class="form-control" placeholder="Ex: Depósito Silva, João...">
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px;">
+      <button type="button" class="btn btn-secondary btn-sm" id="btnCancelModalCusto">Cancelar</button>
+      <button type="button" class="btn btn-danger" id="btnConfirmarCusto">💾 Salvar Custo</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Pré-visualização do PDF do Orçamento -->
 <div class="modal-backdrop" id="orcPreviewModal">
   <div class="modal-dialog modal-pdf-preview">
@@ -1996,9 +2143,9 @@ async function pullDataFromGithub() {
             savedObras.push(cloudObra);
             mergedObras++;
           } else {
-            // Mantém a versão que tiver mais pagamentos ou mais recente
-            const localCount = (savedObras[idx].pagamentos || []).length;
-            const cloudCount = (cloudObra.pagamentos || []).length;
+            // Mantém a versão com maior volume de lançamentos ou atualiza custos/pagamentos
+            const localCount = (savedObras[idx].pagamentos || []).length + (savedObras[idx].custos || []).length;
+            const cloudCount = (cloudObra.pagamentos || []).length + (cloudObra.custos || []).length;
             if (cloudCount >= localCount) {
               savedObras[idx] = cloudObra;
             }
@@ -2322,6 +2469,14 @@ function numeroParaExtenso(valor) {
 /* ==========================================================================
    PASTAS DE OBRAS & CLIENTES (GESTÃO FINANCEIRA)
    ========================================================================== */
+/* Estado das sub-abas de cada obra: 'pagamentos' ou 'custos' */
+const obraActiveTabs = {};
+
+function setObraActiveTab(obraId, tab) {
+  obraActiveTabs[obraId] = tab;
+  renderObrasGrid();
+}
+
 function renderObrasGrid() {
   const container = document.getElementById('obrasListGrid');
   const query = (document.getElementById('searchObrasInput').value || '').trim().toLowerCase();
@@ -2340,7 +2495,7 @@ function renderObrasGrid() {
         <div style="font-size:42px; margin-bottom:10px;">📁</div>
         <h3 style="font-size:18px; font-weight:700; color:var(--dark);">Nenhuma pasta de obra encontrada</h3>
         <p style="font-size:13px; color:var(--text-muted); margin-top:4px; max-width:440px; margin: 4px auto 16px;">
-          Crie sua primeira pasta de obra para gerenciar pagamentos por etapas (Pagamento 1, 2, 3...), controlar o saldo que falta receber e emitir recibos oficiais.
+          Crie sua primeira pasta de obra para gerenciar parcelas, lançar custos (materiais/serviços), controlar o lucro líquido e emitir recibos oficiais.
         </p>
         <button type="button" class="btn btn-primary" onclick="abrirModalNovaObra()">
           ➕ Criar Primeira Pasta de Obra
@@ -2357,9 +2512,19 @@ function renderObrasGrid() {
       if (p.pago) totalPago += parseBRL(p.valor || '0');
     });
 
+    let totalCustos = 0;
+    (o.custos || []).forEach(c => {
+      totalCustos += parseBRL(c.valor || '0');
+    });
+
     const saldoFalta = Math.max(0, totalContratado - totalPago);
     const percPago = totalContratado > 0 ? Math.min(100, Math.round((totalPago / totalContratado) * 100)) : 0;
+    const lucroLiquidoReal = totalPago - totalCustos;
+    const lucroProjetado = totalContratado - totalCustos;
     const statusClass = (o.status || 'Em Andamento').toLowerCase().replace(/\s+/g, '-');
+    const currentSubTab = obraActiveTabs[o.id] || 'pagamentos';
+    const numCustos = (o.custos || []).length;
+    const numPags = (o.pagamentos || []).length;
 
     return `
       <div class="obra-folder-card">
@@ -2376,54 +2541,111 @@ function renderObrasGrid() {
 
         <div class="obra-progress-section">
           <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; margin-bottom:5px;">
-            <span>Progresso dos Pagamentos</span>
+            <span>Progresso do Recebimento</span>
             <span style="color:var(--success);">${percPago}% Recebido</span>
           </div>
           <div class="progress-bar-container">
             <div class="progress-bar-fill" style="width: ${percPago}%;"></div>
           </div>
-          <div class="obra-financial-boxes">
+          <div class="obra-financial-boxes" style="grid-template-columns: repeat(4, 1fr);">
             <div class="fin-box">
-              <div class="fin-box-label">Total Obra</div>
+              <div class="fin-box-label">Contratado</div>
               <div class="fin-box-val total">${formatBRL(totalContratado)}</div>
             </div>
             <div class="fin-box">
-              <div class="fin-box-label">Já Recebido</div>
+              <div class="fin-box-label">Recebido</div>
               <div class="fin-box-val pago">${formatBRL(totalPago)}</div>
+            </div>
+            <div class="fin-box">
+              <div class="fin-box-label">Custos</div>
+              <div class="fin-box-val" style="color:var(--danger);">${formatBRL(totalCustos)}</div>
             </div>
             <div class="fin-box">
               <div class="fin-box-label">Falta Receber</div>
               <div class="fin-box-val falta">${formatBRL(saldoFalta)}</div>
             </div>
+            <div class="obra-cost-box-lucro">
+              <span>📈 <strong>Lucro Real Atual (Recebido - Custos):</strong></span>
+              <strong style="color:${lucroLiquidoReal >= 0 ? 'var(--success)' : 'var(--danger)'}; font-size:14px;">
+                ${formatBRL(lucroLiquidoReal)}
+              </strong>
+            </div>
           </div>
         </div>
 
-        <div class="obra-payments-list">
-          <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">
-            Histórico de Parcelas & Pagamentos:
-          </div>
-          ${(o.pagamentos && o.pagamentos.length > 0) ? o.pagamentos.map((p, idx) => `
-            <div class="payment-item-row ${p.pago ? 'pago' : 'pendente'}">
-              <div class="payment-info-left">
-                <span class="payment-title">${escapeHtml(p.titulo || `Pagamento ${idx + 1}`)}</span>
-                <span class="payment-sub">${p.data ? p.data.split('-').reverse().join('/') : '-'} &bull; ${escapeHtml(p.forma || 'PIX')} ${p.reciboNumero ? `&bull; <strong>${p.reciboNumero}</strong>` : ''}</span>
-              </div>
-              <div class="payment-actions-right">
-                <span class="payment-val" style="color:${p.pago ? 'var(--success)' : 'var(--warning)'};">${escapeHtml(p.valor || 'R$ 0,00')}</span>
-                ${p.pago ? 
-                  `<button type="button" class="btn btn-secondary btn-sm" onclick="verReciboDePagamento('${p.reciboId}')" title="Ver Recibo" style="padding:2px 6px;">🧾</button>` : 
-                  `<button type="button" class="btn btn-success btn-sm" onclick="abrirModalRegistrarPagamento('${o.id}', ${idx})" style="padding:2px 8px; font-size:11px;">Receber</button>`
-                }
-                <button type="button" class="item-remove-btn" onclick="removerPagamentoDaObra('${o.id}', ${idx})" title="Excluir Pagamento">&times;</button>
-              </div>
-            </div>
-          `).join('') : '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:10px;">Nenhum pagamento registrado ainda.</div>'}
+        <!-- Sub-abas: Pagamentos vs Custos da Obra -->
+        <div class="obra-subtabs-nav">
+          <button type="button" class="obra-subtab-btn ${currentSubTab === 'pagamentos' ? 'active' : ''}" onclick="setObraActiveTab('${o.id}', 'pagamentos')">
+            💵 Pagamentos Recebidos (${numPags})
+          </button>
+          <button type="button" class="obra-subtab-btn ${currentSubTab === 'custos' ? 'active' : ''}" onclick="setObraActiveTab('${o.id}', 'custos')">
+            💸 Custos & Despesas <span class="cost-badge-counter">${numCustos}</span>
+          </button>
         </div>
+
+        ${currentSubTab === 'pagamentos' ? `
+          <div class="obra-payments-list">
+            <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+              <span>Histórico de Parcelas & Pagamentos:</span>
+              <span style="color:var(--success); font-weight:800;">Total: ${formatBRL(totalPago)}</span>
+            </div>
+            ${(o.pagamentos && o.pagamentos.length > 0) ? o.pagamentos.map((p, idx) => `
+              <div class="payment-item-row ${p.pago ? 'pago' : 'pendente'}">
+                <div class="payment-info-left">
+                  <span class="payment-title">${escapeHtml(p.titulo || `Pagamento ${idx + 1}`)}</span>
+                  <span class="payment-sub">${p.data ? p.data.split('-').reverse().join('/') : '-'} &bull; ${escapeHtml(p.forma || 'PIX')} ${p.reciboNumero ? `&bull; <strong>${p.reciboNumero}</strong>` : ''}</span>
+                </div>
+                <div class="payment-actions-right">
+                  <span class="payment-val" style="color:${p.pago ? 'var(--success)' : 'var(--warning)'};">${escapeHtml(p.valor || 'R$ 0,00')}</span>
+                  ${p.pago ? 
+                    `<button type="button" class="btn btn-secondary btn-sm" onclick="verReciboDePagamento('${p.reciboId}')" title="Ver Recibo" style="padding:2px 6px;">🧾</button>` : 
+                    `<button type="button" class="btn btn-success btn-sm" onclick="abrirModalRegistrarPagamento('${o.id}', ${idx})" style="padding:2px 8px; font-size:11px;">Receber</button>`
+                  }
+                  <button type="button" class="item-remove-btn" onclick="removerPagamentoDaObra('${o.id}', ${idx})" title="Excluir Pagamento">&times;</button>
+                </div>
+              </div>
+            `).join('') : '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:10px;">Nenhum pagamento registrado ainda.</div>'}
+          </div>
+        ` : `
+          <div class="obra-payments-list">
+            <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+              <span>Custos / Despesas Lançadas:</span>
+              <span style="color:var(--danger); font-weight:800;">Total: ${formatBRL(totalCustos)}</span>
+            </div>
+            ${(o.custos && o.custos.length > 0) ? o.custos.map((c, cIdx) => {
+              const catClass = (c.categoria || 'Outro').toLowerCase().replace(/\s+/g, '-').replace(/[ãõáéíóú]/g, 'a');
+              return `
+                <div class="cost-item-row">
+                  <div class="payment-info-left">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <span class="cost-cat-tag cat-${catClass}">${escapeHtml(c.categoria || 'Material')}</span>
+                      <strong style="color:var(--dark); font-size:13px;">${escapeHtml(c.descricao || 'Despesa')}</strong>
+                    </div>
+                    <span class="payment-sub">
+                      📅 ${c.data ? c.data.split('-').reverse().join('/') : '-'}
+                      ${c.fornecedor ? `&bull; 🏢 ${escapeHtml(c.fornecedor)}` : ''}
+                    </span>
+                  </div>
+                  <div class="payment-actions-right">
+                    <span class="payment-val" style="color:var(--danger);">${escapeHtml(c.valor || 'R$ 0,00')}</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="editarCustoDaObra('${o.id}', ${cIdx})" title="Editar Custo" style="padding:2px 6px;">✏️</button>
+                    <button type="button" class="item-remove-btn" onclick="removerCustoDaObra('${o.id}', ${cIdx})" title="Excluir Custo">&times;</button>
+                  </div>
+                </div>
+              `;
+            }).join('') : '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:10px;">Nenhum custo registrado para esta obra.</div>'}
+          </div>
+        `}
 
         <div class="obra-folder-footer">
-          <button type="button" class="btn btn-primary btn-sm" onclick="abrirModalNovoPagamento('${o.id}')">
-            ➕ Novo Pagamento / Recibo
-          </button>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="abrirModalNovoPagamento('${o.id}')">
+              ➕ Novo Pagamento
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="abrirModalNovoCusto('${o.id}')">
+              💸 Lançar Custo
+            </button>
+          </div>
           <div style="display:flex; gap:6px;">
             <button type="button" class="btn btn-whatsapp btn-sm" onclick="enviarExtratoWhatsApp('${o.id}')" title="Enviar extrato financeiro no WhatsApp">
               📱 Cobrança / Extrato
@@ -2499,7 +2721,8 @@ document.getElementById('btnSalvarObra').onclick = () => {
       valorTotalContratado: valorTotal,
       status: document.getElementById('modalObraStatus').value,
       dataCriacao: new Date().toISOString(),
-      pagamentos: []
+      pagamentos: [],
+      custos: []
     });
     showToast('Pasta de obra criada com sucesso!', 'success');
   }
@@ -2526,7 +2749,7 @@ function editarPastaObra(id) {
 function excluirPastaObra(id) {
   const o = savedObras.find(item => item.id === id);
   if (!o) return;
-  if (confirm(`Deseja excluir a pasta da obra de "${o.clienteNome}"? Todos os pagamentos vinculados serão removidos.`)) {
+  if (confirm(`Deseja excluir a pasta da obra de "${o.clienteNome}"? Todos os pagamentos e custos vinculados serão removidos.`)) {
     savedObras = savedObras.filter(item => item.id !== id);
     persistObras();
     showToast('Pasta de obra excluída.', 'danger');
@@ -2621,6 +2844,103 @@ function verReciboDePagamento(reciboId) {
   editReceipt(reciboId);
 }
 
+/* ==========================================================================
+   GESTÃO DE CUSTOS E DESPESAS DA OBRA
+   ========================================================================== */
+function abrirModalNovoCusto(obraId) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o) return;
+
+  document.getElementById('modalCustoObraId').value = obraId;
+  document.getElementById('modalCustoIndex').value = '-1';
+  document.getElementById('modalCustoTitle').textContent = `💸 Lançar Custo — ${o.clienteNome}`;
+  document.getElementById('modalCustoDesc').value = '';
+  document.getElementById('modalCustoValor').value = '';
+  document.getElementById('modalCustoData').value = getTodayString();
+  document.getElementById('modalCustoCategoria').value = 'Material';
+  document.getElementById('modalCustoFornecedor').value = '';
+
+  document.getElementById('custoModal').classList.add('open');
+  document.getElementById('modalCustoDesc').focus();
+}
+
+function editarCustoDaObra(obraId, custoIdx) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o || !o.custos || !o.custos[custoIdx]) return;
+  const c = o.custos[custoIdx];
+
+  document.getElementById('modalCustoObraId').value = obraId;
+  document.getElementById('modalCustoIndex').value = custoIdx;
+  document.getElementById('modalCustoTitle').textContent = `✏️ Editar Custo — ${o.clienteNome}`;
+  document.getElementById('modalCustoDesc').value = c.descricao || '';
+  document.getElementById('modalCustoValor').value = c.valor || '';
+  document.getElementById('modalCustoData').value = c.data || getTodayString();
+  document.getElementById('modalCustoCategoria').value = c.categoria || 'Material';
+  document.getElementById('modalCustoFornecedor').value = c.fornecedor || '';
+
+  document.getElementById('custoModal').classList.add('open');
+}
+
+function removerCustoDaObra(obraId, custoIdx) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o || !o.custos) return;
+  if (confirm(`Remover este custo de "${o.custos[custoIdx].descricao || 'Despesa'}"?`)) {
+    o.custos.splice(custoIdx, 1);
+    persistObras();
+    showToast('Custo removido com sucesso.', 'info');
+  }
+}
+
+document.getElementById('btnCloseModalCusto').onclick = () => document.getElementById('custoModal').classList.remove('open');
+document.getElementById('btnCancelModalCusto').onclick = () => document.getElementById('custoModal').classList.remove('open');
+document.getElementById('modalCustoValor').addEventListener('input', (e) => { e.target.value = formatBRL(e.target.value); });
+
+document.getElementById('btnConfirmarCusto').onclick = () => {
+  const obraId = document.getElementById('modalCustoObraId').value;
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o) return;
+
+  const desc = document.getElementById('modalCustoDesc').value.trim();
+  const valor = document.getElementById('modalCustoValor').value.trim();
+  const data = document.getElementById('modalCustoData').value || getTodayString();
+  const categoria = document.getElementById('modalCustoCategoria').value;
+  const fornecedor = document.getElementById('modalCustoFornecedor').value.trim();
+
+  if (!desc) {
+    alert('Informe uma descrição para a despesa (ex: Cimento, Diária Pedreiro, Caçamba...).');
+    document.getElementById('modalCustoDesc').focus();
+    return;
+  }
+  if (!valor || parseBRL(valor) <= 0) {
+    alert('Informe o valor gasto nesta despesa.');
+    document.getElementById('modalCustoValor').focus();
+    return;
+  }
+
+  if (!o.custos) o.custos = [];
+  const idx = parseInt(document.getElementById('modalCustoIndex').value, 10);
+  const custoObj = {
+    descricao: desc,
+    valor: valor,
+    data: data,
+    categoria: categoria,
+    fornecedor: fornecedor
+  };
+
+  if (idx >= 0 && idx < o.custos.length) {
+    o.custos[idx] = custoObj;
+    showToast('Custo atualizado!', 'success');
+  } else {
+    o.custos.unshift(custoObj);
+    showToast('Custo registrado na obra!', 'success');
+  }
+
+  // Deixa a sub-aba de custos ativa nesta obra
+  obraActiveTabs[o.id] = 'custos';
+  persistObras();
+  document.getElementById('custoModal').classList.remove('open');
+};
+
 function enviarExtratoWhatsApp(obraId) {
   const o = savedObras.find(item => item.id === obraId);
   if (!o) return;
@@ -2677,19 +2997,44 @@ document.getElementById('btnCriarObraDeOrcamento').onclick = () => {
 function renderDashboard() {
   let totalContratado = 0;
   let totalRecebido = 0;
+  let totalCustosGlobal = 0;
+  let totalDespesasQtd = 0;
+
   savedObras.forEach(o => {
     const tot = parseBRL(o.valorTotalContratado || '0');
     totalContratado += tot;
     (o.pagamentos || []).forEach(p => {
       if (p.pago) totalRecebido += parseBRL(p.valor || '0');
     });
+    (o.custos || []).forEach(c => {
+      totalCustosGlobal += parseBRL(c.valor || '0');
+      totalDespesasQtd++;
+    });
   });
 
   const totalFalta = Math.max(0, totalContratado - totalRecebido);
+  const lucroLiquidoGlobal = totalRecebido - totalCustosGlobal;
+
   document.getElementById('kpiObrasTotalContratado').textContent = formatBRL(totalContratado);
   document.getElementById('kpiObrasAtivasQtd').textContent = `${savedObras.length} obras cadastradas`;
   document.getElementById('kpiObrasRecebido').textContent = formatBRL(totalRecebido);
   document.getElementById('kpiObrasFaltaReceber').textContent = formatBRL(totalFalta);
+
+  // Novos KPIs de Custos e Lucro
+  const kpiCustosEl = document.getElementById('kpiObrasTotalCustos');
+  const kpiCustosSubEl = document.getElementById('kpiObrasTotalCustosSub');
+  const kpiLucroEl = document.getElementById('kpiObrasLucroLiquido');
+  const kpiLucroSubEl = document.getElementById('kpiObrasLucroSub');
+
+  if (kpiCustosEl) kpiCustosEl.textContent = formatBRL(totalCustosGlobal);
+  if (kpiCustosSubEl) kpiCustosSubEl.textContent = `${totalDespesasQtd} despesas registradas`;
+  if (kpiLucroEl) {
+    kpiLucroEl.textContent = formatBRL(lucroLiquidoGlobal);
+    kpiLucroEl.style.color = lucroLiquidoGlobal >= 0 ? '#059669' : '#dc2626';
+  }
+  if (kpiLucroSubEl) {
+    kpiLucroSubEl.textContent = lucroLiquidoGlobal >= 0 ? 'Recebido supera os custos' : 'Custos superam o recebido';
+  }
 
   let totalOrcado = 0;
   savedQuotes.forEach(q => { totalOrcado += parseBRL(q.totalFormatted || '0'); });
