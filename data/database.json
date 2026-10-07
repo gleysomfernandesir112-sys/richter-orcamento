@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T22:15:06.008Z",
+  "lastUpdated": "2026-10-07T22:15:24.169Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -58,6 +58,13 @@
         }
       ],
       "custos": [
+        {
+          "descricao": "Pagamento Rodrigo",
+          "valor": "R$ 60,00",
+          "data": "2026-10-05",
+          "categoria": "Mão de Obra",
+          "fornecedor": "Rodrigo"
+        },
         {
           "descricao": "Pagamento Rodrigo",
           "valor": "R$ 500,00",
