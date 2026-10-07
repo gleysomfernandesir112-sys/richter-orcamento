@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T21:36:00.485Z",
+  "lastUpdated": "2026-10-07T22:11:32.926Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -56,24 +56,20 @@
           "reciboId": null,
           "reciboNumero": null
         }
+      ],
+      "custos": [
+        {
+          "descricao": "Pagamento digao pix",
+          "valor": "R$ 210,00",
+          "data": "2026-09-25",
+          "categoria": "Mão de Obra",
+          "fornecedor": "Digao"
+        }
       ]
     }
   ],
   "quotes": [],
   "receipts": [
-    {
-      "id": "rec_1791408828167",
-      "numero": "REC-2026-002",
-      "data": "2026-09-18",
-      "valor": "R$ 4.000,00",
-      "valorExtenso": "Quatro mil reais",
-      "clienteNome": "Gonzalo",
-      "clienteDoc": "",
-      "formaPagamento": "PIX",
-      "cidade": "Joinville - SC",
-      "descricao": "Pagamento 3 (Construção| Casa) — Obra: Construção| Casa",
-      "createdAt": "2026-10-07T21:33:48.167Z"
-    },
     {
       "id": "rec_1791241919275",
       "numero": "REC-2026-001",
@@ -86,6 +82,19 @@
       "cidade": "Joinville - SC",
       "descricao": "Pagamento 1 (Construção| Casa) — Obra: Construção| Casa",
       "createdAt": "2026-10-05T23:11:59.278Z"
+    },
+    {
+      "id": "rec_1791408828167",
+      "numero": "REC-2026-002",
+      "data": "2026-09-18",
+      "valor": "R$ 4.000,00",
+      "valorExtenso": "Quatro mil reais",
+      "clienteNome": "Gonzalo",
+      "clienteDoc": "",
+      "formaPagamento": "PIX",
+      "cidade": "Joinville - SC",
+      "descricao": "Pagamento 3 (Construção| Casa) — Obra: Construção| Casa",
+      "createdAt": "2026-10-07T21:33:48.167Z"
     }
   ]
 }
