@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T22:15:24.169Z",
+  "lastUpdated": "2026-10-07T22:15:39.543Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -58,6 +58,13 @@
         }
       ],
       "custos": [
+        {
+          "descricao": "Pagamento Edson",
+          "valor": "R$ 1.375,00",
+          "data": "2026-09-04",
+          "categoria": "Mão de Obra",
+          "fornecedor": "Edson"
+        },
         {
           "descricao": "Pagamento Rodrigo",
           "valor": "R$ 60,00",
