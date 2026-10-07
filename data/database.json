@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-05T23:12:09.338Z",
+  "lastUpdated": "2026-10-07T21:31:49.268Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -10,7 +10,17 @@
       "valorTotalContratado": "R$ 180.000,00",
       "status": "Em Andamento",
       "dataCriacao": "2026-10-05T23:07:56.439Z",
-      "pagamentos": []
+      "pagamentos": [
+        {
+          "titulo": "Pagamento 1 (Construção| Casa)",
+          "valor": "R$ 3.000,00",
+          "data": "2026-09-04",
+          "forma": "PIX",
+          "pago": true,
+          "reciboId": null,
+          "reciboNumero": null
+        }
+      ]
     }
   ],
   "quotes": [],
