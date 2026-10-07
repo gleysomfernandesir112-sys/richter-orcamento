@@ -1292,20 +1292,14 @@ table.custom-table tr:hover { background: #f8fafc; }
   </div>
 
   <nav class="main-nav">
-    <button type="button" class="nav-tab active" data-tab="obras">
-      📁 Obras & Clientes <span class="tab-badge" id="tabCountObras">0</span>
-    </button>
-    <button type="button" class="nav-tab" data-tab="dashboard">
-      📊 Painel Geral
+    <button type="button" class="nav-tab active" data-tab="dashboard">
+      📊 Painel & Obras <span class="tab-badge" id="tabCountObras">0</span>
     </button>
     <button type="button" class="nav-tab" data-tab="orcamento">
-      📋 Novo Orçamento
-    </button>
-    <button type="button" class="nav-tab" data-tab="todos-orcamentos">
-      📄 Orçamentos <span class="tab-badge" id="tabCountOrc">0</span>
+      📋 Criar Orçamento (PDF)
     </button>
     <button type="button" class="nav-tab" data-tab="recibos">
-      🧾 Recibos <span class="tab-badge" id="tabCountRec">0</span>
+      🧾 Recibos Oficiais <span class="tab-badge" id="tabCountRec">0</span>
     </button>
   </nav>
 
@@ -1336,76 +1330,49 @@ table.custom-table tr:hover { background: #f8fafc; }
 <div class="app-container">
 
   <!-- ==========================================================================
-       TAB 1: PASTAS DE OBRAS & CLIENTES (DESTAQUE PRINCIPAL)
+       TELA PRINCIPAL: PAINEL FINANCEIRO & PASTAS DE OBRAS (UNIFICADO)
        ========================================================================== -->
-  <section id="tab-obras" class="tab-content-panel active">
-    <div class="obras-toolbar">
-      <input type="text" id="searchObrasInput" class="form-control obras-search" placeholder="🔍 Buscar por cliente, obra ou telefone...">
-      <div style="display: flex; gap: 8px;">
-        <button type="button" class="btn btn-primary" id="btnAbrirModalNovaObra">
-          ➕ Nova Pasta de Obra
-        </button>
-      </div>
-    </div>
-
-    <!-- Grid das Pastas das Obras -->
-    <div id="obrasListGrid" class="obras-list-grid">
-      <!-- Cards renderizados dinamicamente via JS -->
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       TAB 2: PAINEL GERAL (DASHBOARD VISUAL, SIMPLES & INTUITIVO)
-       ========================================================================== -->
-  <section id="tab-dashboard" class="tab-content-panel">
+  <section id="tab-dashboard" class="tab-content-panel active">
     
     <!-- Cartão de Boas-Vindas com Status Geral -->
     <div class="dash-welcome-card">
       <div class="dash-welcome-info">
-        <h2>👋 Richter Construções — Visão Financeira da Empresa</h2>
-        <p>Acompanhe de forma simples o dinheiro que já entrou, os custos e o quanto ainda falta receber.</p>
+        <h2>👋 Richter Construções — Painel Geral</h2>
+        <p>Visão clara do dinheiro recebido, custos e obras em andamento.</p>
       </div>
       <div class="dash-health-badge" id="dashHealthBadge">
         <span>✅ Situação Financeira Positiva</span>
       </div>
     </div>
 
-    <!-- Botões de Ação Rápida Grandes (Ideal para Celular e Toque Fácil) -->
-    <div class="dash-quick-actions">
-      <div class="dash-action-btn" onclick="switchTab('obras'); abrirModalNovaObra();">
+    <!-- 3 Botões de Ação Imediata Grandes (Fáceis de Enxergar e Tocar) -->
+    <div class="dash-quick-actions" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      <div class="dash-action-btn" onclick="abrirModalNovaObra();" style="border-left: 6px solid #2563eb;">
         <div class="dash-action-icon" style="background:#eff6ff; color:#2563eb;">➕</div>
         <div>
-          <div class="dash-action-title">Nova Obra</div>
-          <div class="dash-action-desc">Cadastrar novo cliente</div>
+          <div class="dash-action-title">Nova Pasta de Obra</div>
+          <div class="dash-action-desc">Cadastrar novo cliente e contrato</div>
         </div>
       </div>
 
-      <div class="dash-action-btn" onclick="switchTab('orcamento');">
+      <div class="dash-action-btn" onclick="switchTab('orcamento');" style="border-left: 6px solid #dc2626;">
         <div class="dash-action-icon" style="background:#fef2f2; color:#dc2626;">📋</div>
         <div>
-          <div class="dash-action-title">Novo Orçamento</div>
-          <div class="dash-action-desc">Gerar proposta em PDF</div>
+          <div class="dash-action-title">Criar Orçamento (PDF)</div>
+          <div class="dash-action-desc">Gerar proposta impressa em PDF</div>
         </div>
       </div>
 
-      <div class="dash-action-btn" onclick="switchTab('obras');">
-        <div class="dash-action-icon" style="background:#f0fdf4; color:#16a34a;">📁</div>
+      <div class="dash-action-btn" onclick="switchTab('recibos');" style="border-left: 6px solid #16a34a;">
+        <div class="dash-action-icon" style="background:#f0fdf4; color:#16a34a;">🧾</div>
         <div>
-          <div class="dash-action-title">Ver Obras Ativas</div>
-          <div class="dash-action-desc">Lançar pagamentos e custos</div>
-        </div>
-      </div>
-
-      <div class="dash-action-btn" onclick="switchTab('recibos');">
-        <div class="dash-action-icon" style="background:#fef3c7; color:#d97706;">🧾</div>
-        <div>
-          <div class="dash-action-title">Recibos Emitidos</div>
-          <div class="dash-action-desc">Imprimir ou baixar em PDF</div>
+          <div class="dash-action-title">Emitir / Ver Recibos</div>
+          <div class="dash-action-desc">Recibos oficiais em 2 vias</div>
         </div>
       </div>
     </div>
 
-    <!-- Indicadores Principais (Letras Grandes e Cores Autoexplicativas) -->
+    <!-- 4 Indicadores Essenciais (Grandes e Claros) -->
     <div class="dashboard-grid">
       <div class="kpi-card highlight-success">
         <div class="kpi-header">
@@ -1422,12 +1389,12 @@ table.custom-table tr:hover { background: #f8fafc; }
           <span class="kpi-icon">💸</span>
         </div>
         <div class="kpi-value" id="kpiObrasTotalCustos" style="color:var(--danger);">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasTotalCustosSub">0 compras e diárias lançadas</div>
+        <div class="kpi-subtext" id="kpiObrasTotalCustosSub">0 despesas lançadas</div>
       </div>
 
       <div class="kpi-card highlight-lucro">
         <div class="kpi-header">
-          <span>3. Lucro no Bolso (Líquido)</span>
+          <span>3. Lucro no Bolso</span>
           <span class="kpi-icon">📈</span>
         </div>
         <div class="kpi-value" id="kpiObrasLucroLiquido" style="color:#059669;">R$ 0,00</div>
@@ -1436,65 +1403,32 @@ table.custom-table tr:hover { background: #f8fafc; }
 
       <div class="kpi-card highlight">
         <div class="kpi-header">
-          <span>4. Falta Receber (A Cobrar)</span>
+          <span>4. Falta Receber</span>
           <span class="kpi-icon">⏳</span>
         </div>
         <div class="kpi-value" id="kpiObrasFaltaReceber" style="color:var(--primary);">R$ 0,00</div>
         <div class="kpi-subtext" id="kpiObrasFaltaSub">A receber dos clientes</div>
       </div>
-
-      <div class="kpi-card highlight-info">
-        <div class="kpi-header">
-          <span>Valor Total Contratado</span>
-          <span class="kpi-icon">🏗️</span>
-        </div>
-        <div class="kpi-value" id="kpiObrasTotalContratado">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiObrasAtivasQtd">0 obras cadastradas</div>
-      </div>
-
-      <div class="kpi-card highlight-warning">
-        <div class="kpi-header">
-          <span>Propostas / Orçamentos</span>
-          <span class="kpi-icon">📄</span>
-        </div>
-        <div class="kpi-value" id="kpiTotalOrcado">R$ 0,00</div>
-        <div class="kpi-subtext" id="kpiTotalOrcamentosQtd">0 propostas salvas</div>
-      </div>
     </div>
 
-    <!-- Termômetro das Obras Ativas (Visual para acompanhar o andamento de cada uma) -->
-    <div class="dash-obras-summary">
-      <div class="dash-section-title">
-        <span>🏗️ Andamento Rápido das Obras</span>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="switchTab('obras')" style="margin-left:auto;">
-          Ver todas as pastas ➔
-        </button>
+    <!-- SEÇÃO PRINCIPAL: PASTAS DAS OBRAS & CLIENTES (FICA DIRETAMENTE NA TELA PRINCIPAL) -->
+    <div style="margin-top: 26px;">
+      <div class="obras-toolbar">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <h2 style="font-size: 20px; font-weight: 800; color: var(--dark); margin:0;">📁 Pastas das Obras</h2>
+          <span class="tab-badge" id="dashTotalObrasBadge" style="font-size:13px; padding:3px 10px;">0</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; flex:1; justify-content:flex-end;">
+          <input type="text" id="searchObrasInput" class="form-control obras-search" placeholder="🔍 Buscar por cliente ou obra...">
+          <button type="button" class="btn btn-primary" onclick="abrirModalNovaObra()">
+            ➕ Nova Pasta de Obra
+          </button>
+        </div>
       </div>
-      <div id="dashObrasMiniGrid" class="dash-obras-list-grid">
+
+      <!-- Grid das Pastas das Obras com Histórico de Pagamentos, Custos e Lucro -->
+      <div id="obrasListGrid" class="obras-list-grid">
         <!-- Renderizado dinamicamente -->
-      </div>
-    </div>
-
-    <div class="data-table-card" style="margin-top: 18px;">
-      <div class="data-table-header">
-        <h3>📋 Propostas Recentes</h3>
-        <button type="button" class="btn btn-primary btn-sm" onclick="switchTab('orcamento')">
-          ➕ Novo Orçamento
-        </button>
-      </div>
-      <div class="table-responsive">
-        <table class="custom-table" id="dashboardRecentQuotesTable">
-          <thead>
-            <tr>
-              <th>Nº</th>
-              <th>Cliente</th>
-              <th>Status</th>
-              <th>Valor Total</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
       </div>
     </div>
   </section>
@@ -1712,41 +1646,40 @@ table.custom-table tr:hover { background: #f8fafc; }
         </button>
       </div>
 
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       TAB 4: TODOS OS ORÇAMENTOS (TABELA & FILTROS)
-       ========================================================================== -->
-  <section id="tab-todos-orcamentos" class="tab-content-panel">
-    <div class="data-table-card">
-      <div class="data-table-header">
-        <input type="text" id="searchAllQuotesInput" class="form-control" style="max-width: 320px;" placeholder="🔍 Buscar por cliente, número ou endereço...">
-        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+      <!-- Histórico de Orçamentos e Propostas Salvas (Direto nesta tela, sem precisar mudar de aba) -->
+      <div class="data-table-card" style="margin-top: 10px;">
+        <div class="data-table-header">
+          <div>
+            <h3 style="font-size:16px; font-weight:800; color:var(--dark);">📄 Propostas & Orçamentos Salvos</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin:0;">Clique em ✏️ Editar para carregar ou 📱 WhatsApp para enviar ao cliente.</p>
+          </div>
+          <input type="text" id="searchAllQuotesInput" class="form-control" style="max-width: 260px;" placeholder="🔍 Buscar por cliente ou nº...">
+        </div>
+        <div style="padding: 10px 18px; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap;">
           <button type="button" class="btn btn-secondary btn-sm filter-orc-btn active" data-filter="todos">Todos</button>
           <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Rascunho">Rascunhos</button>
           <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Enviado">Enviados</button>
           <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Aprovado">Aprovados</button>
           <button type="button" class="btn btn-secondary btn-sm filter-orc-btn" data-filter="Recusado">Recusados</button>
         </div>
+        <div class="table-responsive">
+          <table class="custom-table" id="allQuotesTable">
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Cliente</th>
+                <th>Telefone</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Valor Total</th>
+                <th style="text-align: right;">Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="custom-table" id="allQuotesTable">
-          <thead>
-            <tr>
-              <th>Nº</th>
-              <th>Cliente</th>
-              <th>Telefone</th>
-              <th>Data</th>
-              <th>Status</th>
-              <th>Valor Total</th>
-              <th style="text-align: right;">Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
     </div>
   </section>
 
@@ -1882,13 +1815,9 @@ table.custom-table tr:hover { background: #f8fafc; }
 
 <!-- Barra de Navegação Inferior para Celular -->
 <nav class="mobile-bottom-nav">
-  <button type="button" class="mobile-nav-item active" data-tab="obras">
-    <span class="icon">📁</span>
-    <span>Obras</span>
-  </button>
-  <button type="button" class="mobile-nav-item" data-tab="dashboard">
+  <button type="button" class="mobile-nav-item active" data-tab="dashboard">
     <span class="icon">📊</span>
-    <span>Painel</span>
+    <span>Painel & Obras</span>
   </button>
   <button type="button" class="mobile-nav-item" data-tab="orcamento">
     <span class="icon">📋</span>
@@ -2553,9 +2482,14 @@ function persistReceipts() {
 }
 
 function updateCounts() {
-  document.getElementById('tabCountObras').textContent = savedObras.length;
-  document.getElementById('tabCountOrc').textContent = savedQuotes.length;
-  document.getElementById('tabCountRec').textContent = savedReceipts.length;
+  const cObras = document.getElementById('tabCountObras');
+  if (cObras) cObras.textContent = savedObras.length;
+  const cObrasBadge = document.getElementById('dashTotalObrasBadge');
+  if (cObrasBadge) cObrasBadge.textContent = savedObras.length;
+  const cOrc = document.getElementById('tabCountOrc');
+  if (cOrc) cOrc.textContent = savedQuotes.length;
+  const cRec = document.getElementById('tabCountRec');
+  if (cRec) cRec.textContent = savedReceipts.length;
 }
 
 function showToast(message, type = 'info') {
@@ -2576,6 +2510,9 @@ function showToast(message, type = 'info') {
    NAVEGAÇÃO POR ABAS (DESKTOP E MOBILE)
    ========================================================================== */
 function switchTab(tabId) {
+  if (tabId === 'obras') tabId = 'dashboard';
+  if (tabId === 'todos-orcamentos') tabId = 'orcamento';
+
   document.querySelectorAll('.main-nav .nav-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content-panel').forEach(p => p.classList.remove('active'));
@@ -2590,9 +2527,14 @@ function switchTab(tabId) {
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  if (tabId === 'obras') renderObrasGrid();
-  else if (tabId === 'dashboard') renderDashboard();
-  else if (tabId === 'todos-orcamentos') renderAllQuotesTable();
+  if (tabId === 'dashboard') {
+    renderDashboard();
+    renderObrasGrid();
+  } else if (tabId === 'orcamento') {
+    renderAllQuotesTable();
+  } else if (tabId === 'recibos') {
+    renderAllReceiptsTable();
+  }
 }
 
 document.querySelectorAll('.main-nav .nav-tab, .mobile-bottom-nav .mobile-nav-item').forEach(btn => {
@@ -3245,10 +3187,14 @@ function renderDashboard() {
   const totalFalta = Math.max(0, totalContratado - totalRecebido);
   const lucroLiquidoGlobal = totalRecebido - totalCustosGlobal;
 
-  document.getElementById('kpiObrasTotalContratado').textContent = formatBRL(totalContratado);
-  document.getElementById('kpiObrasAtivasQtd').textContent = `${savedObras.length} obras cadastradas`;
-  document.getElementById('kpiObrasRecebido').textContent = formatBRL(totalRecebido);
-  document.getElementById('kpiObrasFaltaReceber').textContent = formatBRL(totalFalta);
+  const kpiContratadoEl = document.getElementById('kpiObrasTotalContratado');
+  if (kpiContratadoEl) kpiContratadoEl.textContent = formatBRL(totalContratado);
+  const kpiAtivasEl = document.getElementById('kpiObrasAtivasQtd');
+  if (kpiAtivasEl) kpiAtivasEl.textContent = `${savedObras.length} obras cadastradas`;
+  const kpiRecebidoEl = document.getElementById('kpiObrasRecebido');
+  if (kpiRecebidoEl) kpiRecebidoEl.textContent = formatBRL(totalRecebido);
+  const kpiFaltaEl = document.getElementById('kpiObrasFaltaReceber');
+  if (kpiFaltaEl) kpiFaltaEl.textContent = formatBRL(totalFalta);
 
   // Novos KPIs de Custos e Lucro
   const kpiCustosEl = document.getElementById('kpiObrasTotalCustos');
@@ -3335,25 +3281,29 @@ function renderDashboard() {
 
   let totalOrcado = 0;
   savedQuotes.forEach(q => { totalOrcado += parseBRL(q.totalFormatted || '0'); });
-  document.getElementById('kpiTotalOrcado').textContent = formatBRL(totalOrcado);
-  document.getElementById('kpiTotalOrcamentosQtd').textContent = `${savedQuotes.length} propostas cadastradas`;
+  const kpiTotOrcEl = document.getElementById('kpiTotalOrcado');
+  if (kpiTotOrcEl) kpiTotOrcEl.textContent = formatBRL(totalOrcado);
+  const kpiTotOrcQtdEl = document.getElementById('kpiTotalOrcamentosQtd');
+  if (kpiTotOrcQtdEl) kpiTotOrcQtdEl.textContent = `${savedQuotes.length} propostas cadastradas`;
 
   const tbodyQ = document.querySelector('#dashboardRecentQuotesTable tbody');
-  const recentQuotes = savedQuotes.slice(0, 5);
-  if (recentQuotes.length === 0) {
-    tbodyQ.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Nenhum orçamento cadastrado.</td></tr>`;
-  } else {
-    tbodyQ.innerHTML = recentQuotes.map(q => `
-      <tr>
-        <td style="font-weight:700;">${escapeHtml(q.numero || '')}</td>
-        <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong></td>
-        <td><span class="status-badge badge-${(q.status||'rascunho').toLowerCase()}">${escapeHtml(q.status||'Rascunho')}</span></td>
-        <td style="font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
-        <td>
-          <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️</button>
-        </td>
-      </tr>
-    `).join('');
+  if (tbodyQ) {
+    const recentQuotes = savedQuotes.slice(0, 5);
+    if (recentQuotes.length === 0) {
+      tbodyQ.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Nenhum orçamento cadastrado.</td></tr>`;
+    } else {
+      tbodyQ.innerHTML = recentQuotes.map(q => `
+        <tr>
+          <td style="font-weight:700;">${escapeHtml(q.numero || '')}</td>
+          <td><strong>${escapeHtml(q.nome || 'Sem nome')}</strong></td>
+          <td><span class="status-badge badge-${(q.status||'rascunho').toLowerCase()}">${escapeHtml(q.status||'Rascunho')}</span></td>
+          <td style="font-weight:800; color:var(--primary);">${escapeHtml(q.totalFormatted || 'R$ 0,00')}</td>
+          <td>
+            <button class="btn btn-secondary btn-sm" onclick="editQuote('${q.id}')">✏️</button>
+          </td>
+        </tr>
+      `).join('');
+    }
   }
 }
 
