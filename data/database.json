@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T22:11:49.231Z",
+  "lastUpdated": "2026-10-07T22:11:52.161Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -62,7 +62,7 @@
           "descricao": "Pagamento digao pix",
           "valor": "R$ 50,00",
           "data": "2026-09-26",
-          "categoria": "Material",
+          "categoria": "Mão de Obra",
           "fornecedor": "Digao"
         },
         {
