@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T09:41:04.162Z",
+  "lastUpdated": "2026-10-17T09:41:17.634Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -225,7 +225,7 @@
       "numero": "#2026-001",
       "status": "Enviado",
       "createdAt": "2026-10-17T09:38:12.568Z",
-      "updatedAt": "2026-10-17T09:41:02.961Z",
+      "updatedAt": "2026-10-17T09:41:16.433Z",
       "data": "2026-10-17",
       "nome": "Casa das  flores",
       "endereco": "",
@@ -285,7 +285,7 @@
       "desconto": "",
       "totalManual": "",
       "autoTotal": true,
-      "observacoes": "Segue acima a lista de materiais necessários para a execução do serviço. Solicitamos, por gentileza, que os materiais sejam providenciados conforme as quantidades especificadas, para que possamos dar andamento aos trabalhos.",
+      "observacoes": "Segue acima a lista de materiais necessários para a execução do serviço.",
       "totalFormatted": "R$ 0,00"
     }
   ],
