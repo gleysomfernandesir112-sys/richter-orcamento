@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T09:38:13.769Z",
+  "lastUpdated": "2026-10-17T09:41:04.162Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -225,7 +225,7 @@
       "numero": "#2026-001",
       "status": "Enviado",
       "createdAt": "2026-10-17T09:38:12.568Z",
-      "updatedAt": "2026-10-17T09:38:12.568Z",
+      "updatedAt": "2026-10-17T09:41:02.961Z",
       "data": "2026-10-17",
       "nome": "Casa das  flores",
       "endereco": "",
@@ -233,44 +233,59 @@
       "items": [
         {
           "desc": "2 barras de ferro 10 mm",
-          "qtd": "1",
-          "preco": ""
-        },
-        {
-          "desc": "3 barras de ferro 5 mm",
-          "qtd": "1",
-          "preco": ""
+          "qtd": "2",
+          "preco": "R$ 0,00"
         },
         {
           "desc": "2 malhas de ferro 5 mm",
-          "qtd": "1",
+          "qtd": "2",
           "preco": ""
         },
         {
           "desc": "6 tábuas de 30 × 270 cm",
-          "qtd": "1",
+          "qtd": "6 ",
           "preco": ""
         },
         {
           "desc": "1 kg de arame nº 16",
-          "qtd": "1",
+          "qtd": "1 kg",
           "preco": ""
         },
         {
-          "desc": "",
-          "qtd": "1",
+          "desc": "1.000 tijolos para 18 m² de parede",
+          "qtd": "1.000",
           "preco": ""
         },
         {
-          "desc": "",
-          "qtd": "1",
+          "desc": "3 m³ de areia média",
+          "qtd": "3 m³ ",
+          "preco": ""
+        },
+        {
+          "desc": "2 litros de adesivo plastificante",
+          "qtd": "2",
+          "preco": ""
+        },
+        {
+          "desc": "8 sacos de cimento",
+          "qtd": "8",
+          "preco": ""
+        },
+        {
+          "desc": "1 m³ de brita",
+          "qtd": "1 m³ ",
+          "preco": ""
+        },
+        {
+          "desc": "3 barras de ferro 5 mm",
+          "qtd": "3",
           "preco": ""
         }
       ],
       "desconto": "",
       "totalManual": "",
       "autoTotal": true,
-      "observacoes": "",
+      "observacoes": "Segue acima a lista de materiais necessários para a execução do serviço. Solicitamos, por gentileza, que os materiais sejam providenciados conforme as quantidades especificadas, para que possamos dar andamento aos trabalhos.",
       "totalFormatted": "R$ 0,00"
     }
   ],
