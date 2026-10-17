@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T09:41:37.623Z",
+  "lastUpdated": "2026-10-17T09:45:09.619Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -220,6 +220,49 @@
     }
   ],
   "quotes": [
+    {
+      "id": "orc_1792230308418",
+      "numero": "#2026-002",
+      "status": "Enviado",
+      "createdAt": "2026-10-17T09:45:08.418Z",
+      "updatedAt": "2026-10-17T09:45:08.418Z",
+      "data": "2026-10-17",
+      "nome": "Angela",
+      "endereco": "",
+      "telefone": "",
+      "items": [
+        {
+          "desc": "10 joelhos soldáveis",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "1 joelho azul de 25 mm",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "2 conexões tipo T soldáveis",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "2 buchas de redução de 25 mm para 20 mm",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "4 barras de cano de 25 mm",
+          "qtd": "1",
+          "preco": ""
+        }
+      ],
+      "desconto": "",
+      "totalManual": "",
+      "autoTotal": true,
+      "observacoes": "Segue acima a lista de materiais necessários para a execução do serviço.",
+      "totalFormatted": "R$ 0,00"
+    },
     {
       "id": "orc_1792229892568",
       "numero": "#2026-001",
