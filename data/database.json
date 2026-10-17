@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T09:30:12.051Z",
+  "lastUpdated": "2026-10-17T09:30:45.701Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -60,6 +60,15 @@
           "titulo": "Pagamento 6 (Construção| Casa)",
           "valor": "R$ 3.000,00",
           "data": "2026-10-09",
+          "forma": "PIX",
+          "pago": true,
+          "reciboId": null,
+          "reciboNumero": null
+        },
+        {
+          "titulo": "Pagamento 7 (Construção| Casa)",
+          "valor": "R$ 3.000,00",
+          "data": "2026-10-16",
           "forma": "PIX",
           "pago": true,
           "reciboId": null,
