@@ -1751,7 +1751,7 @@ table.custom-table tr:hover { background: #f8fafc; }
       📊 Painel & Obras <span class="tab-badge" id="tabCountObras">0</span>
     </button>
     <button type="button" class="nav-tab" data-tab="orcamento">
-      📋 Criar Orçamento (PDF)
+      📋 Criar Orçamento (PDF) <span class="tab-badge" id="tabCountOrc">0</span>
     </button>
     <button type="button" class="nav-tab" data-tab="recibos">
       🧾 Recibos Oficiais <span class="tab-badge" id="tabCountRec">0</span>
@@ -1878,7 +1878,7 @@ table.custom-table tr:hover { background: #f8fafc; }
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap; flex:1; justify-content:flex-end;">
           <input type="text" id="searchObrasInput" class="form-control obras-search" placeholder="🔍 Buscar por cliente ou obra...">
-          <button type="button" class="btn btn-primary" onclick="abrirModalNovaObra()">
+          <button type="button" class="btn btn-primary" id="btnAbrirModalNovaObra" onclick="abrirModalNovaObra()">
             ➕ Nova Pasta de Obra
           </button>
         </div>
@@ -2560,17 +2560,20 @@ let receiptState = {
 function initDatabase() {
   try {
     const rawO = localStorage.getItem(OBRAS_DB_KEY);
-    savedObras = rawO ? JSON.parse(rawO) : [];
+    const parsedO = rawO ? JSON.parse(rawO) : [];
+    savedObras = Array.isArray(parsedO) ? parsedO : (parsedO && Array.isArray(parsedO.obras) ? parsedO.obras : []);
   } catch (e) { savedObras = []; }
 
   try {
     const rawQ = localStorage.getItem(QUOTES_DB_KEY);
-    savedQuotes = rawQ ? JSON.parse(rawQ) : [];
+    const parsedQ = rawQ ? JSON.parse(rawQ) : [];
+    savedQuotes = Array.isArray(parsedQ) ? parsedQ : (parsedQ && Array.isArray(parsedQ.quotes) ? parsedQ.quotes : []);
   } catch (e) { savedQuotes = []; }
 
   try {
     const rawR = localStorage.getItem(RECEIPTS_DB_KEY);
-    savedReceipts = rawR ? JSON.parse(rawR) : [];
+    const parsedR = rawR ? JSON.parse(rawR) : [];
+    savedReceipts = Array.isArray(parsedR) ? parsedR : (parsedR && Array.isArray(parsedR.receipts) ? parsedR.receipts : []);
   } catch (e) { savedReceipts = []; }
 
   updateCounts();
@@ -2960,7 +2963,10 @@ function showToast(message, type = 'info') {
     toast.style.opacity = '0';
     toast.style.transform = 'translateY(10px)';
     toast.style.transition = 'all 0.2s';
-    setTimeout(() => toast.remove(), 250);
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+      else if (toast.remove) toast.remove();
+    }, 250);
   }, 3200);
 }
 
@@ -3309,9 +3315,18 @@ function abrirModalNovaObra() {
   document.getElementById('modalObraCliente').focus();
 }
 
-document.getElementById('btnAbrirModalNovaObra').onclick = abrirModalNovaObra;
-document.getElementById('btnCloseModalObra').onclick = () => document.getElementById('obraModal').classList.remove('open');
-document.getElementById('btnCancelModalObra').onclick = () => document.getElementById('obraModal').classList.remove('open');
+const btnAbrirModalNovaObraEl = document.getElementById('btnAbrirModalNovaObra');
+if (btnAbrirModalNovaObraEl) btnAbrirModalNovaObraEl.onclick = abrirModalNovaObra;
+const btnCloseModalObraEl = document.getElementById('btnCloseModalObra');
+if (btnCloseModalObraEl) btnCloseModalObraEl.onclick = () => document.getElementById('obraModal').classList.remove('open');
+const btnCancelModalObraEl = document.getElementById('btnCancelModalObra');
+if (btnCancelModalObraEl) btnCancelModalObraEl.onclick = () => document.getElementById('obraModal').classList.remove('open');
+const obraModalEl = document.getElementById('obraModal');
+if (obraModalEl) {
+  obraModalEl.addEventListener('click', (e) => {
+    if (e.target === obraModalEl) obraModalEl.classList.remove('open');
+  });
+}
 
 document.getElementById('modalObraValorTotal').addEventListener('input', (e) => {
   e.target.value = formatBRL(e.target.value);
@@ -3409,9 +3424,35 @@ function abrirModalNovoPagamento(obraId) {
   document.getElementById('pagamentoModal').classList.add('open');
 }
 
-document.getElementById('btnCloseModalPagamento').onclick = () => document.getElementById('pagamentoModal').classList.remove('open');
-document.getElementById('btnCancelModalPagamento').onclick = () => document.getElementById('pagamentoModal').classList.remove('open');
-document.getElementById('modalPagamentoValor').addEventListener('input', (e) => { e.target.value = formatBRL(e.target.value); });
+function abrirModalRegistrarPagamento(obraId, pagIdx) {
+  const o = savedObras.find(item => item.id === obraId);
+  if (!o || !o.pagamentos || !o.pagamentos[pagIdx]) return;
+
+  const p = o.pagamentos[pagIdx];
+  document.getElementById('modalPagamentoObraId').value = obraId;
+  document.getElementById('modalPagamentoIndex').value = String(pagIdx);
+  document.getElementById('modalPagamentoTitle').textContent = `💵 Registrar Pagamento — ${o.clienteNome}`;
+  document.getElementById('modalPagamentoDesc').value = p.titulo || `Pagamento ${pagIdx + 1}`;
+  document.getElementById('modalPagamentoValor').value = p.valor || 'R$ 0,00';
+  document.getElementById('modalPagamentoData').value = p.data || getTodayString();
+  document.getElementById('modalPagamentoForma').value = p.forma || 'PIX';
+  document.getElementById('modalPagamentoEmitirRecibo').checked = true;
+
+  document.getElementById('pagamentoModal').classList.add('open');
+}
+
+const btnCloseModalPagamentoEl = document.getElementById('btnCloseModalPagamento');
+if (btnCloseModalPagamentoEl) btnCloseModalPagamentoEl.onclick = () => document.getElementById('pagamentoModal').classList.remove('open');
+const btnCancelModalPagamentoEl = document.getElementById('btnCancelModalPagamento');
+if (btnCancelModalPagamentoEl) btnCancelModalPagamentoEl.onclick = () => document.getElementById('pagamentoModal').classList.remove('open');
+const pagamentoModalEl = document.getElementById('pagamentoModal');
+if (pagamentoModalEl) {
+  pagamentoModalEl.addEventListener('click', (e) => {
+    if (e.target === pagamentoModalEl) pagamentoModalEl.classList.remove('open');
+  });
+}
+const modalPagamentoValorEl = document.getElementById('modalPagamentoValor');
+if (modalPagamentoValorEl) modalPagamentoValorEl.addEventListener('input', (e) => { e.target.value = formatBRL(e.target.value); });
 
 document.getElementById('btnConfirmarPagamento').onclick = () => {
   const obraId = document.getElementById('modalPagamentoObraId').value;
@@ -3521,9 +3562,18 @@ function removerCustoDaObra(obraId, custoIdx) {
   }
 }
 
-document.getElementById('btnCloseModalCusto').onclick = () => document.getElementById('custoModal').classList.remove('open');
-document.getElementById('btnCancelModalCusto').onclick = () => document.getElementById('custoModal').classList.remove('open');
-document.getElementById('modalCustoValor').addEventListener('input', (e) => { e.target.value = formatBRL(e.target.value); });
+const btnCloseModalCustoEl = document.getElementById('btnCloseModalCusto');
+if (btnCloseModalCustoEl) btnCloseModalCustoEl.onclick = () => document.getElementById('custoModal').classList.remove('open');
+const btnCancelModalCustoEl = document.getElementById('btnCancelModalCusto');
+if (btnCancelModalCustoEl) btnCancelModalCustoEl.onclick = () => document.getElementById('custoModal').classList.remove('open');
+const custoModalEl = document.getElementById('custoModal');
+if (custoModalEl) {
+  custoModalEl.addEventListener('click', (e) => {
+    if (e.target === custoModalEl) custoModalEl.classList.remove('open');
+  });
+}
+const modalCustoValorEl = document.getElementById('modalCustoValor');
+if (modalCustoValorEl) modalCustoValorEl.addEventListener('input', (e) => { e.target.value = formatBRL(e.target.value); });
 
 document.getElementById('btnConfirmarCusto').onclick = () => {
   const obraId = document.getElementById('modalCustoObraId').value;
@@ -4852,7 +4902,7 @@ const btnBannerInstall = document.getElementById('btnBannerInstallApp');
 const btnCloseBanner = document.getElementById('btnClosePwaBanner');
 
 // Verifica se já está instalado ou rodando em modo standalone
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (typeof navigator !== 'undefined' && navigator.standalone === true);
 
 // Registra Service Worker para suporte offline e cache
 if ('serviceWorker' in navigator) {
