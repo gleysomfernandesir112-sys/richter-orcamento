@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T09:31:11.138Z",
+  "lastUpdated": "2026-10-17T09:38:13.769Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -219,6 +219,60 @@
       ]
     }
   ],
-  "quotes": [],
+  "quotes": [
+    {
+      "id": "orc_1792229892568",
+      "numero": "#2026-001",
+      "status": "Enviado",
+      "createdAt": "2026-10-17T09:38:12.568Z",
+      "updatedAt": "2026-10-17T09:38:12.568Z",
+      "data": "2026-10-17",
+      "nome": "Casa das  flores",
+      "endereco": "",
+      "telefone": "",
+      "items": [
+        {
+          "desc": "2 barras de ferro 10 mm",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "3 barras de ferro 5 mm",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "2 malhas de ferro 5 mm",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "6 tábuas de 30 × 270 cm",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "1 kg de arame nº 16",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "",
+          "qtd": "1",
+          "preco": ""
+        },
+        {
+          "desc": "",
+          "qtd": "1",
+          "preco": ""
+        }
+      ],
+      "desconto": "",
+      "totalManual": "",
+      "autoTotal": true,
+      "observacoes": "",
+      "totalFormatted": "R$ 0,00"
+    }
+  ],
   "receipts": []
 }
