@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T09:30:57.099Z",
+  "lastUpdated": "2026-10-17T09:31:11.138Z",
   "obras": [
     {
       "id": "obra_1791241676439",
@@ -76,6 +76,13 @@
         }
       ],
       "custos": [
+        {
+          "descricao": "Rodrigo Pagamento",
+          "valor": "R$ 500,00",
+          "data": "2026-10-16",
+          "categoria": "Mão de Obra",
+          "fornecedor": "Rodrigo"
+        },
         {
           "descricao": "Digao",
           "valor": "R$ 500,00",
